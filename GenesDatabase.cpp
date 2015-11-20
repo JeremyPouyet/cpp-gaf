@@ -7,7 +7,9 @@ bool GenesDatabase::exists(Gene gene) const
 
 Type GenesDatabase::getTypeOf(Gene gene) const
 {
-  return _genes.at(gene.to_string()).first;
+  if (exists(gene))
+    return _genes.at(gene.to_string()).first;
+  return UNKNOWN;
 }
 
 int GenesDatabase::getIntValueOf(Gene gene) const

@@ -9,24 +9,20 @@
 bool solve(double number)
 {
   Population population(number);
-  int simulation_number = 0;
+  int generation;
   population.generate();
-  do
+  for (generation = 0; generation < SIMULATION_NUMBER; ++generation)
   {
     population.test();
-    if (population.hasResult()) {
-      std::cout << "WINNNNNEEEER" << std::endl;
+    if (population.hasResult())
       break;
-    }
-    if (simulation_number != SIMULATION_NUMBER - 1)
-      population.reproduce();
-  } while (++simulation_number < SIMULATION_NUMBER);
+    population.reproduce();
+  }
   if (population.hasResult())
   {
-    std::cout << "Solution found in " << simulation_number + 1 << " simulations:" << std::endl;
-    std::cout << number << " =" << std::flush;
-    population.getWinner()->print();
-    std::cout << std::endl << std::endl;
+    std::cout << "Solution found in " << generation + 1 << " generation" << std::endl;
+    population.getWinner()->prettyPrint();
+    std::cout << " = " << number << std::endl;
   }
   else
   {

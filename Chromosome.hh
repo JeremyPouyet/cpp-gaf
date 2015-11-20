@@ -28,8 +28,10 @@ public:
   reproduce(const Chromosome *c1, const Chromosome *c2);
   // mutate the chromosome
   void mutate();
-  // print well formated chromosome
+  // print chromosome
   void print() const;
+  // print well formated equation
+  void prettyPrint() const;
   // get the chromosome
   chrome get() const;
   // set the chromosome

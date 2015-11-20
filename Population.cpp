@@ -3,21 +3,15 @@
 void Population::generate()
 {
   Gene gene;
-  int j;
+  int j, k;
   for (int i = 0; i < SIZE; i++)
   {
     Chromosome *chromosome = new Chromosome();
     for (j = 0; j < Chromosome::SIZE; j++)
     {
-      /**
-       ** CHANGE THIS UGLY THING
-       **/
-      gene.set(0, rand() % 2);
-      gene.set(1, rand() % 2);
-      gene.set(2, rand() % 2);
-      gene.set(3, rand() % 2);
-      //gene = rand() % GENE_MAX_VALUE;
-      chromosome->addGene(gene, j);
+      for (k = 0; k < GENE_SIZE; k++)
+	gene[k] = rand() % 2;
+      chromosome->addGene(gene, k);
     }
     _population.push_back({chromosome, 0});
   }
@@ -29,7 +23,7 @@ void Population::test()
   double value;
   double fitness;
   _totalFitness = 0;
-  for (unsigned int i = 0; i < _population.size(); i++)
+  for (unsigned int i = 0; i < SIZE; i++)
   {
     current = _population[i].first;
     try
@@ -61,7 +55,7 @@ void Population::print()
   for (unsigned int i = 0; i < _population.size(); i++)
   {
     _population[i].first->print();
-    try{
+    try {
       std::cout << "Value = " << _population[i].first->computeValue() << " & Score: " << _population[i].second << std::endl;
     }
     catch (int e) {
@@ -95,10 +89,7 @@ void Population::reproduce()
   Chromosome *c1, *c2;
   do
   {
-    /*
-    ** can a chromosome reproduce with itself ?
-    */
-    c1 = selectChromosome();
+     c1 = selectChromosome();
     c2 = selectChromosome();
     std::pair<Chromosome *, Chromosome *>p = Chromosome::reproduce(c1, c2);
     p.first->mutate();

@@ -72,6 +72,33 @@ void Chromosome::print() const
   std::cout << std::endl;
 }
 
+void Chromosome::prettyPrint() const
+{
+  Gene gene;
+  int j;
+  Type type = DIGIT;
+  std::string s = "";
+  for (int i = 0 ; i < SIZE; i++)
+  {
+    gene.reset();
+    for (j = 0; j < GENE_SIZE; j++)
+      gene[j] = _chromosome[i * GENE_SIZE + j];
+    if (_db.getTypeOf(gene) == type)
+    {
+      s += _db.getCharValueOf(gene);
+      type = type == DIGIT ? OPERATOR : DIGIT;
+    }
+  }
+  if (s.size() < 3)
+    std::cout << "Chromosome " << _chromosome << " has no pretty format: " << s << std::flush;
+  else
+  {
+    if (s.size() % 2 == 0)
+      s.pop_back();
+    std::cout << s << std::flush;
+  }
+}
+
 std::pair<Chromosome *, Chromosome *>
 Chromosome::reproduce(const Chromosome *c1, const Chromosome *c2)
 {
