@@ -20,8 +20,6 @@ public:
   typedef std::pair<Chromosome *, Chromosome *> Children;
 
   Chromosome() : _chromosome(0) {}
-  // add a gene at index index
-  bool addGene(Gene gene, int index);
   // check if the chromosome is of the good shape
   double computeValue() const;
   // generate a new chromosome

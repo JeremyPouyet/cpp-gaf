@@ -1,14 +1,5 @@
 #include "./Chromosome.hh"
 
-bool Chromosome::addGene(Gene gene, int index)
-{
-  if (index < 0 || index > SIZE - 1)
-    return false;
-  for (int i = 0; i < GENE_SIZE; i++)
-    _chromosome[index * GENE_SIZE + i] = gene[i];
-  return true;
-}
-
 double Chromosome::computeValue() const
 {
   Gene g;
