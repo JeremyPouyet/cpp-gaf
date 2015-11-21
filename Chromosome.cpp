@@ -106,34 +106,21 @@ Chromosome::reproduce(const Chromosome *c1, const Chromosome *c2)
   Chromosome *n2 = new Chromosome();
   chrome tmp1 = c1->get();
   chrome tmp2 = c2->get();
-  chrome tmp3;
-  chrome tmp4;
-  int i;
+  chrome tmp;
+  int i, randomPos;
   if ((double)rand() / RAND_MAX <= CROSSOVER_RATE)
   {
-    int randomPos = rand() % (GENE_SIZE * SIZE);
-    for (i = 0; i < randomPos; i++)
-    {
-      tmp3[i] = tmp1[i];
-      tmp4[i] = tmp2[i];
-    }
+    randomPos = rand() % (GENE_SIZE * SIZE);
     for (i = randomPos; i < GENE_SIZE * SIZE; i++)
     {
-      tmp3[i] = tmp2[i];
-      tmp4[i] = tmp1[i];
+      tmp[i] = tmp1[i];
+      tmp1[i] = tmp2[i];
+      tmp2[i] = tmp[i];
     }
-    n1->set(tmp3);
-    n2->set(tmp4);
   }
-  else
-  {
-    n1->set(tmp1);
-    n2->set(tmp2);
-  }
-  std::pair<Chromosome *, Chromosome *> n;
-  n.first = n1;
-  n.second = n2;
-  return n;
+  n1->set(tmp1);
+  n2->set(tmp2);
+  return {n1, n2};
 }
 
 void Chromosome::mutate()

@@ -14,7 +14,7 @@ public:
 
   static constexpr int SIZE = 9;
   static constexpr double CROSSOVER_RATE = 0.7;
-  static constexpr double MUTATION_RATE = 0.1;
+  static constexpr double MUTATION_RATE = 0.01;
 
   typedef std::bitset<SIZE * GENE_SIZE> chrome;
 
