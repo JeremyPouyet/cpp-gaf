@@ -2,17 +2,14 @@
 
 void Population::generate()
 {
-  Gene gene;
-  int j, k;
+  int j;
   for (int i = 0; i < SIZE; i++)
   {
     Chromosome *chromosome = new Chromosome();
+    Chromosome::chrome c;
     for (j = 0; j < Chromosome::SIZE; j++)
-    {
-      for (k = 0; k < GENE_SIZE; k++)
-	gene[k] = rand() % 2;
-      chromosome->addGene(gene, k);
-    }
+      c[j] = rand() % 2;
+    chromosome->set(c);
     _population.push_back({chromosome});
   }
 }
