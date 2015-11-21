@@ -17,6 +17,7 @@ public:
   static constexpr double MUTATION_RATE = 0.01;
 
   typedef std::bitset<SIZE * GENE_SIZE> chrome;
+  typedef std::pair<Chromosome *, Chromosome *> Children;
 
   Chromosome() : _chromosome(0) {}
   // add a gene at index index
@@ -24,8 +25,7 @@ public:
   // check if the chromosome is of the good shape
   double computeValue() const;
   // generate a new chromosome
-  static std::pair<Chromosome *, Chromosome *>
-  reproduce(const Chromosome *c1, const Chromosome *c2);
+  static Children reproduce(const Chromosome *c1, const Chromosome *c2);
   // mutate the chromosome
   void mutate();
   // print well formated equation

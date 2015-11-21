@@ -12,14 +12,13 @@ bool Chromosome::addGene(Gene gene, int index)
 double Chromosome::computeValue() const
 {
   Gene g;
-  char op = '$';
-  double right, value = 0;
+  char op;
+  double right, value;
   bool hasLeft = false, hasValue = false;
   Type type = DIGIT;
   int j;
   for (int i = 0; i < SIZE; i++)
   {
-    g.reset();
     for (j = 0; j < GENE_SIZE; j++)
       g[j] = _chromosome[i * GENE_SIZE + j];
     if (_db.exists(g) == false || _db.getTypeOf(g) != type)
@@ -30,7 +29,7 @@ double Chromosome::computeValue() const
       hasLeft = true;
     }
     else if (hasLeft == false)
-      value += _db.getIntValueOf(g);
+      value = _db.getIntValueOf(g);
     else
     {
       right = _db.getIntValueOf(g);
@@ -46,10 +45,10 @@ double Chromosome::computeValue() const
 	  throw 0;
 	value /= right;
       }
-      op = '$';
       hasValue = true;
     }
     type = (type == DIGIT) ? OPERATOR : DIGIT;
+    g.reset();
   }
   if (hasValue == false)
     throw 1;
@@ -83,8 +82,7 @@ void Chromosome::prettyPrint() const
   }
 }
 
-std::pair<Chromosome *, Chromosome *>
-Chromosome::reproduce(const Chromosome *c1, const Chromosome *c2)
+Chromosome::Children Chromosome::reproduce(const Chromosome *c1, const Chromosome *c2)
 {
   Chromosome *n1 = new Chromosome();
   Chromosome *n2 = new Chromosome();
@@ -125,6 +123,5 @@ Chromosome::chrome Chromosome::get() const
 
 void Chromosome::set(chrome c)
 {
-  for (int i = 0; i < SIZE * GENE_SIZE; i++)
-    _chromosome[i] = c[i];
+  _chromosome = c;
 }

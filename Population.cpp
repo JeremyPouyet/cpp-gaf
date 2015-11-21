@@ -13,31 +13,24 @@ void Population::generate()
 	gene[k] = rand() % 2;
       chromosome->addGene(gene, k);
     }
-    _population.push_back({chromosome, 0});
+    _population.push_back({chromosome});
   }
 }
 
-void Population::test()
+Chromosome *Population::test()
 {
-  Chromosome *current;
   double value;
-  double fitness;
   _totalFitness = 0;
-  for (unsigned int i = 0; i < SIZE; i++)
+  for (Solution &candidate : _population)
   {
-    current = _population[i].first;
     try
     {
-      value = current->computeValue();
+      value = candidate._candidate->computeValue();
       // solution is found!!
       if (_number == value)
-      {
-	_winner = _population[i].first;
-	return;
-      }
-      fitness = 1 / std::abs((double)(_number - value));
-      _population[i].second = fitness;
-      _totalFitness += fitness;
+	return candidate._candidate;
+      candidate._fitness = 1 / std::abs((double)(_number - value));
+      _totalFitness += candidate._fitness;
     }
     catch (int e)
     {
@@ -48,15 +41,17 @@ void Population::test()
       // 	std::cerr << "No value in chromosome" << std::endl;
     }
   }
+  return NULL;
 }
 
 void Population::print()
 {
-  for (unsigned int i = 0; i < _population.size(); i++)
+  for (Solution &candidate : _population)
   {
-    _population[i].first->prettyPrint();
+    candidate._candidate->prettyPrint();
     try {
-      std::cout << " Value = " << _population[i].first->computeValue() << " & Score: " << _population[i].second << std::endl;
+      std::cout << " Value = " << candidate._candidate->computeValue()
+		<< " & fitness: " << candidate._fitness << std::endl;
     }
     catch (int e) {
       (void)e;
@@ -64,20 +59,15 @@ void Population::print()
   }
 }
 
-bool Population::hasResult() const
-{
-  return _winner != NULL;
-}
-
 Chromosome *Population::selectChromosome() const
 {
   double randomNb = std::fmod(std::rand(), _totalFitness);
   double curFitness = 0;
-  for (unsigned int i = 0; i < _population.size(); i++)
+  for (auto candidate : _population)
   {
-    curFitness += _population[i].second;
+    curFitness += candidate._fitness;
     if (curFitness >= randomNb)
-      return _population[i].first;
+      return candidate._candidate;
   }
   // never hapen, just here for the compiler
   return NULL;
@@ -85,31 +75,27 @@ Chromosome *Population::selectChromosome() const
 
 void Population::reproduce()
 {
-  std::vector<std::pair<Chromosome *, double> > nextGeneration;
+  Generation nextGeneration;
   Chromosome *c1, *c2;
+  Chromosome::Children children;
   do
   {
     c1 = selectChromosome();
     c2 = selectChromosome();
-    std::pair<Chromosome *, Chromosome *>p = Chromosome::reproduce(c1, c2);
-    p.first->mutate();
-    p.second->mutate();
-    nextGeneration.push_back({p.first, 0});
-    nextGeneration.push_back({p.second, 0});
+    children = Chromosome::reproduce(c1, c2);
+    children.first->mutate();
+    children.second->mutate();
+    nextGeneration.push_back({children.first});
+    nextGeneration.push_back({children.second});
   } while (nextGeneration.size() != SIZE);
   clean();
   _population = nextGeneration;
 }
 
-Chromosome *Population::getWinner()
-{
-  return _winner;
-}
-
 void Population::clean()
 {
   for (auto p : _population)
-    delete p.first;
+    delete p._candidate;
 }
 
 Population::~Population()

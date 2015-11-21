@@ -10,18 +10,18 @@ bool solve(double number)
 {
   Population population(number);
   int generation;
+  Chromosome *solution;
   population.generate();
   for (generation = 0; generation < SIMULATION_NUMBER; ++generation)
   {
-    population.test();
-    if (population.hasResult())
+    if ((solution = population.test()) != NULL)
       break;
     population.reproduce();
   }
-  if (population.hasResult())
+  if (solution)
   {
     std::cout << "Solution found in " << generation + 1 << " generation" << std::endl;
-    population.getWinner()->prettyPrint();
+    solution->prettyPrint();
     std::cout << " = " << number << std::endl;
   }
   else

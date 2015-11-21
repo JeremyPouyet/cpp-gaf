@@ -3,13 +3,23 @@
 
 #include <vector>
 #include <cstdlib>
-#include <utility>
 #include <cmath>
 #include <cfloat>
 
 #include "./Gene.hh"
 #include "./GenesDatabase.hh"
 #include "./Chromosome.hh"
+
+struct Solution
+{
+public:
+  Solution(Chromosome *candidate) :
+    _candidate(candidate), _fitness(0)
+    {}
+
+  Chromosome	*_candidate;
+  double	_fitness;
+};
 
 class Population
 {
@@ -20,17 +30,17 @@ public:
   ~Population();
   void print();
   void generate();
-  void test();
+  Chromosome *test();
   void clean();
-  bool hasResult() const;
   void reproduce();
-  Chromosome *getWinner();
 
 private:
-  Chromosome * selectChromosome() const;
+  typedef std::vector<Solution> Generation;
   static constexpr int SIZE = 100;
-  // the double is the score of each chromosome
-  std::vector<std::pair<Chromosome *, double> > _population;
+
+  Chromosome * selectChromosome() const;
+
+  Generation _population;
   const GenesDatabase _db;
   Chromosome *_winner;
   double _number;
