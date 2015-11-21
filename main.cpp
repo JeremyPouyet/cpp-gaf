@@ -20,15 +20,13 @@ bool solve(double number)
   }
   if (solution)
   {
-    std::cout << "Solution found in " << generation + 1 << " generation" << std::endl;
+    std::cout << "Solution found in " << generation + 1 << " generation(s)" << std::endl;
     solution->prettyPrint();
     std::cout << " = " << number << std::endl;
+    return true;
   }
-  else
-  {
-    std::cout <<  "Solution not found" << std::endl;
-    population.print();
-  }
+  std::cout <<  "Solution not found" << std::endl;
+  population.print();
   return false;
 }
 
