@@ -5,7 +5,7 @@ bool Chromosome::addGene(Gene gene, int index)
   if (index < 0 || index > SIZE - 1)
     return false;
   for (int i = 0; i < GENE_SIZE; i++)
-    _chromosome.set(index * GENE_SIZE + i, gene[i]);
+    _chromosome[index * GENE_SIZE + i] = gene[i];
   return true;
 }
 
@@ -16,11 +16,12 @@ double Chromosome::computeValue() const
   double right, value = 0;
   bool hasLeft = false, hasValue = false;
   Type type = DIGIT;
+  int j;
   for (int i = 0; i < SIZE; i++)
   {
     g.reset();
-    for (int j = 0; j < GENE_SIZE; j++)
-      g.set(j, _chromosome[i * GENE_SIZE + j]);
+    for (j = 0; j < GENE_SIZE; j++)
+      g[j] = _chromosome[i * GENE_SIZE + j];
     if (_db.exists(g) == false || _db.getTypeOf(g) != type)
       continue;
     if (type == OPERATOR)
@@ -53,23 +54,6 @@ double Chromosome::computeValue() const
   if (hasValue == false)
     throw 1;
   return value;
-}
-
-void Chromosome::print() const
-{
-  Gene gene;
-  int j;
-  for (int i = 0; i < SIZE; i++)
-  {
-    gene.reset();
-    for (j = 0; j < GENE_SIZE; j++)
-      gene[j] = _chromosome[i * GENE_SIZE + j];
-    if (_db.exists(gene))
-      std::cout << " " << _db.getCharValueOf(gene) << std::flush;
-    else
-      std::cout << " UNKNOWN" << std::flush;
-  }
-  std::cout << std::endl;
 }
 
 void Chromosome::prettyPrint() const
@@ -130,7 +114,7 @@ void Chromosome::mutate()
   {
     randomNb = (double)rand() / RAND_MAX;
     if (randomNb <= MUTATION_RATE)
-      _chromosome[i] = !_chromosome[i];
+      _chromosome.flip(i);
   }
 }
 

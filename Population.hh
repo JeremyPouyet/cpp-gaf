@@ -17,9 +17,11 @@ public:
   Population(double number) :
     _winner(NULL), _number(number)
     {}
+  ~Population();
   void print();
   void generate();
   void test();
+  void clean();
   bool hasResult() const;
   void reproduce();
   Chromosome *getWinner();

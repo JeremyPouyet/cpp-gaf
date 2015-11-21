@@ -54,9 +54,9 @@ void Population::print()
 {
   for (unsigned int i = 0; i < _population.size(); i++)
   {
-    _population[i].first->print();
+    _population[i].first->prettyPrint();
     try {
-      std::cout << "Value = " << _population[i].first->computeValue() << " & Score: " << _population[i].second << std::endl;
+      std::cout << " Value = " << _population[i].first->computeValue() << " & Score: " << _population[i].second << std::endl;
     }
     catch (int e) {
       (void)e;
@@ -89,7 +89,7 @@ void Population::reproduce()
   Chromosome *c1, *c2;
   do
   {
-     c1 = selectChromosome();
+    c1 = selectChromosome();
     c2 = selectChromosome();
     std::pair<Chromosome *, Chromosome *>p = Chromosome::reproduce(c1, c2);
     p.first->mutate();
@@ -97,11 +97,22 @@ void Population::reproduce()
     nextGeneration.push_back({p.first, 0});
     nextGeneration.push_back({p.second, 0});
   } while (nextGeneration.size() != SIZE);
-  _population.clear();
+  clean();
   _population = nextGeneration;
 }
 
 Chromosome *Population::getWinner()
 {
   return _winner;
+}
+
+void Population::clean()
+{
+  for (auto p : _population)
+    delete p.first;
+}
+
+Population::~Population()
+{
+  clean();
 }
