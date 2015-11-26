@@ -1,14 +1,22 @@
 #include "./Chromosome.hh"
 
-double Chromosome::computeValue() const
+Chromosome::Chromosome()
+{
+  for (int j = 0; j < CHROMOSOME_SIZE; j++)
+    _chromosome[j] = rand() % 2;
+}
+
+void	Chromosome::computeValue()
 {
   Gene g;
   char op;
-  double right, value;
-  bool hasLeft = false, hasValue = false;
+  double right;
+  bool hasLeft = false;
   Type type = DIGIT;
   int j;
-  for (int i = 0; i < SIZE; i++)
+  _value = 0;
+  _hasValue = false;
+  for (int i = 0; i < GENE_PER_CHROMOSOME; i++)
   {
     for (j = 0; j < GENE_SIZE; j++)
       g[j] = _chromosome[i * GENE_SIZE + j];
@@ -20,30 +28,35 @@ double Chromosome::computeValue() const
       hasLeft = true;
     }
     else if (hasLeft == false)
-      value = _db.getIntValueOf(g);
+      _value = _db.getIntValueOf(g);
     else
     {
       right = _db.getIntValueOf(g);
       if (op == '+')
-	value += right;
+	_value += right;
       else if (op == '-')
-	value -= right;
+	_value -= right;
       else if (op == '*')
-	value *= right;
+	_value *= right;
       else
       {
 	if (right == 0)
-	  throw 0;
-	value /= right;
+	{
+	  _hasValue = false;
+	  return;
+	}
+	_value /= right;
       }
-      hasValue = true;
+      _hasValue = true;
     }
     type = (type == DIGIT) ? OPERATOR : DIGIT;
     g.reset();
   }
-  if (hasValue == false)
-    throw 1;
-  return value;
+}
+
+void Chromosome::computeFitness(double number)
+{
+  _fitness = 1 / std::abs(number - _value);
 }
 
 void Chromosome::prettyPrint() const
@@ -52,7 +65,7 @@ void Chromosome::prettyPrint() const
   int j;
   Type type = DIGIT;
   std::string s = "";
-  for (int i = 0 ; i < SIZE; i++)
+  for (int i = 0 ; i < GENE_PER_CHROMOSOME; i++)
   {
     gene.reset();
     for (j = 0; j < GENE_SIZE; j++)
@@ -73,7 +86,7 @@ void Chromosome::prettyPrint() const
   }
 }
 
-Chromosome::Children Chromosome::reproduce(const Chromosome *c1, const Chromosome *c2)
+Chromosome::Children Chromosome::reproduce(const Chromosome * const c1, const Chromosome * const c2)
 {
   Chromosome *n1 = new Chromosome();
   Chromosome *n2 = new Chromosome();
@@ -83,8 +96,8 @@ Chromosome::Children Chromosome::reproduce(const Chromosome *c1, const Chromosom
   int i, randomPos;
   if ((double)rand() / RAND_MAX <= CROSSOVER_RATE)
   {
-    randomPos = rand() % (GENE_SIZE * SIZE);
-    for (i = randomPos; i < GENE_SIZE * SIZE; i++)
+    randomPos = rand() % CHROMOSOME_SIZE;
+    for (i = randomPos; i < CHROMOSOME_SIZE; i++)
     {
       tmp[i] = tmp1[i];
       tmp1[i] = tmp2[i];
@@ -99,11 +112,14 @@ Chromosome::Children Chromosome::reproduce(const Chromosome *c1, const Chromosom
 void Chromosome::mutate()
 {
   double randomNb;
-  for (int i = 0; i < GENE_SIZE * SIZE; i++)
+  for (int i = 0; i < CHROMOSOME_SIZE; i++)
   {
     randomNb = (double)rand() / RAND_MAX;
     if (randomNb <= MUTATION_RATE)
+    {
       _chromosome.flip(i);
+      computeValue();
+    }
   }
 }
 
@@ -112,7 +128,23 @@ Chromosome::chrome Chromosome::get() const
   return _chromosome;
 }
 
-void Chromosome::set(chrome c)
+double Chromosome::getValue() const
+{
+  return _value;
+}
+
+bool Chromosome::isValid() const
+{
+  return _hasValue;
+}
+
+double Chromosome::getFitness() const
+{
+  return _fitness;
+}
+
+void Chromosome::set(const chrome c)
 {
   _chromosome = c;
+  computeValue();
 }

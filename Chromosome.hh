@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <bitset>
 #include <utility>
+#include <cmath>
 
 #include "./Gene.hh"
 #include "./GenesDatabase.hh"
@@ -12,31 +13,36 @@ class Chromosome
 {
 public:
 
-  static constexpr int SIZE = 9;
-  static constexpr double CROSSOVER_RATE = 0.7;
-  static constexpr double MUTATION_RATE = 0.01;
+  static constexpr double	CROSSOVER_RATE		= 0.7;
+  static constexpr double	MUTATION_RATE		= 0.1;
+  static constexpr int		GENE_PER_CHROMOSOME	= 9;
+  static constexpr int		CHROMOSOME_SIZE		= GENE_SIZE * GENE_PER_CHROMOSOME;
 
-  typedef std::bitset<SIZE * GENE_SIZE> chrome;
+  typedef std::bitset<CHROMOSOME_SIZE> chrome;
   typedef std::pair<Chromosome *, Chromosome *> Children;
 
-  Chromosome() : _chromosome(0) {}
-  // check if the chromosome is of the good shape
-  double computeValue() const;
-  // generate a new chromosome
-  static Children reproduce(const Chromosome *c1, const Chromosome *c2);
-  // mutate the chromosome
-  void mutate();
-  // print well formated equation
-  void prettyPrint() const;
-  // get the chromosome
-  chrome get() const;
-  // set the chromosome
-  void set(chrome c);
+  Chromosome();
+
+  static Children
+  reproduce(const Chromosome * const c1, const Chromosome * const c2);
+
+  void		mutate();
+  void		prettyPrint()			const;
+  chrome	get()				const;
+  void		set(const chrome c);
+  void		computeFitness(double number);
+  double	getValue()			const;
+  double	getFitness()			const;
+  bool		isValid()			const;
 
 private:
-  Gene getGene(int index);
-  chrome _chromosome;
-  GenesDatabase _db;
+  void		computeValue();
+
+  chrome		_chromosome;
+  const GenesDatabase	_db;
+  double		_fitness;
+  double		_value;
+  bool			_hasValue;
 };
 
 #endif

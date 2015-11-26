@@ -31,13 +31,13 @@ public:
   	{"1101", {OPERATOR, '/'}}})
     {}
 
-  bool exists(Gene gene) const;
-  Type getTypeOf(Gene gene) const;
-  int getIntValueOf(Gene gene) const;
-  char getCharValueOf(Gene gene) const;
+  bool	exists(Gene gene)		const;
+  Type	getTypeOf(Gene gene)		const;
+  int	getIntValueOf(Gene gene)	const;
+  char	getCharValueOf(Gene gene)	const;
 
 private:
-  const std::map<std::string, std::pair<Type, char> > _genes;
+  const std::map<const std::string, const std::pair<const Type, const char> > _genes;
 };
 
 #endif
