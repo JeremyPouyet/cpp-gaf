@@ -6,7 +6,6 @@
 #include <cfloat>
 
 #include "./Gene.hh"
-#include "./GenesDatabase.hh"
 #include "./Chromosome.hh"
 
 class Population

@@ -9,7 +9,7 @@ RM		= rm -f
 ##
 CPPFLAGS	+= -W -Wextra -Wall
 
-#CPPFLAGS	+= -fmax-errors=2
+CPPFLAGS	+= -fmax-errors=2
 
 ##
 ## c++ version
@@ -23,7 +23,6 @@ NAME	= equation_finder
 
 SRCS	= main.cpp \
 	Chromosome.cpp \
-	GenesDatabase.cpp \
 	Population.cpp \
 
 OBJS	= $(SRCS:.cpp=.o)

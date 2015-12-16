@@ -1,6 +1,8 @@
 #include <cstdlib>
 #include <string>
 
+#include <iostream>
+
 #include "./Population.hh"
 #include "./Chromosome.hh"
 

@@ -1,7 +1,7 @@
 #ifndef _GENE_HH_
 #define _GENE_HH_
 
-#include <bitset>
+#include <cstdint>
 
 enum Type
 {
@@ -10,9 +10,12 @@ enum Type
   UNKNOWN
 };
 
-#define GENE_SIZE 4
-#define GENE_MAX_VALUE 255
+#define GENE_TYPE uint16_t
 
-typedef std::bitset<GENE_SIZE> Gene;
+typedef GENE_TYPE Gene;
+
+#define GENE_SIZE (sizeof(GENE_TYPE) * 8)
+#define MIN_GENE_VALUE std::numeric_limits<GENE_TYPE>::min()
+#define MAX_GENE_VALUE std::numeric_limits<GENE_TYPE>::max()
 
 #endif

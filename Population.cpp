@@ -2,8 +2,8 @@
 
 void Population::generate()
 {
-  for (int i = 0; i < SIZE; i++)
-    _population.push_back(new Chromosome());
+    for (int i = 0; i < SIZE; i++)
+        _population.push_back(new Chromosome());
 }
 
 Chromosome *Population::test()
