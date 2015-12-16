@@ -10,7 +10,7 @@ enum Type
   UNKNOWN
 };
 
-#define GENE_TYPE uint16_t
+#define GENE_TYPE int8_t
 
 typedef GENE_TYPE Gene;
 

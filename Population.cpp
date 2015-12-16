@@ -50,7 +50,7 @@ Chromosome *Population::selectChromosome() const
     if (curFitness >= randomNb)
       return candidate;
   }
-  // never hapen, just here for the compiler
+  // never happen, just here for the compiler
   return NULL;
 }
 
