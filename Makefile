@@ -31,6 +31,7 @@ LIB     = EquationProblem.so
 
 
 SRCS	= main.cpp \
+	ProblemLoader.cpp \
 	Chromosome.cpp \
 	Population.cpp \
 	
