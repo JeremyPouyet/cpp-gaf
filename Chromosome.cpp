@@ -73,11 +73,11 @@ double Chromosome::getValue() const
 
 void Chromosome::setValue(Problem *problem) 
 {
-  try {
-    _value = problem->computeValue(this);
-  } catch (int e) {
-    _hasValue = false;
-  }
+    try {
+        _value = problem->computeValue(this);
+    } catch (int e) {
+        _hasValue = false;
+    }
 }
 
 bool Chromosome::isValid() const
