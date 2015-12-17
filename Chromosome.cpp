@@ -9,20 +9,21 @@ Chromosome::Chromosome()
         _strand.push_back(dis(gen));
 }
 
-char getCharValue(int n) {
+std::string Chromosome::getCharValue(int n) const 
+{
     int b1 = (n >> 0) & 1, b2 = (n >> 1) & 1;
     if (b1 && b2)
-        return '+';
+        return "+";
     if (b1 && !b2)
-        return '-';
+        return "-";
     if (!b1 && !b2)
-        return '*';
-    return '/';
+        return "*";
+    return "/";
 }
 
 void	Chromosome::computeValue()
 {
-  char op;
+  std::string op;
   bool hasLeft = false;
   Type type = DIGIT;
   _value = 0;
@@ -38,11 +39,11 @@ void	Chromosome::computeValue()
       _value = gene;
     else
     {
-      if (op == '+')
+      if (op == "+")
 	_value += gene;
-      else if (op == '-')
+      else if (op == "-")
 	_value -= gene;
-      else if (op == '*')
+      else if (op == "*")
 	_value *= gene;
       else if (gene == 0)
       {
@@ -59,29 +60,21 @@ void	Chromosome::computeValue()
 
 void Chromosome::computeFitness(double number)
 {
-  _fitness = 1 / std::abs(number - _value);
+    _fitness = 1 / std::abs(number - _value);
 }
 
-void Chromosome::prettyPrint() const
+void Chromosome::print() const
 {
-  Type type = DIGIT;
-  std::string s;
-  for (auto gene: _strand)
-  {
-      if (type == OPERATOR)
-        s += getCharValue(gene);
-      else
-        s += std::to_string(gene);
-     type = type == DIGIT ? OPERATOR : DIGIT; 
-  }
-  if (s.size() < 3)
-    std::cout << "Chromosome has no pretty format: " << s << std::flush;
-  else
-  {
-    if (s.size() % 2 == 0)
-      s.pop_back();
-    std::cout << s << std::flush;
-  }
+    Type type = DIGIT;
+    for (auto gene: _strand)
+    {
+        if (type == OPERATOR)
+            std::cout << " " << getCharValue(gene) << " ";
+        else
+            std::cout << std::to_string(gene);
+        type = type == DIGIT ? OPERATOR : DIGIT; 
+    }
+    std::cout << " = " << _value << " && fitness = " << _fitness << std::endl;
 }
 
 Chromosome::Children Chromosome::reproduce(const Chromosome * const c1, const Chromosome * const c2)

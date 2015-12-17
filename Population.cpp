@@ -27,17 +27,8 @@ Chromosome *Population::test()
 
 void Population::print() const
 {
-  for (auto &candidate : _population)
-  {
-    candidate->prettyPrint();
-    if (candidate->isValid())
-    {
-      std::cout << " Value = " << candidate->getValue()
-		<< " & fitness: " << candidate->getFitness() << std::endl;
-    }
-    else
-      std::cout << " Chromosome not printable" << std::endl;
-  }
+    for (auto &candidate : _population)
+        candidate->print();
 }
 
 Chromosome *Population::selectChromosome() const

@@ -29,7 +29,7 @@ public:
   reproduce(const Chromosome * const c1, const Chromosome * const c2);
 
   void		mutate();
-  void		prettyPrint()			const;
+  void		print() 			const;
   Strand	get()				const;
   void		set(const Strand strand);
   void		computeFitness(double number);
@@ -39,6 +39,7 @@ public:
 
 private:
   void		computeValue();
+  std::string   getCharValue(int n)             const;
 
   Strand        _strand;
   double	_fitness;
