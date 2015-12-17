@@ -15,10 +15,12 @@ class EquationProblem : public Problem
         virtual void askParameters();
         virtual double computeFitnessOf(const Chromosome *chromosome) const;
         virtual double getSolution() const;
-       
+        virtual double computeValue(Chromosome *chromosome) const;
+        
         ~EquationProblem();
         
     private:
+        std::string getCharValue(int n) const;
         double _number;
 };
 

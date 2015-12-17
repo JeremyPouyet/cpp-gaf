@@ -9,7 +9,10 @@
 #include <algorithm>
 #include <iostream>
 
-#include "./Gene.hh"
+#include "Gene.hh"
+#include "./Problem.hh"
+
+class Problem;
 
 class Chromosome
 {
@@ -26,22 +29,18 @@ public:
   Chromosome();
 
   static Children
-  reproduce(const Chromosome * const c1, const Chromosome * const c2);
+  reproduce(Problem * problem, const Chromosome * const c1, const Chromosome * const c2);
 
   void          setFitness(double fitness);
-  void		mutate();
-  void		print() 			const;
-  void		set(const Strand strand);
+  void		mutate(Problem *problem);
+  void		set(Problem *problem, const Strand strand);
   double	getValue()			const;
+  void          setValue(Problem *problem);
   Strand        getStrand()                     const;
   double	getFitness()			const;
   bool		isValid()			const;
-
-  std::string   getCharValue(int n)             const;
 private:
-  void		computeValue();
   
-
   Strand        _strand;
   double	_fitness;
   double	_value;

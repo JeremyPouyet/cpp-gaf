@@ -9,60 +9,12 @@ Chromosome::Chromosome()
         _strand.push_back(dis(gen));
 }
 
-std::string Chromosome::getCharValue(int n) const 
-{
-    int b1 = (n >> 0) & 1, b2 = (n >> 1) & 1;
-    if (b1 && b2)
-        return "+";
-    if (b1 && !b2)
-        return "-";
-    if (!b1 && !b2)
-        return "*";
-    return "/";
-}
-
-void	Chromosome::computeValue()
-{
-  std::string op;
-  bool hasLeft = false;
-  Type type = DIGIT;
-  _value = 0;
-  _hasValue = false;
-  for (auto gene: _strand)
-  {
-    if (type == OPERATOR)
-    {
-      op = getCharValue(gene);
-      hasLeft = true;
-    }
-    else if (hasLeft == false)
-      _value = gene;
-    else
-    {
-      if (op == "+")
-	_value += gene;
-      else if (op == "-")
-	_value -= gene;
-      else if (op == "*")
-	_value *= gene;
-      else if (gene == 0)
-      {
-	_hasValue = false;
-	return;
-      }
-      else
-	_value /= gene;
-      _hasValue = true;
-    }
-    type = (type == DIGIT) ? OPERATOR : DIGIT;
-  } 
-}
-
 void Chromosome::setFitness(double fitness) {
     _fitness = fitness;
 }
 
-Chromosome::Children Chromosome::reproduce(const Chromosome * const c1, const Chromosome * const c2)
+Chromosome::Children 
+Chromosome::reproduce(Problem *problem, const Chromosome * const c1, const Chromosome * const c2)
 {
   Chromosome *n1 = new Chromosome();
   Chromosome *n2 = new Chromosome();
@@ -83,12 +35,12 @@ Chromosome::Children Chromosome::reproduce(const Chromosome * const c1, const Ch
         tmp2[currentGeneId] |= 1 << g1;
     }
   }
-  n1->set(tmp1);
-  n2->set(tmp2);
+  n1->set(problem, tmp1);
+  n2->set(problem, tmp2);
   return {n1, n2};
 }
 
-void Chromosome::mutate()
+void Chromosome::mutate(Problem *problem)
 {
   double randomNb;
   int currentGeneId, currentBitId;
@@ -99,8 +51,12 @@ void Chromosome::mutate()
     currentBitId = i - (currentGeneId * GENE_SIZE);
     if (randomNb <= MUTATION_RATE)
     {
-      _strand[currentGeneId] ^= 1 << currentBitId;  
-      computeValue();
+      _strand[currentGeneId] ^= 1 << currentBitId;
+      try {
+          setValue(problem);
+      } catch (int e) {
+          _hasValue = false;
+      }
     }
   }
 }
@@ -115,6 +71,15 @@ double Chromosome::getValue() const
   return _value;
 }
 
+void Chromosome::setValue(Problem *problem) 
+{
+  try {
+    _value = problem->computeValue(this);
+  } catch (int e) {
+    _hasValue = false;
+  }
+}
+
 bool Chromosome::isValid() const
 {
   return _hasValue;
@@ -125,8 +90,8 @@ double Chromosome::getFitness() const
   return _fitness;
 }
 
-void Chromosome::set(const Strand strand)
+void Chromosome::set(Problem *problem, const Strand strand)
 {
   _strand = strand;
-  computeValue();
+  setValue(problem);
 }

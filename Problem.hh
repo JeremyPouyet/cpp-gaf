@@ -3,6 +3,8 @@
 
 #include "Chromosome.hh"
 
+class Chromosome;
+
 class Problem {
 public:
     Problem() {}
@@ -11,6 +13,7 @@ public:
     virtual void askParameters() = 0;
     virtual double computeFitnessOf(const Chromosome *chromosome) const = 0;
     virtual double getSolution() const = 0;
+    virtual double computeValue(Chromosome *chromosome) const = 0;
     
     virtual ~Problem() {}
 };

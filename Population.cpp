@@ -82,9 +82,9 @@ void Population::reproduce()
   {
     c1 = selectChromosome();
     c2 = selectChromosome();
-    children = Chromosome::reproduce(c1, c2);
-    children.first->mutate();
-    children.second->mutate();
+    children = Chromosome::reproduce(_problem, c1, c2);
+    children.first->mutate(_problem);
+    children.second->mutate(_problem);
     nextGeneration.push_back(children.first);
     nextGeneration.push_back(children.second);
   } while (nextGeneration.size() != SIZE);
