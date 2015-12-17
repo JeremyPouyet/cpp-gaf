@@ -35,8 +35,12 @@ bool solve(double number)
 
 int main(int ac, char **av)
 {
-    ProblemLoader pl("./EquationProblem.so");
-    
+    ProblemLoader pl;
+    try {
+        pl.load("./EquationProblem.so");
+    } catch(std::string &error) {
+       std::cerr << error << std::endl; 
+    }
     Problem * problem = pl.getProblem();
     problem->print();
     

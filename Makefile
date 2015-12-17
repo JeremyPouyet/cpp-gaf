@@ -2,7 +2,7 @@
 ## Practical alias
 ##
 CC		= g++
-RM		= rm -f
+RM		= rm -rf
 
 ##
 ## code like a boss

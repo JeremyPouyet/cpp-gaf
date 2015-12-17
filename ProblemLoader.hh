@@ -1,10 +1,3 @@
-/* 
- * File:   ProblemLoader.hh
- * Author: jeremy
- *
- * Created on 17 December 2015, 15:23
- */
-
 #ifndef PROBLEMLOADER_HH
 #define	PROBLEMLOADER_HH
 
@@ -15,9 +8,11 @@
 
 class ProblemLoader {
 public:
-    ProblemLoader(std::string libPath);
+    ProblemLoader();
     ~ProblemLoader();
     
+    Problem *load(const std::string &libPath);
+    void    close();
     Problem *getProblem() const;
 private:
     std::string _libPath;
