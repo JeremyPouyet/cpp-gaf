@@ -9,19 +9,20 @@
 class EquationProblem : public Problem
 {
     public: 
-        EquationProblem();
+        EquationProblem() {}
         
         virtual void print(const Chromosome *chromosome) const;
         virtual void askParameters();
         virtual double computeFitnessOf(const Chromosome *chromosome) const;
-        virtual double getSolution() const;
-        virtual double computeValue(Chromosome *chromosome) const;
+        virtual double computeValue(const Chromosome *chromosome) const;
+        virtual bool test(Chromosome *chromosome) const;
         
-        ~EquationProblem();
+        virtual ~EquationProblem() {}
         
     private:
         std::string getCharValue(int n) const;
         double _number;
+        double _value;
 };
 
 #endif	/* EQUATIONPROBLEM_HH */

@@ -35,22 +35,17 @@ void Population::generate()
 
 Chromosome *Population::test()
 {
-  double value, fitness;
-  _totalFitness = 0;
-  for (auto &candidate : _population)
-  {
-    if (candidate->isValid())
-    {
-      value = candidate->getValue();
-      // solution is found!!
-      if (_problem->getSolution() == value)
-	return candidate;
-      fitness = _problem->computeFitnessOf(candidate);
-      candidate->setFitness(fitness);
-      _totalFitness += candidate->getFitness();
+    double fitness;
+    _totalFitness = 0;
+    for (auto &candidate : _population)
+    {   
+        if (_problem->test(candidate))
+            return candidate;
+        fitness = _problem->computeFitnessOf(candidate);
+        candidate->setFitness(fitness);
+        _totalFitness += candidate->getFitness();
     }
-  }
-  return NULL;
+    return NULL;
 }
 
 void Population::print() const
@@ -82,9 +77,9 @@ void Population::reproduce()
   {
     c1 = selectChromosome();
     c2 = selectChromosome();
-    children = Chromosome::reproduce(_problem, c1, c2);
-    children.first->mutate(_problem);
-    children.second->mutate(_problem);
+    children = Chromosome::reproduce(c1, c2);
+    children.first->mutate();
+    children.second->mutate();
     nextGeneration.push_back(children.first);
     nextGeneration.push_back(children.second);
   } while (nextGeneration.size() != SIZE);

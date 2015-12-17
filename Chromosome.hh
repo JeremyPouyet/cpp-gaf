@@ -10,9 +10,6 @@
 #include <iostream>
 
 #include "Gene.hh"
-#include "./Problem.hh"
-
-class Problem;
 
 class Chromosome
 {
@@ -29,22 +26,17 @@ public:
   Chromosome();
 
   static Children
-  reproduce(Problem * problem, const Chromosome * const c1, const Chromosome * const c2);
+  reproduce(const Chromosome * const c1, const Chromosome * const c2);
 
   void          setFitness(double fitness);
-  void		mutate(Problem *problem);
-  void		set(Problem *problem, const Strand strand);
-  double	getValue()			const;
-  void          setValue(Problem *problem);
+  void		mutate();
+  void		set(const Strand strand);
   Strand        getStrand()                     const;
   double	getFitness()			const;
-  bool		isValid()			const;
 private:
   
   Strand        _strand;
   double	_fitness;
-  double	_value;
-  bool		_hasValue;
 };
 
 #endif

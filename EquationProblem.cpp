@@ -8,9 +8,6 @@ extern "C" void destroy(Problem *problem) {
     delete problem;
 }
 
-EquationProblem::EquationProblem() 
-{ }
-
 void EquationProblem::print(const Chromosome *chromosome) const {
     Chromosome::Strand strand = chromosome->getStrand();
     Type type = DIGIT;
@@ -22,7 +19,11 @@ void EquationProblem::print(const Chromosome *chromosome) const {
             std::cout << std::to_string(gene);
         type = type == DIGIT ? OPERATOR : DIGIT; 
     }
-    std::cout << " = " << chromosome->getValue() << " && fitness = " << chromosome->getFitness() << std::endl;
+    try {
+        std::cout << " = " << computeValue(chromosome) << " && fitness = " << chromosome->getFitness() << std::endl;
+    } catch (int e) {
+        std::cout << " chromosome with a division by 0 " << std::endl;
+    } 
 }
 
 void EquationProblem::askParameters() {
@@ -31,17 +32,14 @@ void EquationProblem::askParameters() {
 }
 
 double EquationProblem::computeFitnessOf(const Chromosome *chromosome) const {
-    return 1 / std::abs(_number - chromosome->getValue());
+    try  {
+        return 1 / std::abs(_number - computeValue(chromosome));
+    } catch (int e) {
+        return 0.001; // minimise division by zero  
+    }
 }
 
-EquationProblem::~EquationProblem() 
-{ }
-
-double EquationProblem::getSolution() const {
-    return _number;
-}
-
-double	EquationProblem::computeValue(Chromosome *chromosome) const
+double	EquationProblem::computeValue(const Chromosome *chromosome) const
 {
     Chromosome::Strand strand = chromosome->getStrand();
     std::string op;
@@ -85,4 +83,15 @@ std::string EquationProblem::getCharValue(int n) const
     if (!b1 && !b2)
         return "*";
     return "/";
+}
+
+bool EquationProblem::test(Chromosome *chromosome) const
+{
+    double value;
+    try {
+        value = computeValue(chromosome);
+    } catch (int e) {
+        return false;
+    }
+    return value == _number;
 }
