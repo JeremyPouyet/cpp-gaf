@@ -58,31 +58,16 @@ void	Chromosome::computeValue()
   } 
 }
 
-void Chromosome::computeFitness(double number)
-{
-    _fitness = 1 / std::abs(number - _value);
-}
-
-void Chromosome::print() const
-{
-    Type type = DIGIT;
-    for (auto gene: _strand)
-    {
-        if (type == OPERATOR)
-            std::cout << " " << getCharValue(gene) << " ";
-        else
-            std::cout << std::to_string(gene);
-        type = type == DIGIT ? OPERATOR : DIGIT; 
-    }
-    std::cout << " = " << _value << " && fitness = " << _fitness << std::endl;
+void Chromosome::setFitness(double fitness) {
+    _fitness = fitness;
 }
 
 Chromosome::Children Chromosome::reproduce(const Chromosome * const c1, const Chromosome * const c2)
 {
   Chromosome *n1 = new Chromosome();
   Chromosome *n2 = new Chromosome();
-  Strand tmp1 = c1->get();
-  Strand tmp2 = c2->get();
+  Strand tmp1 = c1->getStrand();
+  Strand tmp2 = c2->getStrand();
   Gene g1, g2;
   int i, randomPos, currentGeneId, currentBitId;
   if ((double)rand() / RAND_MAX <= CROSSOVER_RATE)
@@ -120,7 +105,7 @@ void Chromosome::mutate()
   }
 }
 
-Chromosome::Strand Chromosome::get() const
+Chromosome::Strand Chromosome::getStrand() const
 {
   return _strand;
 }

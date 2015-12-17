@@ -4,7 +4,7 @@ ProblemLoader::ProblemLoader()
 : _sharedLibrary(NULL), _problem(NULL) {}
 
 Problem *ProblemLoader::load(const std::string &libPath) {
-    _sharedLibrary = dlopen("./EquationProblem.so", RTLD_LAZY);
+    _sharedLibrary = dlopen(libPath.c_str(), RTLD_LAZY);
     if (!_sharedLibrary)
         throw "Cannot open lib";
     
@@ -12,12 +12,12 @@ Problem *ProblemLoader::load(const std::string &libPath) {
     _constructor = (create_t *)dlsym(_sharedLibrary, "create");
     const char * dlsym_error = dlerror();
     if (dlsym_error)
-        throw "Cannot load create symbol: " + dlsym_error;
+        throw "Cannot load create symbol: " + std::string(dlsym_error);
     
     _destructor = (destroy_t *)dlsym(_sharedLibrary, "destroy");
     dlsym_error = dlerror();
     if (dlsym_error)
-        throw "Cannot load destroy symbol: " + dlsym_error;
+        throw "Cannot load destroy symbol: " + std::string(dlsym_error);
     _problem = _constructor();
     return _problem;
 }

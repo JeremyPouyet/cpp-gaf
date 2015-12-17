@@ -1,14 +1,41 @@
 #include "./Population.hh"
 
+Population::Population() :
+_winner(NULL), _problem(NULL)
+{ }
+
+int Population::solve(Problem *problem) {
+    _problem = problem;
+    int generation;
+    Chromosome *solution;
+    generate();
+    for (generation = 0; generation < SIMULATION_NUMBER; ++generation)
+    {
+        if ((solution = test()) != NULL)
+            break;
+        reproduce();
+    }
+    if (solution)
+    {
+        std::cout << "Solution found in " << generation + 1 << " generation(s)" << std::endl;
+        _problem->print(solution);
+        return true;
+    }
+    std::cout <<  "Solution not found" << std::endl;
+    print();
+    return false;
+}
+
 void Population::generate()
 {
+    _problem->askParameters();
     for (int i = 0; i < SIZE; i++)
         _population.push_back(new Chromosome());
 }
 
 Chromosome *Population::test()
 {
-  double value;
+  double value, fitness;
   _totalFitness = 0;
   for (auto &candidate : _population)
   {
@@ -16,9 +43,10 @@ Chromosome *Population::test()
     {
       value = candidate->getValue();
       // solution is found!!
-      if (_number == value)
+      if (_problem->getSolution() == value)
 	return candidate;
-      candidate->computeFitness(_number);
+      fitness = _problem->computeFitnessOf(candidate);
+      candidate->setFitness(fitness);
       _totalFitness += candidate->getFitness();
     }
   }
@@ -28,7 +56,7 @@ Chromosome *Population::test()
 void Population::print() const
 {
     for (auto &candidate : _population)
-        candidate->print();
+        _problem->print(candidate);
 }
 
 Chromosome *Population::selectChromosome() const
@@ -66,8 +94,8 @@ void Population::reproduce()
 
 void Population::clean()
 {
-  for (Chromosome *p : _population)
-    delete p;
+    for (Chromosome *p : _population)
+        delete p;
 }
 
 Population::~Population()

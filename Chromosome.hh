@@ -28,18 +28,19 @@ public:
   static Children
   reproduce(const Chromosome * const c1, const Chromosome * const c2);
 
+  void          setFitness(double fitness);
   void		mutate();
   void		print() 			const;
-  Strand	get()				const;
   void		set(const Strand strand);
-  void		computeFitness(double number);
   double	getValue()			const;
+  Strand        getStrand()                     const;
   double	getFitness()			const;
   bool		isValid()			const;
 
+  std::string   getCharValue(int n)             const;
 private:
   void		computeValue();
-  std::string   getCharValue(int n)             const;
+  
 
   Strand        _strand;
   double	_fitness;

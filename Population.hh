@@ -5,30 +5,34 @@
 #include <cstdlib>
 #include <cfloat>
 
+#include "./Problem.hh"
+#include "./ProblemLoader.hh"
 #include "./Gene.hh"
 #include "./Chromosome.hh"
 
 class Population
 {
 public:
-  Population(double number) : _winner(NULL), _number(number) {}
+  Population();
   ~Population();
-  void print() const;
-  void generate();
-  Chromosome *test();
-  void clean();
-  void reproduce();
+  int solve(Problem *problem);
 
 private:
   typedef std::vector<Chromosome *> Generation;
   static constexpr int SIZE = 100;
+  static constexpr int SIMULATION_NUMBER = 1500;
 
   Chromosome * selectChromosome() const;
+  void print() const;
+  void generate();
+   Chromosome *test();
+  void clean();
+  void reproduce();
 
   Generation _population;
   Chromosome *_winner;
-  double _number;
   double _totalFitness;
+  Problem *_problem;
 };
 
 #endif

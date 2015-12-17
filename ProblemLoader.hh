@@ -15,7 +15,6 @@ public:
     void    close();
     Problem *getProblem() const;
 private:
-    std::string _libPath;
     void        *_sharedLibrary;
     Problem     *_problem;
     create_t    *_constructor;

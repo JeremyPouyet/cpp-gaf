@@ -35,7 +35,8 @@ SRCS	= main.cpp \
 	Chromosome.cpp \
 	Population.cpp \
 	
-SRC_LIB= EquationProblem.cpp
+SRC_LIB= EquationProblem.cpp \
+	Chromosome.cpp
 
 OBJS	= $(SRCS:.cpp=.o)
 LIB_OBJS= $(SRC_LIB:.cpp=.o)
