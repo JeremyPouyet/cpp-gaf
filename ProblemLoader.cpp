@@ -6,7 +6,7 @@ ProblemLoader::ProblemLoader()
 Problem *ProblemLoader::load(const std::string &libPath) {
     _sharedLibrary = dlopen(libPath.c_str(), RTLD_LAZY);
     if (!_sharedLibrary)
-        throw "Cannot open lib";
+        throw "Cannot open lib " + libPath ;
     
     dlerror();
     _constructor = (create_t *)dlsym(_sharedLibrary, "create");
