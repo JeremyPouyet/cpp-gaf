@@ -12,6 +12,11 @@ CPPFLAGS	+= -W -Wextra -Wall -fPIC
 CPPFLAGS	+= -fmax-errors=2
 
 ##
+## header location
+##
+CPPFLAGS += -I./
+
+##
 ## shared library flag
 ##
 LDFLAGS		+= -shared
@@ -27,7 +32,7 @@ CPPFLAGS	+= -std=c++11
 ## files generation compilation options
 ##
 NAME	= equation_finder
-LIB     = EquationProblem.so
+P1     = problems/equation/EquationProblem.so
 
 
 SRCS	= main.cpp \
@@ -35,19 +40,19 @@ SRCS	= main.cpp \
 	Chromosome.cpp \
 	Population.cpp \
 	
-SRC_LIB= EquationProblem.cpp \
+SRCS_P1	= problems/equation/EquationProblem.cpp \
 	Chromosome.cpp
 
 OBJS	= $(SRCS:.cpp=.o)
-LIB_OBJS= $(SRC_LIB:.cpp=.o)
+OBJS_P1 = $(SRCS_P1:.cpp=.o)
 
 ##
 ## compilation
 ##
-all:		$(LIB) $(NAME)
+all:		$(P1) $(NAME)
 
-$(LIB):		$(LIB_OBJS)
-		$(CC) $(LDFLAGS) $(LIB_OBJS) -o $(LIB)   
+$(P1):		$(OBJS_P1)
+		$(CC) $(LDFLAGS) $(OBJS_P1) -o $(P1)   
 
 $(NAME):	$(OBJS)
 		$(CC) $(OBJS) -o $(NAME) $(LIBDL)
@@ -56,10 +61,10 @@ $(NAME):	$(OBJS)
 ## Clean data
 ##
 clean:
-		$(RM) $(OBJS) $(LIB_OBJS)
+		$(RM) $(OBJS) $(OBJS_P1)
 
 fclean:		clean
-		$(RM) $(NAME) $(LIB)
+		$(RM) $(NAME) $(P1)
 
 re:		fclean all
 
