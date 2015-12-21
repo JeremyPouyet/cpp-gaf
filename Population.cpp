@@ -77,7 +77,13 @@ void Population::reproduce()
   {
     c1 = selectChromosome();
     c2 = selectChromosome();
-    children = Chromosome::reproduce(c1, c2);
+    try {
+        children = Chromosome::reproduce("one-point", c1, c2);
+    } catch (std::string &error) {
+        std::cerr << "Crossover " << error << " do not exists" << std::endl;
+        break;
+    }
+    
     children.first->mutate();
     children.second->mutate();
     nextGeneration.push_back(children.first);
