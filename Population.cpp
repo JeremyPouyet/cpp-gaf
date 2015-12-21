@@ -83,7 +83,6 @@ void Population::reproduce()
         std::cerr << "Crossover " << error << " do not exists" << std::endl;
         break;
     }
-    
     children.first->mutate();
     children.second->mutate();
     nextGeneration.push_back(children.first);

@@ -17,7 +17,7 @@ public:
 
   static constexpr double	CROSSOVER_RATE		= 0.7;
   static constexpr double	MUTATION_RATE		= 0.1;
-  static constexpr int		GENE_PER_CHROMOSOME	= 9;
+  static constexpr int		GENE_PER_CHROMOSOME	= 13;
   static constexpr int          CHROMOSOME_SIZE		= GENE_SIZE * GENE_PER_CHROMOSOME;
 
   typedef std::vector<Gene> Strand;
@@ -49,7 +49,6 @@ private:
     double	_fitness;
     
     static const std::map<const std::string, fp> crossovers;
-    
 };
 
 #endif
