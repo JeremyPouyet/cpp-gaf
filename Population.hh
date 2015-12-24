@@ -9,7 +9,6 @@
 
 #include "./Problem.hh"
 #include "./ProblemLoader.hh"
-#include "./Gene.hh"
 #include "./Chromosome.hh"
 
 class Population

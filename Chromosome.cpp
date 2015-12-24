@@ -7,11 +7,9 @@ const std::map<const std::string, Chromosome::fp> Chromosome::crossovers = {
 
 Chromosome::Chromosome()
 {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(MIN_GENE_VALUE, MAX_GENE_VALUE);
-    for (int j = 0; j < GENE_PER_CHROMOSOME; j++)
-        _strand.push_back(dis(gen));
+    _strand = "";
+    for (int j = 0; j < CHROMOSOME_SIZE; j++)
+        _strand += (rand() % 2) ? "1" : "0";
 }
 
 Chromosome::Chromosome(const Strand &strand) : _strand(strand)
@@ -39,14 +37,11 @@ Chromosome::reproduce(const std::string &name, const Chromosome * const c1, cons
 void Chromosome::mutate()
 {
   double randomNb;
-  int currentGeneId, currentBitId;
-  for (int i = 0; i < CHROMOSOME_SIZE; i++)
+  for (unsigned int i = 0; i < _strand.size(); i++)
   {
     randomNb = (double)rand() / RAND_MAX;
-    currentGeneId = i / GENE_SIZE;
-    currentBitId = i - (currentGeneId * GENE_SIZE);
     if (randomNb <= MUTATION_RATE)
-        _strand[currentGeneId] ^= 1 << currentBitId;
+        _strand[i] = (_strand[i] == '0') ? '1' : '0';
   }
 }
 
@@ -86,15 +81,11 @@ void Chromosome::twoPointCrossover(Strand &s1, Strand &s2)
 
 void Chromosome::crossoverBetween(Strand &s1, Strand &s2, int l1, int l2) 
 {
-    int currentGeneId, currentBitId;
-    Gene g1, g2;
+    Gene g;
     for (int i = l1; i < l2; i++)
     {
-        currentGeneId = i / GENE_SIZE;
-        currentBitId = i - (currentGeneId * GENE_SIZE);
-        g1 = (s1[currentGeneId] >> currentBitId) & 1;
-        g2 = (s2[currentGeneId] >> currentBitId) & 1;
-        s1[currentGeneId] |= 1 << g2;
-        s2[currentGeneId] |= 1 << g1;
+        g = s1[i];
+        s1[i] = s2[i];
+        s2[i] = g;
     } 
 }

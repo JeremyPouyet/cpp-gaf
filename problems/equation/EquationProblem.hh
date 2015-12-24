@@ -6,6 +6,13 @@
 #include "Problem.hh"
 #include "Chromosome.hh"
 
+enum Type
+{
+  DIGIT,
+  OPERATOR,
+  UNKNOWN
+};
+
 class EquationProblem : public Problem
 {
     public: 
@@ -20,7 +27,8 @@ class EquationProblem : public Problem
         virtual ~EquationProblem() {}
         
     private:
-        std::string getCharValue(int n) const;
+        std::string getCharValue(Chromosome::Strand strand, int &p) const;
+        int8_t getIntValue(Chromosome::Strand strand, int &p) const;
         double _number;
 };
 

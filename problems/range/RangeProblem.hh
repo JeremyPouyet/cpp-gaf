@@ -18,6 +18,8 @@ class RangeProblem : public Problem {
         virtual ~RangeProblem() {}
         
     private:
+        int8_t getNextInt(Chromosome::Strand strand) const;
+        
         int _min;
         int _max;
 };

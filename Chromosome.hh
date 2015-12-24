@@ -9,8 +9,6 @@
 #include <string>
 #include <map>
 
-#include "Gene.hh"
-
 class Chromosome
 {
 public:
@@ -18,9 +16,10 @@ public:
   static constexpr double	CROSSOVER_RATE		= 0.7;
   static constexpr double	MUTATION_RATE		= 0.1;
   static constexpr int		GENE_PER_CHROMOSOME	= 13;
-  static constexpr int          CHROMOSOME_SIZE		= GENE_SIZE * GENE_PER_CHROMOSOME;
+  static constexpr int          CHROMOSOME_SIZE		= 8 * GENE_PER_CHROMOSOME;
 
-  typedef std::vector<Gene> Strand;
+  typedef char Gene;
+  typedef std::string Strand;
   typedef std::pair<Chromosome *, Chromosome *> Children;
 
   Chromosome();

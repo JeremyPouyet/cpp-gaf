@@ -11,12 +11,13 @@ extern "C" void destroy(Problem *problem) {
 void EquationProblem::print(const Chromosome *chromosome) const {
     Chromosome::Strand strand = chromosome->getStrand();
     Type type = DIGIT;
-    for (auto gene: strand)
+    int p = 0;
+    for (int i = 0; i < 13; i++)
     {
         if (type == OPERATOR)
-            std::cout << " " << getCharValue(gene) << " ";
+            std::cout << " " << getCharValue(strand, p) << " ";
         else
-            std::cout << std::to_string(gene);
+            std::cout << (int)getIntValue(strand, p);
         type = type == DIGIT ? OPERATOR : DIGIT; 
     }
     try {
@@ -46,52 +47,63 @@ double	EquationProblem::computeValue(const Chromosome *chromosome) const
     bool hasLeft = false;
     Type type = DIGIT;
     double value = 0;
-    for (auto gene: strand)
+    int p = 0, v;
+    for (int i = 0; i < 13; i++)
     {
         if (type == OPERATOR)
         {
-            op = getCharValue(gene);
+            op = getCharValue(strand, p);
             hasLeft = true;
         }
         else if (hasLeft == false)
-            value = gene;
+            value = getIntValue(strand, p);
         else
         {
+            v = getIntValue(strand, p);
             if (op == "+")
-                value += gene;
+                value += v;
             else if (op == "-")
-                value -= gene;
+                value -= v;
             else if (op == "*")
-                value *= gene;
-            else if (gene == 0)
+                value *= v;
+            else if (v == 0)
                 throw 0;
             else
-                value /= gene;
+                value /= v;
         }
         type = (type == DIGIT) ? OPERATOR : DIGIT;
     }
     return value;
 }
 
-std::string EquationProblem::getCharValue(int n) const 
+std::string EquationProblem::getCharValue(Chromosome::Strand strand, int &p) const 
 {
-    int b1 = (n >> 0) & 1, b2 = (n >> 1) & 1;
-    if (b1 && b2)
+    char g1 = strand[p], g2 = strand[p + 1];
+    p += 2;
+    if (g1 == '1' && g2 == '1')
         return "+";
-    if (b1 && !b2)
+    if (g1 == '1' && g2 == '0')
         return "-";
-    if (!b1 && !b2)
+    if (g1 == '0' && g2 == '1')
         return "*";
     return "/";
 }
 
+int8_t EquationProblem::getIntValue(Chromosome::Strand strand, int &p) const
+{
+    int8_t a = 0;
+    for (int j = 0; j < 8; j++)
+        if (strand[p + j] == '1')
+            a |= 1 << j;   
+    p += 8;
+    return a;
+}
+
 bool EquationProblem::test(Chromosome *chromosome) const
 {
-    double value;
     try {
-        value = computeValue(chromosome);
+        return computeValue(chromosome) == _number;
     } catch (int e) {
         return false;
     }
-    return value == _number;
 }

@@ -11,8 +11,8 @@ extern "C" void destroy(Problem *problem) {
 void RangeProblem::print(const Chromosome *chromosome) const {
     Chromosome::Strand strand = chromosome->getStrand();
     std::cout << "numbers in this chromosome: " << std::endl;
-    for (auto gene: strand)
-        std::cout << (int)gene << " ";
+    for (int i = 0; i < 13; i++)
+        std::cout << (int)getNextInt(strand) << " ";
     std::cout << " fitness: " << computeFitnessOf(chromosome) << std::endl;
 }
 
@@ -31,11 +31,13 @@ double RangeProblem::computeFitnessOf(const Chromosome *chromosome) const {
     Chromosome::Strand strand = chromosome->getStrand();
     double fitness = 0;
     double k = 4;
-    for (auto gene: strand) {
-        if (gene < _min)
-            fitness += k * (1.0 / (1 + std::abs(_min - gene)));
-        else if (gene > _max)
-            fitness += k * (1.0 / (1 + std::abs(gene - _max)));
+    int value;
+    for (int i = 0; i < 13; i++) {
+        value = getNextInt(strand);
+        if (value < _min)
+            fitness += k * (1.0 / (1 + std::abs(_min - value)));
+        else if (value > _max)
+            fitness += k * (1.0 / (1 + std::abs(value - _max)));
         else
             fitness += 1;
     }
@@ -45,8 +47,23 @@ double RangeProblem::computeFitnessOf(const Chromosome *chromosome) const {
 bool RangeProblem::test(Chromosome *chromosome) const
 {
     Chromosome::Strand strand = chromosome->getStrand();
-    for (auto gene: strand)
-        if (gene < _min || gene > _max)
+    int value;
+    for (int i = 0; i < 13; i++)
+    {
+        value = getNextInt(strand);
+        if (value < _min || value > _max)
             return false;
+    }
     return true;
+}
+
+int8_t RangeProblem::getNextInt(Chromosome::Strand strand) const
+{
+    static int p = 0;
+    int a = 0;
+    for (int j = 0; j < 8; j++)
+        if (strand[p + j] == '1')
+            a |= 1 << j;   
+    p += 8;
+    return a;
 }
