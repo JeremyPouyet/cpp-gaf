@@ -1,7 +1,10 @@
 #include "./Population.hh"
 
 Population::Population() :
-_winner(NULL), _problem(NULL)
+_winner(NULL), _problem(NULL), selections({
+    {"fitness-proportional", &Population::fitnessProportionateSelection},
+    {"tournament", &Population::tournamentSelection}
+})
 { }
 
 int Population::solve(Problem *problem) {
@@ -43,6 +46,7 @@ Chromosome *Population::test()
             return candidate;
         fitness = _problem->computeFitnessOf(candidate);
         candidate->setFitness(fitness);
+        //compute total fitness in case of fitness proportional selection
         _totalFitness += candidate->getFitness();
     }
     return NULL;
@@ -54,18 +58,11 @@ void Population::print() const
         _problem->print(candidate);
 }
 
-Chromosome *Population::selectChromosome() const
+Chromosome *Population::selectChromosome(const std::string &name) const
 {
-  double randomNb = std::fmod(std::rand(), _totalFitness);
-  double curFitness = 0;
-  for (auto &candidate : _population)
-  {
-    curFitness += candidate->getFitness();
-    if (curFitness >= randomNb)
-      return candidate;
-  }
-  // never happen, just here for the compiler
-  return NULL;
+    if (selections.find(name) == selections.end())
+        throw name;
+    return (this->*selections.at(name))();
 }
 
 void Population::reproduce()
@@ -75,12 +72,17 @@ void Population::reproduce()
   Chromosome::Children children;
   do
   {
-    c1 = selectChromosome();
-    c2 = selectChromosome();
+    try {
+        c1 = selectChromosome("tournament");
+        c2 = selectChromosome("tournament");
+    } catch (std::string &error) {
+        std::cerr << "Selection " << error << " does not exists" << std::endl;
+        break;
+    }
     try {
         children = Chromosome::reproduce("one-point", c1, c2);
     } catch (std::string &error) {
-        std::cerr << "Crossover " << error << " do not exists" << std::endl;
+        std::cerr << "Crossover " << error << " does not exists" << std::endl;
         break;
     }
     children.first->mutate();
@@ -101,4 +103,45 @@ void Population::clean()
 Population::~Population()
 {
   clean();
+}
+
+/**
+ ** Selections 
+ */
+
+Chromosome *Population::fitnessProportionateSelection() const
+{
+    double randomNb = std::fmod(std::rand(), _totalFitness);
+    double curFitness = 0;
+    for (auto &candidate : _population)
+    {
+        curFitness += candidate->getFitness();
+        if (curFitness >= randomNb)
+            return candidate;
+    }
+    // never happen, just here for the compiler
+    return NULL;
+}
+
+Chromosome *Population::tournamentSelection() const
+{
+    const int ts = 5;
+    std::vector<int> subPop;
+    int id;
+    do {
+        do { 
+            id = rand() % _population.size();
+        } while (std::find(subPop.begin(), subPop.end(), id) != subPop.end());
+        subPop.push_back(id);
+    } while(subPop.size() != ts);
+    int f = 0;
+    for (auto i : subPop)
+    {
+        if (_population.at(i)->getFitness() > f)
+        {
+            f = _population.at(i)->getFitness();
+            id = i;
+        }
+    }
+    return _population[id];
 }
