@@ -15,23 +15,20 @@ Chromosome::Chromosome()
 Chromosome::Chromosome(const Strand &strand) : _strand(strand)
 {}
 
-void Chromosome::setFitness(double fitness) 
+void Chromosome::setFitness(double fitness)
 {
     _fitness = fitness;
 }
 
-Chromosome::Children 
-Chromosome::reproduce(const std::string &name, const Chromosome * const c1, const Chromosome * const c2)
+Chromosome::Children
+Chromosome::crossover(const std::string &name, const Chromosome * const c1, const Chromosome * const c2)
 {
-    if (crossovers.find(name) == crossovers.end())
-        throw std::string(name);
-    Strand s1 = c1->getStrand();
-    Strand s2 = c2->getStrand();
-    if ((double)rand() / RAND_MAX <= CROSSOVER_RATE)
-        crossovers.at(name)(s1, s2);
-    Chromosome *n1 = new Chromosome(s1);
-    Chromosome *n2 = new Chromosome(s2);
-    return {n1, n2};
+  if (crossovers.find(name) == crossovers.end())
+    throw std::string(name);
+  Strand s1 = c1->getStrand();
+  Strand s2 = c2->getStrand();
+  crossovers.at(name)(s1, s2);
+  return {new Chromosome(s1), new Chromosome(s2)};
 }
 
 void Chromosome::mutate()
@@ -69,7 +66,7 @@ void Chromosome::onePointCrossover(Strand &s1, Strand &s2)
     crossoverBetween(s1, s2, rand() % CHROMOSOME_SIZE, CHROMOSOME_SIZE);
 }
 
-void Chromosome::twoPointCrossover(Strand &s1, Strand &s2) 
+void Chromosome::twoPointCrossover(Strand &s1, Strand &s2)
 {
     int r1, r2;
     r1 = rand() % CHROMOSOME_SIZE;
@@ -79,7 +76,7 @@ void Chromosome::twoPointCrossover(Strand &s1, Strand &s2)
     crossoverBetween(s1, s2, r1, r2);
 }
 
-void Chromosome::crossoverBetween(Strand &s1, Strand &s2, int l1, int l2) 
+void Chromosome::crossoverBetween(Strand &s1, Strand &s2, int l1, int l2)
 {
     Gene g;
     for (int i = l1; i < l2; i++)
@@ -87,5 +84,5 @@ void Chromosome::crossoverBetween(Strand &s1, Strand &s2, int l1, int l2)
         g = s1[i];
         s1[i] = s2[i];
         s2[i] = g;
-    } 
+    }
 }

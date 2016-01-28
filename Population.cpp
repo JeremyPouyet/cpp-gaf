@@ -7,8 +7,9 @@ _winner(NULL), _problem(NULL), selections({
 })
 { }
 
-int Population::solve(Problem *problem) {
+int Population::solve(Problem *problem, const INIReader &reader) {
     _problem = problem;
+    (void)reader;
     int generation;
     Chromosome *solution;
     generate();
@@ -41,7 +42,7 @@ Chromosome *Population::test()
     double fitness;
     _totalFitness = 0;
     for (auto &candidate : _population)
-    {   
+    {
         if (_problem->test(candidate))
             return candidate;
         fitness = _problem->computeFitnessOf(candidate);
@@ -70,6 +71,7 @@ void Population::reproduce()
   Generation nextGeneration;
   Chromosome *c1, *c2;
   Chromosome::Children children;
+
   do
   {
     try {
@@ -80,7 +82,12 @@ void Population::reproduce()
         break;
     }
     try {
-        children = Chromosome::reproduce("one-point", c1, c2);
+      if ((double)rand() / RAND_MAX <= CROSSOVER_RATE)
+        children = Chromosome::crossover("one-point", c1, c2);
+      else {
+	children.first = new Chromosome(c1->getStrand());
+	children.second = new Chromosome(c2->getStrand());
+      }
     } catch (std::string &error) {
         std::cerr << "Crossover " << error << " does not exists" << std::endl;
         break;
@@ -106,7 +113,7 @@ Population::~Population()
 }
 
 /**
- ** Selections 
+ ** Selections
  */
 
 Chromosome *Population::fitnessProportionateSelection() const
@@ -129,7 +136,7 @@ Chromosome *Population::tournamentSelection() const
     std::vector<int> subPop;
     int id;
     do {
-        do { 
+        do {
             id = rand() % _population.size();
         } while (std::find(subPop.begin(), subPop.end(), id) != subPop.end());
         subPop.push_back(id);

@@ -15,6 +15,7 @@ CPPFLAGS	+= -fmax-errors=2
 ## header location
 ##
 CPPFLAGS += -I./
+CPPFLAGS += -I./inih/
 
 ##
 ## shared library flag
@@ -39,25 +40,28 @@ P2	= problems/range/RangeProblem.so
 SRCS	= main.cpp \
 	ProblemLoader.cpp \
 	Chromosome.cpp \
-	Population.cpp
-	
+	Population.cpp \
+\
+	inih/INIReader.cpp \
+	inih/ini.cpp
+
 SRCS_P1	= problems/equation/EquationProblem.cpp \
 	Chromosome.cpp
-	
+
 SRCS_P2 = problems/range/RangeProblem.cpp \
 	Chromosome.cpp
 
 OBJS	= $(SRCS:.cpp=.o)
 OBJS_P1 = $(SRCS_P1:.cpp=.o)
 OBJS_P2 = $(SRCS_P2:.cpp=.o)
-	
+
 ##
 ## compilation
 ##
 all:		$(P1) $(P2) $(NAME)
 
 $(P1):		$(OBJS_P1)
-		$(CC) $(LDFLAGS) $(OBJS_P1) -o $(P1)   
+		$(CC) $(LDFLAGS) $(OBJS_P1) -o $(P1)
 
 $(P2):		$(OBJS_P2)
 		$(CC) $(LDFLAGS) $(OBJS_P2) -o $(P2)

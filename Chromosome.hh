@@ -13,7 +13,6 @@ class Chromosome
 {
 public:
 
-  static constexpr double	CROSSOVER_RATE		= 0.7;
   static constexpr double	MUTATION_RATE		= 0.1;
   static constexpr int		GENE_PER_CHROMOSOME	= 13;
   static constexpr int          CHROMOSOME_SIZE		= 8 * GENE_PER_CHROMOSOME;
@@ -23,30 +22,29 @@ public:
   typedef std::pair<Chromosome *, Chromosome *> Children;
 
   Chromosome();
+  Chromosome(const Strand &strand);
 
   static Children
-  reproduce(const std::string &name, const Chromosome * const c1, const Chromosome * const c2);
+  crossover(const std::string &name, const Chromosome * const c1, const Chromosome * const c2);
 
   void          setFitness(double fitness);
   void		mutate();
   void		set(const Strand strand);
   Strand        getStrand()                     const;
   double	getFitness()			const;
-  
-private:  
-    
-    Chromosome(const Strand &strand);
-    
+
+private:
+
     typedef void (*fp)(Strand &s1, Strand &s2);
-      
+
     static void onePointCrossover(Strand &s1, Strand &s2);
     static void twoPointCrossover(Strand &s1, Strand &s2);
-    
+
     static void crossoverBetween(Strand &s1, Strand &s2, int l1, int l2);
-    
+
     Strand      _strand;
     double	_fitness;
-    
+
     static const std::map<const std::string, fp> crossovers;
 };
 
