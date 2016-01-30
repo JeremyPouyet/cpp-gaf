@@ -2,9 +2,9 @@
 #define	EQUATIONPROBLEM_HH
 
 #include <iostream>
+#include <cmath>
 
 #include "Problem.hh"
-#include "Chromosome.hh"
 
 enum Type
 {
@@ -18,17 +18,17 @@ class EquationProblem : public Problem
     public: 
         EquationProblem() {}
         
-        virtual void print(const Chromosome *chromosome) const;
+        virtual void print(const std::string &strand) const;
         virtual void askParameters();
-        virtual double computeFitnessOf(const Chromosome *chromosome) const;
-        virtual double computeValue(const Chromosome *chromosome) const;
-        virtual bool test(Chromosome *chromosome) const;
+        virtual double computeFitnessOf(const std::string &strand) const;
+        virtual double computeValue(const std::string &strand) const;
+        virtual bool test(const std::string &strand) const;
         
         virtual ~EquationProblem() {}
         
     private:
-        std::string getCharValue(Chromosome::Strand strand, int &p) const;
-        int8_t getIntValue(Chromosome::Strand strand, int &p) const;
+        std::string getCharValue(const std::string &strand, int &p) const;
+        int8_t getIntValue(const std::string &strand, int &p) const;
         double _number;
 };
 

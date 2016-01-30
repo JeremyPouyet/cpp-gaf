@@ -25,7 +25,7 @@ int Population::solve() {
     if (solution)
     {
         std::cout << "Solution found in " << generation + 1 << " generation(s)" << std::endl;
-        _problem->print(solution);
+        _problem->print(solution->getStrand());
         return true;
     }
     std::cout <<  "Solution not found" << std::endl;
@@ -46,12 +46,12 @@ Chromosome *Population::test()
     _totalFitness = 0;
     for (auto &candidate : _population)
     {
-        if (_problem->test(candidate))
+        if (_problem->test(candidate->getStrand()))
             return candidate;
-        fitness = _problem->computeFitnessOf(candidate);
+        fitness = _problem->computeFitnessOf(candidate->getStrand());
         candidate->setFitness(fitness);
         //compute total fitness in case of fitness proportional selection
-        _totalFitness += candidate->getFitness();
+        _totalFitness += fitness;
     }
     return NULL;
 }
@@ -59,7 +59,7 @@ Chromosome *Population::test()
 void Population::print() const
 {
     for (auto &candidate : _population)
-        _problem->print(candidate);
+        _problem->print(candidate->getStrand());
 }
 
 Chromosome *Population::selectChromosome(const std::string &name) const
@@ -129,7 +129,7 @@ Chromosome *Population::fitnessProportionateSelection() const
         if (curFitness >= randomNb)
             return candidate;
     }
-    // never happen, just here for the compiler
+    // never happens, just here for the compiler
     return NULL;
 }
 

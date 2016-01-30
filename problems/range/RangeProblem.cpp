@@ -8,12 +8,11 @@ extern "C" void destroy(Problem *problem) {
     delete problem;
 }
 
-void RangeProblem::print(const Chromosome *chromosome) const {
-    Chromosome::Strand strand = chromosome->getStrand();
+void RangeProblem::print(const std::string &strand) const {
     std::cout << "numbers in this chromosome: " << std::endl;
     for (int i = 0; i < 13; i++)
         std::cout << (int)getNextInt(strand) << " ";
-    std::cout << " fitness: " << computeFitnessOf(chromosome) << std::endl;
+    std::cout << " fitness: " << computeFitnessOf(strand) << std::endl;
 }
 
 void RangeProblem::askParameters() {
@@ -27,8 +26,7 @@ void RangeProblem::askParameters() {
     } while (_min > _max);
 }
 
-double RangeProblem::computeFitnessOf(const Chromosome *chromosome) const {
-    Chromosome::Strand strand = chromosome->getStrand();
+double RangeProblem::computeFitnessOf(const std::string &strand) const {
     double fitness = 0;
     double k = 4;
     int value;
@@ -44,9 +42,8 @@ double RangeProblem::computeFitnessOf(const Chromosome *chromosome) const {
     return fitness;
 }
 
-bool RangeProblem::test(Chromosome *chromosome) const
+bool RangeProblem::test(const std::string &strand) const
 {
-    Chromosome::Strand strand = chromosome->getStrand();
     int value;
     for (int i = 0; i < 13; i++)
     {
@@ -57,7 +54,7 @@ bool RangeProblem::test(Chromosome *chromosome) const
     return true;
 }
 
-int8_t RangeProblem::getNextInt(Chromosome::Strand strand) const
+int8_t RangeProblem::getNextInt(const std::string &strand) const
 {
     static int p = 0;
     int a = 0;

@@ -8,8 +8,7 @@ extern "C" void destroy(Problem *problem) {
     delete problem;
 }
 
-void EquationProblem::print(const Chromosome *chromosome) const {
-    Chromosome::Strand strand = chromosome->getStrand();
+void EquationProblem::print(const std::string &strand) const {
     Type type = DIGIT;
     int p = 0;
     for (int i = 0; i < 13; i++)
@@ -21,7 +20,7 @@ void EquationProblem::print(const Chromosome *chromosome) const {
         type = type == DIGIT ? OPERATOR : DIGIT; 
     }
     try {
-        std::cout << " = " << computeValue(chromosome) << " && fitness = " << chromosome->getFitness() << std::endl;
+        std::cout << " = " << computeValue(strand) << " && fitness = " << computeFitnessOf(strand) << std::endl;
     } catch (int e) {
         std::cout << " chromosome with a division by 0 " << std::endl;
     } 
@@ -32,17 +31,16 @@ void EquationProblem::askParameters() {
     std::cin >> _number;
 }
 
-double EquationProblem::computeFitnessOf(const Chromosome *chromosome) const {
+double EquationProblem::computeFitnessOf(const std::string &strand) const {
     try  {
-        return 1 / std::abs(_number - computeValue(chromosome));
+        return 1 / std::abs(_number - computeValue(strand));
     } catch (int e) {
         return 0.001; // minimise division by zero  
     }
 }
 
-double	EquationProblem::computeValue(const Chromosome *chromosome) const
+double	EquationProblem::computeValue(const std::string &strand) const
 {
-    Chromosome::Strand strand = chromosome->getStrand();
     std::string op;
     bool hasLeft = false;
     Type type = DIGIT;
@@ -76,7 +74,7 @@ double	EquationProblem::computeValue(const Chromosome *chromosome) const
     return value;
 }
 
-std::string EquationProblem::getCharValue(Chromosome::Strand strand, int &p) const 
+std::string EquationProblem::getCharValue(const std::string &strand, int &p) const 
 {
     char g1 = strand[p], g2 = strand[p + 1];
     p += 2;
@@ -89,7 +87,7 @@ std::string EquationProblem::getCharValue(Chromosome::Strand strand, int &p) con
     return "/";
 }
 
-int8_t EquationProblem::getIntValue(Chromosome::Strand strand, int &p) const
+int8_t EquationProblem::getIntValue(const std::string &strand, int &p) const
 {
     int8_t a = 0;
     for (int j = 0; j < 8; j++)
@@ -99,10 +97,10 @@ int8_t EquationProblem::getIntValue(Chromosome::Strand strand, int &p) const
     return a;
 }
 
-bool EquationProblem::test(Chromosome *chromosome) const
+bool EquationProblem::test(const std::string &strand) const
 {
     try {
-        return computeValue(chromosome) == _number;
+        return computeValue(strand) == _number;
     } catch (int e) {
         return false;
     }
