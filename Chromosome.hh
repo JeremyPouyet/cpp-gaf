@@ -9,14 +9,11 @@
 #include <string>
 #include <map>
 
+#include "Config.hh"
+
 class Chromosome
 {
 public:
-
-  static constexpr double	MUTATION_RATE		= 0.1;
-  static constexpr int		GENE_PER_CHROMOSOME	= 13;
-  static constexpr int          CHROMOSOME_SIZE		= 8 * GENE_PER_CHROMOSOME;
-
   typedef char Gene;
   typedef std::string Strand;
   typedef std::pair<Chromosome *, Chromosome *> Children;

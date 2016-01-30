@@ -41,15 +41,18 @@ SRCS	= main.cpp \
 	ProblemLoader.cpp \
 	Chromosome.cpp \
 	Population.cpp \
+	Config.cpp \
 \
 	inih/INIReader.cpp \
-	inih/ini.cpp
+	inih/ini.cpp 
 
 SRCS_P1	= problems/equation/EquationProblem.cpp \
-	Chromosome.cpp
+	Chromosome.cpp \
+	Config.cpp
 
 SRCS_P2 = problems/range/RangeProblem.cpp \
-	Chromosome.cpp
+	Chromosome.cpp \
+	Config.cpp
 
 OBJS	= $(SRCS:.cpp=.o)
 OBJS_P1 = $(SRCS_P1:.cpp=.o)

@@ -1,4 +1,7 @@
 #include "./Chromosome.hh"
+#include "INIReader.h"
+
+extern Config config;
 
 const std::map<const std::string, Chromosome::fp> Chromosome::crossovers = {
         {"one-point", &Chromosome::onePointCrossover},
@@ -8,11 +11,12 @@ const std::map<const std::string, Chromosome::fp> Chromosome::crossovers = {
 Chromosome::Chromosome()
 {
     _strand = "";
-    for (int j = 0; j < CHROMOSOME_SIZE; j++)
+    for (int j = 0; j < config.chromosomeSize; j++)
         _strand += (rand() % 2) ? "1" : "0";
 }
 
-Chromosome::Chromosome(const Strand &strand) : _strand(strand)
+Chromosome::Chromosome(const Strand &strand) : 
+            _strand(strand)
 {}
 
 void Chromosome::setFitness(double fitness)
@@ -37,7 +41,7 @@ void Chromosome::mutate()
   for (unsigned int i = 0; i < _strand.size(); i++)
   {
     randomNb = (double)rand() / RAND_MAX;
-    if (randomNb <= MUTATION_RATE)
+    if (randomNb <= config.mutationRate)
         _strand[i] = (_strand[i] == '0') ? '1' : '0';
   }
 }
@@ -63,16 +67,16 @@ void Chromosome::set(const Strand strand)
 
 void Chromosome::onePointCrossover(Strand &s1, Strand &s2)
 {
-    crossoverBetween(s1, s2, rand() % CHROMOSOME_SIZE, CHROMOSOME_SIZE);
+    crossoverBetween(s1, s2, rand() % config.chromosomeSize, config.chromosomeSize);
 }
 
 void Chromosome::twoPointCrossover(Strand &s1, Strand &s2)
 {
     int r1, r2;
-    r1 = rand() % CHROMOSOME_SIZE;
-    r2 = (rand() % CHROMOSOME_SIZE) + r1;
-    if (r2 > CHROMOSOME_SIZE)
-        r2 = CHROMOSOME_SIZE;
+    r1 = rand() % config.chromosomeSize;
+    r2 = (rand() % config.chromosomeSize) + r1;
+    if (r2 > config.chromosomeSize)
+        r2 = config.chromosomeSize;
     crossoverBetween(s1, s2, r1, r2);
 }
 

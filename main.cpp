@@ -3,9 +3,12 @@
 
 #include <iostream>
 
-#include "./Population.hh"
-#include "./Chromosome.hh"
+#include "Config.hh"
+#include "Population.hh"
+#include "Chromosome.hh"
 #include "INIReader.h"
+
+extern Config config;
 
 int main(int ac, char **av)
 {
@@ -14,19 +17,17 @@ int main(int ac, char **av)
         return 1;
     }
     std::srand(time(NULL));
-    ProblemLoader pl;
+    ProblemLoader problemLoader;
     try {
-        pl.load(av[1]);
+        problemLoader.load(av[1]);
     } catch(std::string &error) {
        std::cerr << error << std::endl;
        return 2;
     }
-    INIReader reader(av[2]);
-    if (reader.ParseError() < 0) {
-      std::cerr << "Can't load config file " << av[2] << std::endl;
-      return 3;
+    if (config.load(av[2]) == false) {
+        std::cerr << "Can't load config file " << std::endl;
+        return 3;
     }
-    Problem * problem = pl.getProblem();
-    Population p;
-    return p.solve(problem, reader);
+    Population p(problemLoader.getProblem());
+    return p.solve();
 }

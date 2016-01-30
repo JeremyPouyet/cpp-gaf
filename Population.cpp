@@ -1,19 +1,22 @@
 #include "./Population.hh"
 
-Population::Population() :
-_winner(NULL), _problem(NULL), selections({
-    {"fitness-proportional", &Population::fitnessProportionateSelection},
-    {"tournament", &Population::tournamentSelection}
-})
-{ }
+extern Config config;
 
-int Population::solve(Problem *problem, const INIReader &reader) {
-    _problem = problem;
-    (void)reader;
-    int generation;
-    Chromosome *solution;
+Population::Population(Problem *problem) : 
+        _winner(NULL),
+        _problem(problem),
+        selections({
+            {"fitness-proportional", &Population::fitnessProportionateSelection},
+            {"tournament", &Population::tournamentSelection}})
+{
     generate();
-    for (generation = 0; generation < SIMULATION_NUMBER; ++generation)
+}
+
+int Population::solve() {
+    unsigned int generation;
+    Chromosome *solution;
+  
+    for (generation = 0; generation < config.simulationNumber; ++generation)
     {
         if ((solution = test()) != NULL)
             break;
@@ -33,7 +36,7 @@ int Population::solve(Problem *problem, const INIReader &reader) {
 void Population::generate()
 {
     _problem->askParameters();
-    for (int i = 0; i < SIZE; i++)
+    for (unsigned int i = 0; i < config.populationSize; i++)
         _population.push_back(new Chromosome());
 }
 
@@ -82,7 +85,7 @@ void Population::reproduce()
         break;
     }
     try {
-      if ((double)rand() / RAND_MAX <= CROSSOVER_RATE)
+      if ((double)rand() / RAND_MAX <= config.crossoverRate)
         children = Chromosome::crossover("one-point", c1, c2);
       else {
 	children.first = new Chromosome(c1->getStrand());
@@ -96,7 +99,7 @@ void Population::reproduce()
     children.second->mutate();
     nextGeneration.push_back(children.first);
     nextGeneration.push_back(children.second);
-  } while (nextGeneration.size() != SIZE);
+  } while (nextGeneration.size() != config.populationSize);
   clean();
   _population = nextGeneration;
 }
