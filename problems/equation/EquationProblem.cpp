@@ -11,7 +11,7 @@ extern "C" void destroy(Problem *problem) {
 void EquationProblem::print(const std::string &strand) const {
     Type type = DIGIT;
     int p = 0;
-    for (int i = 0; i < 13; i++)
+    for (int i = 0; i < _config.genePerChromosome; i++)
     {
         if (type == OPERATOR)
             std::cout << " " << getCharValue(strand, p) << " ";
@@ -46,7 +46,7 @@ double	EquationProblem::computeValue(const std::string &strand) const
     Type type = DIGIT;
     double value = 0;
     int p = 0, v;
-    for (int i = 0; i < 13; i++)
+    for (int i = 0; i < _config.genePerChromosome; i++)
     {
         if (type == OPERATOR)
         {
@@ -90,10 +90,10 @@ std::string EquationProblem::getCharValue(const std::string &strand, int &p) con
 int8_t EquationProblem::getIntValue(const std::string &strand, int &p) const
 {
     int8_t a = 0;
-    for (int j = 0; j < 8; j++)
+    for (int j = 0; j < _config.chromosomeSize; j++)
         if (strand[p + j] == '1')
             a |= 1 << j;   
-    p += 8;
+    p += _config.chromosomeSize;
     return a;
 }
 

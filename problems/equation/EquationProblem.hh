@@ -3,8 +3,9 @@
 
 #include <iostream>
 #include <cmath>
+#include <cstdint>
 
-#include "Problem.hh"
+#include "AProblem.hh"
 
 enum Type
 {
@@ -13,10 +14,10 @@ enum Type
   UNKNOWN
 };
 
-class EquationProblem : public Problem
+class EquationProblem : public AProblem
 {
     public: 
-        EquationProblem() {}
+        EquationProblem() : AProblem() {}
         
         virtual void print(const std::string &strand) const;
         virtual void askParameters();

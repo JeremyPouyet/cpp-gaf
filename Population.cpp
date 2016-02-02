@@ -1,6 +1,4 @@
-#include "./Population.hh"
-
-extern Config config;
+#include "Population.hh"
 
 Population::Population(Problem *problem) : 
         _winner(NULL),
@@ -78,8 +76,8 @@ void Population::reproduce()
   do
   {
     try {
-        c1 = selectChromosome("tournament");
-        c2 = selectChromosome("tournament");
+        c1 = selectChromosome("fitness-proportional");
+        c2 = selectChromosome("fitness-proportional");
     } catch (std::string &error) {
         std::cerr << "Selection " << error << " does not exists" << std::endl;
         break;

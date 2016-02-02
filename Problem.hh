@@ -1,6 +1,8 @@
 #ifndef PROBLEM_H
 #define	PROBLEM_H
 
+#include "Config.hh"
+
 class Problem {
 public:
     Problem() {}

@@ -3,12 +3,10 @@
 
 #include <iostream>
 
+#include "AProblem.hh"
 #include "Config.hh"
 #include "Population.hh"
 #include "Chromosome.hh"
-#include "INIReader.h"
-
-extern Config config;
 
 int main(int ac, char **av)
 {
@@ -18,16 +16,18 @@ int main(int ac, char **av)
     }
     std::srand(time(NULL));
     ProblemLoader problemLoader;
+    if (config.load(av[2]) == false) {
+        std::cerr << "Can't load config file " << std::endl;
+        return 3;
+    }
     try {
         problemLoader.load(av[1]);
     } catch(std::string &error) {
        std::cerr << error << std::endl;
        return 2;
     }
-    if (config.load(av[2]) == false) {
-        std::cerr << "Can't load config file " << std::endl;
-        return 3;
-    }
-    Population p(problemLoader.getProblem());
+    Problem *problem = problemLoader.getProblem();
+    ((AProblem *)problem)->setConfig(config);
+    Population p(problem);
     return p.solve();
 }

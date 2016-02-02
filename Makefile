@@ -8,7 +8,7 @@ RM		= rm -rf
 ## code like a boss
 ##
 CPPFLAGS	+= -W -Wextra -Wall -fPIC
-
+#CPPFLAGS	+= -rdynamic -export-dynamic
 CPPFLAGS	+= -fmax-errors=2
 
 ##
@@ -39,6 +39,7 @@ P2	= problems/range/RangeProblem.so
 
 SRCS	= main.cpp \
 	ProblemLoader.cpp \
+	AProblem.cpp \
 	Chromosome.cpp \
 	Population.cpp \
 	Config.cpp \
@@ -57,7 +58,7 @@ OBJS_P2 = $(SRCS_P2:.cpp=.o)
 ##
 ## compilation
 ##
-all:		$(P1) $(P2) $(NAME)
+all:		$(NAME) $(P1) $(P2)
 
 $(P1):		$(OBJS_P1)
 		$(CC) $(LDFLAGS) $(OBJS_P1) -o $(P1)

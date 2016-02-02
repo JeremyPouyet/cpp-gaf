@@ -1,7 +1,4 @@
 #include "./Chromosome.hh"
-#include "INIReader.h"
-
-extern Config config;
 
 const std::map<const std::string, Chromosome::fp> Chromosome::crossovers = {
         {"one-point", &Chromosome::onePointCrossover},

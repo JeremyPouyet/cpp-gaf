@@ -3,11 +3,11 @@
 
 #include <iostream>
 
-#include "Problem.hh"
+#include "AProblem.hh"
 
-class RangeProblem : public Problem {
+class RangeProblem : public AProblem {
     public:
-        RangeProblem() {}
+        RangeProblem() : AProblem() {}
         
         virtual void print(const std::string &strand) const;
         virtual void askParameters();
