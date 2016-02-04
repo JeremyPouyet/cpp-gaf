@@ -32,10 +32,10 @@ void EquationProblem::askParameters() {
 }
 
 double EquationProblem::computeFitnessOf(const std::string &strand) const {
-    try  {
-        return 1 / std::abs(_number - computeValue(strand));
+    try {
+        return 1.0 / std::abs(_number - computeValue(strand));
     } catch (int e) {
-        return 0.001; // minimise division by zero  
+        return 1.0 / _config.populationSize; // minimise division by zero 
     }
 }
 
@@ -90,10 +90,10 @@ std::string EquationProblem::getCharValue(const std::string &strand, int &p) con
 int8_t EquationProblem::getIntValue(const std::string &strand, int &p) const
 {
     int8_t a = 0;
-    for (int j = 0; j < _config.chromosomeSize; j++)
+    for (int j = 0; j < _config.chromosomeSize /_config.genePerChromosome; j++)
         if (strand[p + j] == '1')
             a |= 1 << j;   
-    p += _config.chromosomeSize;
+    p += _config.chromosomeSize /_config.genePerChromosome;
     return a;
 }
 

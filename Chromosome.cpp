@@ -24,8 +24,6 @@ void Chromosome::setFitness(double fitness)
 Chromosome::Children
 Chromosome::crossover(const std::string &name, const Chromosome * const c1, const Chromosome * const c2)
 {
-  if (crossovers.find(name) == crossovers.end())
-    throw std::string(name);
   Strand s1 = c1->getStrand();
   Strand s2 = c2->getStrand();
   crossovers.at(name)(s1, s2);
