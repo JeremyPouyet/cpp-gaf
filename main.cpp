@@ -11,7 +11,7 @@
 int main(int ac, char **av)
 {
     if (ac != 3) {
-        std::cout << "Wrong number of arguments: ./number problem config" << std::endl;
+        std::cerr << "Wrong number of arguments: ./number problem config" << std::endl;
         return 1;
     }
     std::srand(time(NULL));

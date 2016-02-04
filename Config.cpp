@@ -2,6 +2,14 @@
 
 Config config;
 
+// list of all possible crossover type
+static const std::vector<std::string> _crossovers = {
+    "one-point", "two-point"};
+
+// list of all possible selection type
+static const std::vector<std::string> _selections = {
+    "fitness-proportional", "tournament"};
+
 bool Config::load(const std::string &path) {
     INIReader reader(path);
     if (reader.ParseError() < 0)
@@ -14,15 +22,51 @@ bool Config::load(const std::string &path) {
     mutationRate = reader.GetReal("chromosome", "mutation_rate", 0.1);
     genePerChromosome = reader.GetInteger("chromosome", "gene_per_chromosome", 13);
     chromosomeSize = reader.GetInteger("chromosome", "chromosome_size", 8) * genePerChromosome;
+    crossoverType = reader.Get("chromosome", "crossover_type", "one-point");
+    if (checkCrossover() == false) {
+        printCrossoverError();
+        return false;
+    }
+    selectionType = reader.Get("chromosome", "selection_type", "fitness-proportional");
+    if (checkSelection() == false) {
+        printSelectionError();
+        return false;
+    }
     
-    std::cout << "Population config: " << std::endl << "------------------" << std::endl << std::endl;
-    std::cout << "crossover rate: " << crossoverRate << std::endl;
-    std::cout << "population size: " << populationSize << std::endl;
-    std::cout << "simulation number: " << simulationNumber << std::endl << std::endl;
+    std::cout << "Population configuration:\t " << std::endl << "-------------------------" << std::endl << std::endl;
+    std::cout << "crossover rate:\t\t " << crossoverRate << std::endl;
+    std::cout << "population size:\t " << populationSize << std::endl;
+    std::cout << "simulation number:\t " << simulationNumber << std::endl << std::endl;
     
-    std::cout << "Chromosome config: " << std::endl << "------------------" << std::endl << std::endl;
-    std::cout << "mutation rate: " << mutationRate << std::endl;
-    std::cout << "gene per chromosome: " << genePerChromosome << std::endl;
-    std::cout << "chromosome size: " << chromosomeSize << std::endl << std::endl;
+    std::cout << "Chromosome configuration:\t " << std::endl << "-------------------------" << std::endl << std::endl;
+    std::cout << "mutation rate:\t\t " << mutationRate << std::endl;
+    std::cout << "gene per chromosome:\t " << genePerChromosome << std::endl;
+    std::cout << "chromosome size:\t " << chromosomeSize << std::endl;
+    std::cout << "crossover_type:\t\t " << crossoverType << std::endl;
+    std::cout << "selection_type:\t\t " << selectionType << std::endl << std::endl; 
     return true;
+}
+
+bool Config::checkCrossover() const {
+    return std::find(_crossovers.begin(), _crossovers.end(), crossoverType) != _crossovers.end();
+}
+
+bool Config::checkSelection() const {
+    return std::find(_selections.begin(), _selections.end(), selectionType) != _selections.end();
+}
+
+void Config::printCrossoverError() const {
+    std::cerr << "Error: crossover " << crossoverType << " does not exists or is not yet implemented" << std::endl;
+    std::cerr << "Available crossovers: " << std::endl;
+    for (auto c: _crossovers)
+        std::cerr << c;
+    std::cerr << std::flush;
+}
+
+void Config::printSelectionError() const {
+    std::cerr << "Error: selection " << selectionType << " does not exists or is not yet implemented" << std::endl;
+    std::cerr << "Available selections: " << std::endl;
+    for (auto s: _selections)
+        std::cerr << s;
+    std::cerr << std::flush;
 }

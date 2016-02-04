@@ -27,7 +27,6 @@ void RangeProblem::askParameters() {
 }
 
 double RangeProblem::computeFitnessOf(const std::string &strand) const {
-    std::cout << "compf" <<std::endl;
     double fitness = 0;
     double k = 4;
     int value;
@@ -40,13 +39,11 @@ double RangeProblem::computeFitnessOf(const std::string &strand) const {
         else
             fitness += 1;
     }
-    std::cout << "compf" <<std::endl;
     return fitness;
 }
 
 bool RangeProblem::test(const std::string &strand) const
 {
-    std::cout << "test"<< std::endl;
     int value;
     for (int i = 0; i < _config.genePerChromosome; i++)
     {
@@ -59,13 +56,11 @@ bool RangeProblem::test(const std::string &strand) const
 
 int8_t RangeProblem::getNextInt(const std::string &strand) const
 {
-    std::cout << "gni" <<std::endl;
     static int p = 0;
     int a = 0;
-    for (int j = 0; j < _config.chromosomeSize; j++)
+    for (int j = 0; j < _config.chromosomeSize/_config.genePerChromosome; j++)
         if (strand[p + j] == '1')
             a |= 1 << j;   
-    p += _config.chromosomeSize;
-    std::cout << "gni" <<std::endl;
+    p += _config.chromosomeSize/_config.genePerChromosome;
     return a;
 }

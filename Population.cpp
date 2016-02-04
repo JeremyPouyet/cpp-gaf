@@ -62,8 +62,6 @@ void Population::print() const
 
 Chromosome *Population::selectChromosome(const std::string &name) const
 {
-    if (selections.find(name) == selections.end())
-        throw name;
     return (this->*selections.at(name))();
 }
 
@@ -72,26 +70,15 @@ void Population::reproduce()
   Generation nextGeneration;
   Chromosome *c1, *c2;
   Chromosome::Children children;
-
   do
   {
-    try {
-        c1 = selectChromosome("fitness-proportional");
-        c2 = selectChromosome("fitness-proportional");
-    } catch (std::string &error) {
-        std::cerr << "Selection " << error << " does not exists" << std::endl;
-        break;
-    }
-    try {
-      if ((double)rand() / RAND_MAX <= config.crossoverRate)
-        children = Chromosome::crossover("one-point", c1, c2);
-      else {
+    c1 = selectChromosome(config.selectionType);
+    c2 = selectChromosome(config.selectionType);
+    if ((double)rand() / RAND_MAX <= config.crossoverRate)
+        children = Chromosome::crossover(config.crossoverType, c1, c2);
+    else {
 	children.first = new Chromosome(c1->getStrand());
 	children.second = new Chromosome(c2->getStrand());
-      }
-    } catch (std::string &error) {
-        std::cerr << "Crossover " << error << " does not exists" << std::endl;
-        break;
     }
     children.first->mutate();
     children.second->mutate();

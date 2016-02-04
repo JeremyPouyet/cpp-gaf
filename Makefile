@@ -45,7 +45,7 @@ SRCS	= main.cpp \
 	Config.cpp \
 \
 	inih/INIReader.cpp \
-	inih/ini.cpp 
+	inih/ini.cpp
 
 SRCS_P1	= problems/equation/EquationProblem.cpp
 
