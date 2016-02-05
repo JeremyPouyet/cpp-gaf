@@ -17,10 +17,11 @@ class RangeProblem : public AProblem {
         virtual ~RangeProblem() {}
         
     private:
-        int8_t getNextInt(const std::string &strand) const;
+        typedef int32_t targetType;
+        targetType getNextInt(const std::string &strand, int &p) const;
         
-        int _min;
-        int _max;
+        targetType _min;
+        targetType _max;
 };
 
 #endif	/* RANGEPROBLEM_HH */
