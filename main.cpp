@@ -11,13 +11,13 @@
 int main(int ac, char **av)
 {
     if (ac != 3) {
-        std::cerr << "Wrong number of arguments: ./number problem config" << std::endl;
+        std::cerr << "Wrong number of arguments: ./number problem configuration_file" << std::endl;
         return 1;
     }
     std::srand(time(NULL));
     ProblemLoader problemLoader;
     if (config.load(av[2]) == false) {
-        std::cerr << "Can't load config file " << std::endl;
+        std::cerr << "Can't load configuration file " << std::endl;
         return 3;
     }
     try {

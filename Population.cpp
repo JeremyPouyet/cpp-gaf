@@ -13,7 +13,6 @@ Population::Population(Problem *problem) :
 int Population::solve() {
     unsigned int generation;
     Chromosome *solution;
-  
     for (generation = 0; generation < config.simulationNumber; ++generation)
     {
         if ((solution = test()) != NULL)

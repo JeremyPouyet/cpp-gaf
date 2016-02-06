@@ -37,7 +37,7 @@ ProblemLoader::~ProblemLoader() {
     close();
 }
 
-Problem * ProblemLoader::getProblem() const {
+Problem *ProblemLoader::getProblem() const {
     return _problem;
 }
 

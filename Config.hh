@@ -10,12 +10,17 @@
 
 struct Config {
 public:
+    /**
+     * load a configuration file into the program
+     * @param path, configuration file path
+     * @return whether the configuration file is loaded or not
+     */
     bool load(const std::string &path);
     
     /*
-    ** Population
+    ** Population configuration variable
     */
-    // rate at which a chromosome can be crossovered
+    // rate at which a chromosome can be crossover
     double crossoverRate;
     // number of possible solution
     unsigned int populationSize;
@@ -23,7 +28,7 @@ public:
     unsigned int simulationNumber;
     
     /*
-    ** Chromosome 
+    ** Chromosome configuration variable
     */
     // Rate at which a chromosome mutate
     double mutationRate;
@@ -36,17 +41,30 @@ public:
     // Type of selection used during population selection
     std::string selectionType;
 private:
-    // display an error when the chosen crossover does not exists
+    /**
+     * Display an error when the chosen crossover does not exists
+     */
     void printCrossoverError() const;
-    // display an error when the chosen selection does not exists
+    
+    /**
+     * Display an error when the chosen selection does not exists
+     */
     void printSelectionError() const;
     
-    // check if chosen crossover is valid
+    /**
+     * Check if chosen crossover is valid
+     * @return whether the crossover is valid or not
+     */
     bool checkCrossover() const;
-    // check if chosen selection is valid
+    
+    /**
+     * check if chosen selection is valid
+     * @return whether the selection is valid or not
+     */
     bool checkSelection() const;
 };
 
+// configuration variable
 extern Config config;
 
 #endif	/* CONFIG_HH */
