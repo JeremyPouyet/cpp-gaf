@@ -10,7 +10,7 @@ Population::Population(Problem *problem) :
     generate();
 }
 
-int Population::solve() {
+bool Population::solve() {
     unsigned int generation;
     Chromosome *solution;
     for (generation = 0; generation < config.simulationNumber; ++generation)

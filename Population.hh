@@ -15,29 +15,79 @@
 class Population
 {
 public:
+    /**
+     * Population constructor
+     * @param problem, Problem to solve
+     */
     Population(Problem *problem);
     ~Population();
-    int solve();
+    
+    /**
+     * Solves the current Problem
+     * @return whether the problem has been solved or not
+     */
+    bool solve();
 
 private:
     typedef std::vector<Chromosome *> Generation;
     typedef Chromosome *(Population::*fp)() const;
     
+    /**
+     * Selection function, Select a chromosome in the current population by using
+     * fitness proportional selection
+     * @return the selected chromosome
+     */
     Chromosome  *fitnessProportionateSelection()            const;
+    
+    /**
+     * Selection function, Select a chromosome in the current population by using
+     * tournament selection
+     * @return the selected chromosome
+     */
     Chromosome  *tournamentSelection()                      const;
+    
+    /**
+     * Selection function, it redirects to the good selection
+     * @param name, selection name
+     * @return the selected chromosome
+     */
     Chromosome  *selectChromosome(const std::string &name)  const;
+    
+    /**
+     * test if the population has a winner (best candidate solution)
+     * @return the best candidate solution or NULL
+     */
     Chromosome  *test();
     
+    /**
+     * print the current population
+     */
     void        print()                                     const;
+    
+    /**
+     * generate the current population
+     */
     void        generate();
+    
+    /**
+     * clean the current population
+     */
     void        clean();
+    
+    /**
+     * reproduce the current population, creation of the next generation
+     */
     void        reproduce();
 
+    // current population
     Generation  _population;
+    // best candidate solution
     Chromosome  *_winner;
+    // total fitness of the current generation
     double      _totalFitness;
+    // current problem
     Problem     *_problem;
-    
+    // list of possible selections
     const std::map<const std::string, fp> selections;
 };
 
