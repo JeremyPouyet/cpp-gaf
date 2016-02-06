@@ -3,13 +3,37 @@
 
 #include "Config.hh"
 
+/**
+ * Problem Interface. It is the computational representation of a Problem
+ * Just implement it to be able to load a new problem into the framework.
+ */
 class Problem {
 public:
     Problem() {}
     
+    /**
+     * print a chromosome strand
+     * @param strand, strand to print
+     */
     virtual void print(const std::string &strand) const = 0;
+    
+    /**
+     * user interaction function. Used to ask parameter to the user. Can be graphic.
+     */
     virtual void askParameters() = 0;
+    
+    /**
+     * Compute the fitness of a chromosome through its strand.
+     * @param strand, strand used to compute a chromosome fitness
+     * @return 
+     */
     virtual double computeFitnessOf(const std::string &strand) const = 0;
+    
+    /**
+     * test whether a solution resolves the problem
+     * @param strand, strand to test
+     * @return whether a solution resolves the problem
+     */
     virtual bool test(const std::string &strand) const = 0;
     
     virtual ~Problem() {}
