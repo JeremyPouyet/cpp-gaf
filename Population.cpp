@@ -41,15 +41,17 @@ Chromosome *Population::test()
 {
     double fitness;
     _totalFitness = 0;
-    for (auto &candidate : _population)
-    {
-        if (_problem->test(candidate->getStrand()))
-            return candidate;
+    // compute fitness of all chromosome
+    for (auto &candidate : _population) {
         fitness = _problem->computeFitnessOf(candidate->getStrand());
         candidate->setFitness(fitness);
-        //compute total fitness in case of fitness proportional selection
         _totalFitness += fitness;
     }
+    // sort them by fitness
+    sortByFitness();
+    // test if the best candidate solution solves the problem
+    if (_problem->test(_population.front()->getStrand()))
+        return _population.front();
     return NULL;
 }
 
@@ -74,7 +76,6 @@ void Population::reproduce()
   Chromosome *c1, *c2;
   Chromosome::Children children;
   if (config.useElitism == true) {
-      sortByFitness();
       for (unsigned int i = 0; i < config.eliteNumber && i < _population.size(); i++)
           nextGeneration.push_back(new Chromosome(_population.at(i)->getStrand()));
   }
