@@ -11,7 +11,7 @@ extern "C" void destroy(Problem *problem) {
 void EquationProblem::print(const std::string &strand) const {
     Type type = DIGIT;
     int p = 0;
-    for (int i = 0; i < _config.genePerChromosome; i++)
+    for (unsigned int i = 0; i < _config.genePerChromosome; i++)
     {
         if (type == OPERATOR)
             std::cout << " " << getCharValue(strand, p) << " ";
@@ -35,7 +35,7 @@ double EquationProblem::computeFitnessOf(const std::string &strand) const {
     try {
         return 1.0 / std::abs(_number - computeValue(strand));
     } catch (int e) {
-        return 1.0 / _config.populationSize; // minimise division by zero 
+        return 1.0 / (_config.populationSize * _config.simulationNumber); // minimize division by zero 
     }
 }
 
@@ -46,7 +46,7 @@ double	EquationProblem::computeValue(const std::string &strand) const
     Type type = DIGIT;
     double value = 0;
     int p = 0, v;
-    for (int i = 0; i < _config.genePerChromosome; i++)
+    for (unsigned int i = 0; i < _config.genePerChromosome; i++)
     {
         if (type == OPERATOR)
         {
@@ -90,7 +90,7 @@ std::string EquationProblem::getCharValue(const std::string &strand, int &p) con
 int8_t EquationProblem::getIntValue(const std::string &strand, int &p) const
 {
     int8_t a = 0;
-    for (int j = 0; j < _config.chromosomeSize /_config.genePerChromosome; j++)
+    for (unsigned int j = 0; j < _config.chromosomeSize /_config.genePerChromosome; j++)
         if (strand[p + j] == '1')
             a |= 1 << j;   
     p += _config.chromosomeSize /_config.genePerChromosome;

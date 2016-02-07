@@ -12,7 +12,7 @@ Population::Population(Problem *problem) :
 
 bool Population::solve() {
     unsigned int generation;
-    Chromosome *solution;
+    Chromosome *solution = NULL;
     for (generation = 0; generation < config.simulationNumber; ++generation)
     {
         if ((solution = test()) != NULL)
@@ -59,9 +59,13 @@ void Population::print() const
         _problem->print(candidate->getStrand());
 }
 
-Chromosome *Population::selectChromosome(const std::string &name) const
+Chromosome *Population::selectChromosome() const
 {
-    return (this->*selections.at(name))();
+    return (this->*selections.at(config.selectionType))();
+}
+
+void Population::sortByFitness() {
+    std::sort(_population.begin(), _population.end(), Chromosome());
 }
 
 void Population::reproduce()
@@ -69,10 +73,15 @@ void Population::reproduce()
   Generation nextGeneration;
   Chromosome *c1, *c2;
   Chromosome::Children children;
+  if (config.useElitism == true) {
+      sortByFitness();
+      for (unsigned int i = 0; i < config.eliteNumber && i < _population.size(); i++)
+          nextGeneration.push_back(new Chromosome(_population.at(i)->getStrand()));
+  }
   do
   {
-    c1 = selectChromosome(config.selectionType);
-    c2 = selectChromosome(config.selectionType);
+    c1 = selectChromosome();
+    c2 = selectChromosome();
     if ((double)rand() / RAND_MAX <= config.crossoverRate)
         children = Chromosome::crossover(config.crossoverType, c1, c2);
     else {
@@ -83,7 +92,7 @@ void Population::reproduce()
     children.second->mutate();
     nextGeneration.push_back(children.first);
     nextGeneration.push_back(children.second);
-  } while (nextGeneration.size() != config.populationSize);
+  } while (nextGeneration.size() < config.populationSize);
   clean();
   _population = nextGeneration;
 }
@@ -122,18 +131,20 @@ Chromosome *Population::tournamentSelection() const
     const int ts = 5;
     std::vector<int> subPop;
     int id;
+    double tmpFitness;
     do {
         do {
             id = rand() % _population.size();
         } while (std::find(subPop.begin(), subPop.end(), id) != subPop.end());
         subPop.push_back(id);
-    } while(subPop.size() != ts);
-    int f = 0;
+    } while (subPop.size() != ts);
+    double f = 0;
     for (auto i : subPop)
     {
-        if (_population.at(i)->getFitness() > f)
+        tmpFitness = _population.at(i)->getFitness(); 
+        if (tmpFitness > f)
         {
-            f = _population.at(i)->getFitness();
+            f = tmpFitness;
             id = i;
         }
     }

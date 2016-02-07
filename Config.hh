@@ -33,13 +33,21 @@ public:
     // Rate at which a chromosome mutate
     double mutationRate;
     // Number of chromosome in a gene => equal to a possible solution
-    int genePerChromosome;
+    unsigned int genePerChromosome;
     // Number of bit in a chromosome, each bit represents a part of a solution
-    int chromosomeSize;
+    unsigned int chromosomeSize;
     // Type of crossover used during chromosome reproduction
     std::string crossoverType;
     // Type of selection used during population selection
     std::string selectionType;
+    
+    /*
+     * Elitism configuration variable
+     */
+    // whether or not elitism has to be used
+    bool useElitism;
+    // number of elite to pick in a generation
+    unsigned int eliteNumber;
 private:
     /**
      * Display an error when the chosen crossover does not exists

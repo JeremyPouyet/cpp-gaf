@@ -32,6 +32,8 @@ bool Config::load(const std::string &path) {
         printSelectionError();
         return false;
     }
+    useElitism = reader.GetBoolean("elitism", "use_elitism", false);
+    eliteNumber = reader.GetInteger("elitism", "elite_number", 0);
     
     std::cout << "Population configuration:\t " << std::endl << "-------------------------" << std::endl << std::endl;
     std::cout << "crossover rate:\t\t " << crossoverRate << std::endl;
@@ -44,6 +46,10 @@ bool Config::load(const std::string &path) {
     std::cout << "chromosome size:\t " << chromosomeSize << std::endl;
     std::cout << "crossover_type:\t\t " << crossoverType << std::endl;
     std::cout << "selection_type:\t\t " << selectionType << std::endl << std::endl; 
+    
+    std::cout << "Elitism configuration:\t " << std::endl << "----------------------" << std::endl << std::endl;
+    std::cout << "Is elitism used:\t\t " << useElitism << std::endl;
+    std::cout << "Number of elite:\t\t " << eliteNumber << std::endl << std::endl;
     return true;
 }
 

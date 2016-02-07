@@ -66,6 +66,15 @@ public:
    * @return the chromosome fitness
    */
   double	getFitness()			const;
+  
+  /**
+   * Overload of the parenthesis operator, used to compare chromosome fitness
+   * in order to sort them in case of elitism
+   * @param c1, first chromosome
+   * @param c2, second chromosome
+   * @return whether the first chromosome has a better fitness than the second
+   */
+  bool operator() (const Chromosome *c1, const Chromosome *c2);
 
 private:
 
@@ -92,7 +101,7 @@ private:
      * @param l1, limit at which to start crossover
      * @param l2, limit at which to end crossover
      */
-    static void crossoverBetween(Strand &s1, Strand &s2, int l1, int l2);
+    static void crossoverBetween(Strand &s1, Strand &s2, unsigned int l1, unsigned int l2);
 
     // Computation representation of a possible solution
     Strand      _strand;

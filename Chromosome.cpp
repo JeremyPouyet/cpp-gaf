@@ -8,7 +8,7 @@ const std::map<const std::string, Chromosome::fp> Chromosome::crossovers = {
 Chromosome::Chromosome()
 {
     _strand = "";
-    for (int j = 0; j < config.chromosomeSize; j++)
+    for (unsigned int j = 0; j < config.chromosomeSize; j++)
         _strand += (rand() % 2) ? "1" : "0";
 }
 
@@ -19,6 +19,11 @@ Chromosome::Chromosome(const Strand &strand) :
 void Chromosome::setFitness(double fitness)
 {
     _fitness = fitness;
+}
+
+bool Chromosome::operator() (const Chromosome *c1, const Chromosome *c2)
+{
+    return c1->getFitness() > c2->getFitness();
 }
 
 Chromosome::Children
@@ -67,7 +72,7 @@ void Chromosome::onePointCrossover(Strand &s1, Strand &s2)
 
 void Chromosome::twoPointCrossover(Strand &s1, Strand &s2)
 {
-    int r1, r2;
+    unsigned int r1, r2;
     r1 = rand() % config.chromosomeSize;
     r2 = (rand() % config.chromosomeSize) + r1;
     if (r2 > config.chromosomeSize)
@@ -75,10 +80,10 @@ void Chromosome::twoPointCrossover(Strand &s1, Strand &s2)
     crossoverBetween(s1, s2, r1, r2);
 }
 
-void Chromosome::crossoverBetween(Strand &s1, Strand &s2, int l1, int l2)
+void Chromosome::crossoverBetween(Strand &s1, Strand &s2, unsigned int l1, unsigned  int l2)
 {
     Gene g;
-    for (int i = l1; i < l2; i++)
+    for (unsigned int i = l1; i < l2; i++)
     {
         g = s1[i];
         s1[i] = s2[i];

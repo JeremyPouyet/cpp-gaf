@@ -6,6 +6,7 @@
 #include <string>
 #include <cfloat>
 #include <map>
+#include <algorithm>
 
 #include "Config.hh"
 #include "Problem.hh"
@@ -47,11 +48,10 @@ private:
     Chromosome  *tournamentSelection()                      const;
     
     /**
-     * Selection function, it redirects to the good selection
-     * @param name, selection name
+     * Selection function, redirect to the good selection according to the configuration's selection type
      * @return the selected chromosome
      */
-    Chromosome  *selectChromosome(const std::string &name)  const;
+    inline Chromosome  *selectChromosome()                  const;
     
     /**
      * test if the population has a winner (best candidate solution)
@@ -78,6 +78,11 @@ private:
      * reproduce the current population, creation of the next generation
      */
     void        reproduce();
+    
+    /**
+     * sort the current population by chromosome fitness
+     */
+    inline void        sortByFitness();
 
     // current population
     Generation  _population;
