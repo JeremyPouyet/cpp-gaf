@@ -9,8 +9,6 @@
  */
 class Problem {
 public:
-    Problem() {}
-    
     /**
      * print a chromosome strand
      * @param strand, strand to print
@@ -18,9 +16,16 @@ public:
     virtual void print(const std::string &strand) const = 0;
     
     /**
-     * user interaction function. Used to ask parameter to the user. Can be graphic.
+     * user interaction function. Used to ask parameter to the user. 
+     * Can be graphic, not mendatory;
      */
     virtual void askParameters() = 0;
+    
+    /**
+     * give the possibility to load some data into the framework
+     * not mendatory
+     */
+    virtual bool loadData() = 0;
     
     /**
      * Compute the fitness of a chromosome through its strand.
@@ -35,6 +40,12 @@ public:
      * @return whether a solution resolves the problem
      */
     virtual bool test(const std::string &strand) const = 0;
+    
+    /**
+     * Transmit the best candidate solution to the problem
+     * @param strand, the best candidate solution
+     */
+    virtual void giveBestSolution(const std::string &strand) const = 0;
     
     virtual ~Problem() {}
 };

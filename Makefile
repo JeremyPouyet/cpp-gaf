@@ -10,6 +10,7 @@ RM		= rm -rf
 CPPFLAGS	+= -W -Wextra -Wall -fPIC
 #CPPFLAGS	+= -rdynamic -export-dynamic
 CPPFLAGS	+= -fmax-errors=2
+CPPFLAGS	+= -fopenmp
 
 ##
 ## header location
@@ -22,7 +23,7 @@ CPPFLAGS += -I./inih/
 ##
 LDFLAGS		+= -shared
 
-LIBDL		= -ldl
+LIBDL		= -ldl -lgomp
 
 ##
 ## c++ version
@@ -39,7 +40,6 @@ P2	= problems/range/RangeProblem.so
 
 SRCS	= main.cpp \
 	ProblemLoader.cpp \
-	AProblem.cpp \
 	Chromosome.cpp \
 	Population.cpp \
 	Config.cpp \

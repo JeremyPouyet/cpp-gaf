@@ -20,14 +20,35 @@ int main(int ac, char **av)
         std::cerr << "Can't load configuration file " << std::endl;
         return 3;
     }
+    config.display();
     try {
         problemLoader.load(av[1]);
     } catch(std::string &error) {
        std::cerr << error << std::endl;
        return 2;
     }
-    Problem *problem = problemLoader.getProblem();
-    ((AProblem *)problem)->setConfig(config);
-    Population p(problem);
-    return p.solve();
+    Problem *problem = (AProblem *)problemLoader.getProblem();
+    Population population;
+    bool error = false;
+    // Don't waste of time, load and generate data while the user enter parameters
+    #pragma omp parallel sections
+    {
+        #pragma omp section
+        {
+            problem->askParameters();
+        }
+        #pragma omp section
+        {
+            ((AProblem *)problem)->setConfig(config);
+            if (problem->loadData() == false)
+                error = true;
+            population.generate();
+        }
+    }
+    if (error == true) {
+        std::cerr << "Problem while loading data" << std::endl;
+        return 4;
+    }
+    population.solve(problem);
+    return 0;
 }

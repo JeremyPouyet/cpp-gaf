@@ -20,14 +20,19 @@ public:
      * Population constructor
      * @param problem, Problem to solve
      */
-    Population(Problem *problem);
+    Population();
     ~Population();
     
     /**
-     * Solves the current Problem
-     * @return whether the problem has been solved or not
+     * Try to Solve the current Problem
+     * @param problem, the problem to solve
      */
-    bool solve();
+    void solve(Problem *problem);
+    
+    /**
+     * generate the current population
+     */
+    void        generate();
 
 private:
     typedef std::vector<Chromosome *> Generation;
@@ -54,20 +59,15 @@ private:
     inline Chromosome  *selectChromosome()                  const;
     
     /**
-     * test if the population has a winner (best candidate solution)
-     * @return the best candidate solution or NULL
+     * test if the population has a winner
+     * @return if a candidate solution solves the problem
      */
-    Chromosome  *test();
+    bool  test();
     
     /**
      * print the current population
      */
     void        print()                                     const;
-    
-    /**
-     * generate the current population
-     */
-    void        generate();
     
     /**
      * clean the current population

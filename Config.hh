@@ -17,6 +17,11 @@ public:
      */
     bool load(const std::string &path);
     
+    /**
+     * Display the current configuration
+     */
+    void display();
+    
     /*
     ** Population configuration variable
     */
@@ -38,8 +43,14 @@ public:
     unsigned int chromosomeSize;
     // Type of crossover used during chromosome reproduction
     std::string crossoverType;
+    
+    /*
+    ** Selection configuration variable
+    */
     // Type of selection used during population selection
     std::string selectionType;
+    // number of candidate solution selected in tournament selection
+    unsigned int tournamentSize;
     
     /*
      * Elitism configuration variable

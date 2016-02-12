@@ -6,13 +6,13 @@
 class AProblem : public Problem
 {
 public:
-    AProblem() : Problem() {}
-    
     virtual void print(const std::string &strand) const = 0;
-    virtual void askParameters() = 0;
+    virtual void askParameters() {}
+    virtual bool loadData() { return true; }
     virtual double computeFitnessOf(const std::string &strand) const = 0;
     virtual bool test(const std::string &strand) const = 0;
-    void setConfig(Config &config);
+    void setConfig(Config &config) { _config = config; }
+    virtual void giveBestSolution(const std::string &strand) const { (void)strand;}
     
     virtual ~AProblem() {}
 protected:

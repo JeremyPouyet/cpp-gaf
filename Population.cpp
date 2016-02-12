@@ -1,48 +1,49 @@
 #include "Population.hh"
 
-Population::Population(Problem *problem) : 
+Population::Population() : 
         _winner(NULL),
-        _problem(problem),
+        _problem(NULL),
         selections({
             {"fitness-proportional", &Population::fitnessProportionateSelection},
             {"tournament", &Population::tournamentSelection}})
-{
-    generate();
-}
+{ }
 
-bool Population::solve() {
+void Population::solve(Problem *problem) {
+    _problem = problem;
     unsigned int generation;
-    Chromosome *solution = NULL;
-    for (generation = 0; generation < config.simulationNumber; ++generation)
+    bool solutionFound = false;
+    for (generation = 0; generation < config.simulationNumber; generation++)
     {
-        if ((solution = test()) != NULL)
+        if (test() == true) {
+            solutionFound = true;
             break;
+        }
         reproduce();
     }
-    if (solution)
-    {
-        std::cout << "Solution found in " << generation + 1 << " generation(s)" << std::endl;
-        _problem->print(solution->getStrand());
-        return true;
-    }
-    std::cout <<  "Solution not found" << std::endl;
-    print();
-    return false;
+    if (solutionFound == true)
+        std::cout << "Solution found in " << generation + 1 << " generations(s) " << std::endl;
+    else
+        std::cout << "Solution not found, best candidate is: " << std::endl;
+    sortByFitness();
+    _problem->print(_population.front()->getStrand());
+    _problem->giveBestSolution(_population.back()->getStrand());
+    //print();
 }
 
 void Population::generate()
 {
-    _problem->askParameters();
     for (unsigned int i = 0; i < config.populationSize; i++)
         _population.push_back(new Chromosome());
 }
 
-Chromosome *Population::test()
+bool Population::test()
 {
     double fitness;
+    Chromosome *candidate;
     _totalFitness = 0;
     // compute fitness of all chromosome
-    for (auto &candidate : _population) {
+    for (unsigned int i = 0; i < config.populationSize; i++) {
+        candidate = _population.at(i);
         fitness = _problem->computeFitnessOf(candidate->getStrand());
         candidate->setFitness(fitness);
         _totalFitness += fitness;
@@ -51,8 +52,8 @@ Chromosome *Population::test()
     sortByFitness();
     // test if the best candidate solution solves the problem
     if (_problem->test(_population.front()->getStrand()))
-        return _population.front();
-    return NULL;
+        return true;
+    return false;
 }
 
 void Population::print() const

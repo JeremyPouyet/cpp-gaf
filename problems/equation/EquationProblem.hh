@@ -16,14 +16,13 @@ enum Type
 
 class EquationProblem : public AProblem
 {
-    public: 
-        EquationProblem() : AProblem() {}
+    public:
         
-        virtual void print(const std::string &strand) const;
-        virtual void askParameters();
-        virtual double computeFitnessOf(const std::string &strand) const;
-        virtual double computeValue(const std::string &strand) const;
-        virtual bool test(const std::string &strand) const;
+        void print(const std::string &strand) const;
+        void askParameters();
+        double computeFitnessOf(const std::string &strand) const;
+        double computeValue(const std::string &strand) const;
+        bool test(const std::string &strand) const;
         
         virtual ~EquationProblem() {}
         

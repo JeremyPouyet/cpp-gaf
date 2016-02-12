@@ -27,14 +27,20 @@ bool Config::load(const std::string &path) {
         printCrossoverError();
         return false;
     }
-    selectionType = reader.Get("chromosome", "selection_type", "fitness-proportional");
+    
+    useElitism = reader.GetBoolean("elitism", "use_elitism", false);
+    eliteNumber = reader.GetInteger("elitism", "elite_number", 0);
+ 
+    selectionType = reader.Get("selection", "selection_type", "fitness-proportional");
     if (checkSelection() == false) {
         printSelectionError();
         return false;
     }
-    useElitism = reader.GetBoolean("elitism", "use_elitism", false);
-    eliteNumber = reader.GetInteger("elitism", "elite_number", 0);
-    
+    tournamentSize = reader.GetInteger("selection", "tournament_size", 1);
+    return true;
+}
+
+void Config::display() {
     std::cout << "Population configuration:\t " << std::endl << "-------------------------" << std::endl << std::endl;
     std::cout << "crossover rate:\t\t " << crossoverRate << std::endl;
     std::cout << "population size:\t " << populationSize << std::endl;
@@ -44,13 +50,15 @@ bool Config::load(const std::string &path) {
     std::cout << "mutation rate:\t\t " << mutationRate << std::endl;
     std::cout << "gene per chromosome:\t " << genePerChromosome << std::endl;
     std::cout << "chromosome size:\t " << chromosomeSize << std::endl;
-    std::cout << "crossover_type:\t\t " << crossoverType << std::endl;
-    std::cout << "selection_type:\t\t " << selectionType << std::endl << std::endl; 
+    std::cout << "crossover_type:\t\t " << crossoverType << std::endl << std::endl; 
     
     std::cout << "Elitism configuration:\t " << std::endl << "----------------------" << std::endl << std::endl;
-    std::cout << "Is elitism used:\t\t " << useElitism << std::endl;
-    std::cout << "Number of elite:\t\t " << eliteNumber << std::endl << std::endl;
-    return true;
+    std::cout << "Is elitism used:\t " << useElitism << std::endl;
+    std::cout << "Number of elite:\t " << eliteNumber << std::endl << std::endl;
+    
+    std::cout << "Selection configuration:" << std::endl << "------------------------" << std::endl << std::endl;
+    std::cout << "selection_type:\t\t " << selectionType << std::endl;
+    std::cout << "Tournament size:\t" << tournamentSize << std::endl << std::endl;
 }
 
 bool Config::checkCrossover() const {
