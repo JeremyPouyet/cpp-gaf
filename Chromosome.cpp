@@ -23,16 +23,14 @@ void Chromosome::setFitness(double fitness)
 
 bool Chromosome::operator() (const Chromosome *c1, const Chromosome *c2)
 {
-    return c1->getFitness() > c2->getFitness();
+    // > -> desc
+    // < -> asc
+    return c1->getFitness() < c2->getFitness();
 }
 
-Chromosome::Children
-Chromosome::crossover(const std::string &name, const Chromosome * const c1, const Chromosome * const c2)
+void Chromosome::crossover(const std::string &name, Strand &s1, Strand &s2)
 {
-  Strand s1 = c1->getStrand();
-  Strand s2 = c2->getStrand();
   crossovers.at(name)(s1, s2);
-  return {new Chromosome(s1), new Chromosome(s2)};
 }
 
 void Chromosome::mutate()
@@ -46,7 +44,7 @@ void Chromosome::mutate()
   }
 }
 
-Chromosome::Strand Chromosome::getStrand() const
+Strand Chromosome::getStrand() const
 {
   return _strand;
 }

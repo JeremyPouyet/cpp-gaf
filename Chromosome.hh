@@ -11,12 +11,12 @@
 
 #include "Config.hh"
 
+typedef std::string Strand;
+
 class Chromosome
 {
 public:
   typedef char Gene;
-  typedef std::string Strand;
-  typedef std::pair<Chromosome *, Chromosome *> Children;
 
   /**
    * Creates a new random chromosome according to the configuration file
@@ -36,7 +36,7 @@ public:
    * @param c2, chromosome 2
    * @return a pair of new chromosome
    */
-  static Children crossover(const std::string &name, const Chromosome * const c1, const Chromosome * const c2);
+  static void crossover(const std::string &name, Strand &s1, Strand &s2);
 
   /**
    * Set the current fitness of a chromosome previously computed into a problem

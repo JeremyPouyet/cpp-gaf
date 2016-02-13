@@ -26,7 +26,7 @@ void Population::solve(Problem *problem) {
         std::cout << "Solution not found, best candidate is: " << std::endl;
     sortByFitness();
     _problem->print(_population.front()->getStrand());
-    _problem->giveBestSolution(_population.back()->getStrand());
+    _problem->giveBestSolution(_population.front()->getStrand());
     //print();
 }
 
@@ -38,22 +38,22 @@ void Population::generate()
 
 bool Population::test()
 {
-    double fitness;
+    double fitness, totalFitness = 0;
     Chromosome *candidate;
-    _totalFitness = 0;
     // compute fitness of all chromosome
+    #pragma omp parallel for private(fitness, candidate) reduction(+:totalFitness)
     for (unsigned int i = 0; i < config.populationSize; i++) {
         candidate = _population.at(i);
         fitness = _problem->computeFitnessOf(candidate->getStrand());
         candidate->setFitness(fitness);
-        _totalFitness += fitness;
+        totalFitness += fitness;
     }
+    _totalFitness = totalFitness;
+    std::cout << "fitness total: " << _totalFitness << std::endl;
     // sort them by fitness
     sortByFitness();
     // test if the best candidate solution solves the problem
-    if (_problem->test(_population.front()->getStrand()))
-        return true;
-    return false;
+    return _problem->test(_population.front()->getStrand());
 }
 
 void Population::print() const
@@ -75,25 +75,25 @@ void Population::reproduce()
 {
   Generation nextGeneration;
   Chromosome *c1, *c2;
-  Chromosome::Children children;
   if (config.useElitism == true) {
       for (unsigned int i = 0; i < config.eliteNumber && i < _population.size(); i++)
           nextGeneration.push_back(new Chromosome(_population.at(i)->getStrand()));
   }
+  Strand s1, s2;
   do
   {
     c1 = selectChromosome();
     c2 = selectChromosome();
+    s1 = c1->getStrand();
+    s2 = c2->getStrand();
     if ((double)rand() / RAND_MAX <= config.crossoverRate)
-        children = Chromosome::crossover(config.crossoverType, c1, c2);
-    else {
-	children.first = new Chromosome(c1->getStrand());
-	children.second = new Chromosome(c2->getStrand());
-    }
-    children.first->mutate();
-    children.second->mutate();
-    nextGeneration.push_back(children.first);
-    nextGeneration.push_back(children.second);
+        Chromosome::crossover(config.crossoverType, s1, s2);
+    c1 = new Chromosome(s1);
+    c2 = new Chromosome(s2);
+    c1->mutate();
+    c2->mutate();
+    nextGeneration.push_back(c1);
+    nextGeneration.push_back(c2);
   } while (nextGeneration.size() < config.populationSize);
   clean();
   _population = nextGeneration;
@@ -130,25 +130,23 @@ Chromosome *Population::fitnessProportionateSelection() const
 
 Chromosome *Population::tournamentSelection() const
 {
-    const int ts = 5;
     std::vector<int> subPop;
-    int id;
-    double tmpFitness;
+    int id, bestId = 0;
+    double tmpFitness, bestFitness = 0;
+    // for each tournament
     do {
+        // select a chromosome
         do {
             id = rand() % _population.size();
         } while (std::find(subPop.begin(), subPop.end(), id) != subPop.end());
-        subPop.push_back(id);
-    } while (subPop.size() != ts);
-    double f = 0;
-    for (auto i : subPop)
-    {
-        tmpFitness = _population.at(i)->getFitness(); 
-        if (tmpFitness > f)
-        {
-            f = tmpFitness;
-            id = i;
+        tmpFitness = _population.at(id)->getFitness();
+        // and check if it's better than the other
+        if (tmpFitness < bestFitness) {
+            // if so, set it as the winner
+            bestFitness = tmpFitness;
+            bestId = id;
         }
-    }
-    return _population[id];
+        subPop.push_back(id);
+    } while (subPop.size() != config.tournamentSize);
+    return _population[bestId];
 }

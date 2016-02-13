@@ -53,7 +53,7 @@ void Config::display() {
     std::cout << "crossover_type:\t\t " << crossoverType << std::endl << std::endl; 
     
     std::cout << "Elitism configuration:\t " << std::endl << "----------------------" << std::endl << std::endl;
-    std::cout << "Is elitism used:\t " << useElitism << std::endl;
+    std::cout << "Is elitism used:\t " << std::boolalpha << useElitism << std::endl;
     std::cout << "Number of elite:\t " << eliteNumber << std::endl << std::endl;
     
     std::cout << "Selection configuration:" << std::endl << "------------------------" << std::endl << std::endl;

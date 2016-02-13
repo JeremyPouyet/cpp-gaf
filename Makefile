@@ -33,7 +33,7 @@ CPPFLAGS	+= -std=c++11
 ##
 ## files generation compilation options
 ##
-NAME	= equation_finder
+NAME	= open-gaf
 P1	= problems/equation/EquationProblem.so
 P2	= problems/range/RangeProblem.so
 
