@@ -1,2 +1,3 @@
-# equation_finder
-Genetic algorithm to find the equation that leads to a result
+# cpp-gaf
+
+Genetic algorithm Framework written in c++, helps you to solve problems.
