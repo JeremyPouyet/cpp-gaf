@@ -1,0 +1,7 @@
+set autoscale
+
+set title "Differences between reference and generated data"
+set grid
+
+plot "./results.dat" using 1:2 title "generated", \
+     "./problems/iis/datfile.dat" using 1:2 title "references";

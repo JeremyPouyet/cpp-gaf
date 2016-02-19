@@ -69,6 +69,8 @@ Chromosome *Population::selectChromosome() const
 
 void Population::sortByFitness() {
     std::sort(_population.begin(), _population.end(), Chromosome());
+    //std::cout << "1st: " << _population.front()->getFitness() << std::endl
+    //        << "last: " << _population.back()->getFitness() << std::endl;
 }
 
 void Population::reproduce()
@@ -82,10 +84,8 @@ void Population::reproduce()
   Strand s1, s2;
   do
   {
-    c1 = selectChromosome();
-    c2 = selectChromosome();
-    s1 = c1->getStrand();
-    s2 = c2->getStrand();
+    s1 = selectChromosome()->getStrand();
+    s2 = selectChromosome()->getStrand();
     if ((double)rand() / RAND_MAX <= config.crossoverRate)
         Chromosome::crossover(config.crossoverType, s1, s2);
     c1 = new Chromosome(s1);
@@ -131,8 +131,8 @@ Chromosome *Population::fitnessProportionateSelection() const
 Chromosome *Population::tournamentSelection() const
 {
     std::vector<int> subPop;
-    int id, bestId = 0;
-    double tmpFitness, bestFitness = 0;
+    int id, bestId = _population.size() - 1;
+    double tmpFitness, bestFitness = _population.back()->getFitness();
     // for each tournament
     do {
         // select a chromosome
