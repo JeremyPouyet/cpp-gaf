@@ -10,7 +10,7 @@ extern "C" void destroy(Problem *problem) {
 
 void Iis::print(const std::string &strand) const {
     int p = 0;
-    for (unsigned int i = 0; i < _config.genePerChromosome; i++)
+    for (unsigned int i = 0; i < _config.genePerChromosome / 2; i++)
       std::cout << getIntValue(strand, p) << " ";
     std::cout << "fitness: " << computeFitnessOf(strand) << std::endl;
 }
@@ -81,12 +81,25 @@ std::vector<dataType> Iis::getCoefs(const std::string &strand) const {
 
 dataType Iis::getIntValue(const std::string &strand, int &p) const
 {
-    u_t a;
+    int16_t a = 0;
+    int16_t b = 0;
+    bool isneg = false;
+    /*u_t a;
     a.f = 0;
-    a.i = 0;
+    a.i = 0;*/
     for (unsigned int j = 0; j < _config.chromosomeSize /_config.genePerChromosome; j++)
         if (strand[p + j] == '1')
-            a.i |= 1 << j;
+            a |= 1 << j;
     p += _config.chromosomeSize /_config.genePerChromosome;
-    return a.f;
+    for (unsigned int j = 0; j < _config.chromosomeSize /_config.genePerChromosome; j++)
+        if (strand[p + j] == '1')
+            b |= 1 << j;
+    b = std::abs(b);
+    if (a < 0) {
+        a = std::abs(a);
+        isneg = true;
+    }
+    p += _config.chromosomeSize /_config.genePerChromosome;
+    dataType f = a + (b / 100000.0); 
+    return isneg ? -f : f;
 }
