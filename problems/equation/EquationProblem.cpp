@@ -10,13 +10,11 @@ extern "C" void destroy(Problem *problem) {
 
 void EquationProblem::print(const std::string &strand) const {
     Type type = DIGIT;
-    int p = 0;
-    for (unsigned int i = 0; i < _config.genePerChromosome; i++)
-    {
+    for (unsigned int i = 0; i < _config.chromosomeSize;) {
         if (type == OPERATOR)
-            std::cout << " " << getCharValue(strand, p) << " ";
+            std::cout << " " << getCharValue(strand, i) << " ";
         else
-            std::cout << (int)getIntValue(strand, p);
+            std::cout << (int)getters::getValue<int8_t>(strand, i);
         type = type == DIGIT ? OPERATOR : DIGIT; 
     }
     try {
@@ -41,28 +39,28 @@ double EquationProblem::computeFitnessOf(const std::string &strand) const {
 
 double	EquationProblem::computeValue(const std::string &strand) const
 {
-    std::string op;
+    char op;
     bool hasLeft = false;
     Type type = DIGIT;
     double value = 0;
-    int p = 0, v;
-    for (unsigned int i = 0; i < _config.genePerChromosome; i++)
+    int16_t v;
+    for (unsigned int i = 0; i < _config.chromosomeSize; )
     {
         if (type == OPERATOR)
         {
-            op = getCharValue(strand, p);
+            op = getCharValue(strand, i);
             hasLeft = true;
         }
         else if (hasLeft == false)
-            value = getIntValue(strand, p);
+            value = getters::getValue<int8_t>(strand, i);
         else
         {
-            v = getIntValue(strand, p);
-            if (op == "+")
+            v = getters::getValue<int8_t>(strand, i);
+            if (op == '+')
                 value += v;
-            else if (op == "-")
+            else if (op == '-')
                 value -= v;
-            else if (op == "*")
+            else if (op == '*')
                 value *= v;
             else if (v == 0)
                 throw 0;
@@ -74,27 +72,22 @@ double	EquationProblem::computeValue(const std::string &strand) const
     return value;
 }
 
-std::string EquationProblem::getCharValue(const std::string &strand, int &p) const 
-{
-    char g1 = strand[p], g2 = strand[p + 1];
-    p += 2;
-    if (g1 == '1' && g2 == '1')
-        return "+";
-    if (g1 == '1' && g2 == '0')
-        return "-";
-    if (g1 == '0' && g2 == '1')
-        return "*";
-    return "/";
-}
+const std::map<bool, std::map<bool, char> > toSymb = {
+    {true, {
+        {true, '+'},
+        {false, '-'}
+    }},
+    {false, {
+        {true, '*'},
+        {false, '/'}
+    }}
+};
 
-int8_t EquationProblem::getIntValue(const std::string &strand, int &p) const
+char EquationProblem::getCharValue(const std::string &strand, unsigned int &off) const 
 {
-    int8_t a = 0;
-    for (unsigned int j = 0; j < sizeof(a) * CHAR_BIT; j++)
-        if (strand[p + j] == '1')
-            a |= 1 << j;   
-    p += sizeof(a) * CHAR_BIT;
-    return a;
+    bool g1 = getters::getValue<bool>(strand, off), 
+            g2 = getters::getValue<bool>(strand, off);
+    return toSymb.at(g1).at(g2);
 }
 
 bool EquationProblem::test(const std::string &strand) const

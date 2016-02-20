@@ -10,9 +10,8 @@ extern "C" void destroy(Problem *problem) {
 
 void RangeProblem::print(const std::string &strand) const {
     std::cout << "numbers in this chromosome: " << std::endl;
-    int p = 0;
-    for (unsigned int i = 0; i < _config.genePerChromosome; i++)
-        std::cout << getNextInt(strand, p) << " ";
+    for (unsigned int i = 0; i < _config.chromosomeSize;)
+        std::cout << getters::getValue<int16_t>(strand, i) << " ";
     std::cout << " fitness: " << computeFitnessOf(strand) << std::endl;
 }
 
@@ -30,9 +29,8 @@ void RangeProblem::askParameters() {
 double RangeProblem::computeFitnessOf(const std::string &strand) const {
     double fitness = 0;
     targetType value;
-    int p = 0;
-    for (unsigned int i = 0; i < _config.genePerChromosome; i++) {
-        value = getNextInt(strand, p);
+    for (unsigned int i = 0; i < _config.chromosomeSize;) {
+        value = getters::getValue<int16_t>(strand, i);
         if (value < _min)
             fitness += 1.0 / (1 + std::abs(_min - value));
         else if (value > _max)
@@ -46,22 +44,11 @@ double RangeProblem::computeFitnessOf(const std::string &strand) const {
 bool RangeProblem::test(const std::string &strand) const
 {
     targetType value;
-    int p = 0;
-    for (unsigned int i = 0; i < _config.genePerChromosome; i++)
+    for (unsigned int i = 0; i < _config.chromosomeSize;)
     {
-        value = getNextInt(strand, p);
+        value = getters::getValue<int16_t>(strand, i);
         if (value < _min || value > _max)
             return false;
     }
     return true;
-}
-
-RangeProblem::targetType RangeProblem::getNextInt(const std::string &strand, int &p) const
-{
-    targetType a = 0;
-    for (unsigned int j = 0; j < sizeof(a) * CHAR_BIT; j++)
-        if (strand[p + j] == '1')
-            a |= 1 << j;   
-    p += sizeof(a) * CHAR_BIT;
-    return a;
 }

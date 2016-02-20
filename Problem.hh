@@ -17,13 +17,13 @@ public:
     
     /**
      * user interaction function. Used to ask parameter to the user. 
-     * Can be graphic, not mendatory;
+     * Can be graphic, not mandatory;
      */
     virtual void askParameters() = 0;
     
     /**
      * give the possibility to load some data into the framework
-     * not mendatory
+     * not mandatory
      */
     virtual bool loadData() = 0;
     

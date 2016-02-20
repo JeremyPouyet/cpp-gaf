@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <climits>
 
 #include "Config.hh"
 

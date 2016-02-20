@@ -2,13 +2,14 @@
 #define	IIG_HH
 
 #include <cstdint>
-#include <climits>
 #include <fstream>
 #include <vector>
 #include <utility>
 #include <cmath>
 #include <iomanip>
+
 #include "AProblem.hh"
+#include "Getters.hpp"
 
 typedef float dataType;
 

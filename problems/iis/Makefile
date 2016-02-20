@@ -9,7 +9,7 @@ RM		= rm -rf
 ##
 CPPFLAGS	+= -W -Wextra -Wall -fPIC -fopenmp
 CPPFLAGS	+= -fmax-errors=2
-CPPFLAGS	+= -I./ -I../.. -I../../inih/
+CPPFLAGS	+= -I./ -I../.. -I../../inih/ -I../../libs/
 
 
 ##
@@ -27,7 +27,7 @@ CPPFLAGS	+= -std=c++11
 ##
 ## files generation compilation options
 ##
-NAME	= ./Iis.so
+NAME	= ./problem.so
 
 SRCS	= Iis.cpp
 

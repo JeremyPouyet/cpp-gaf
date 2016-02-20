@@ -7,6 +7,7 @@
 #include <climits>
 
 #include "AProblem.hh"
+#include "Getters.hpp" 
 
 enum Type
 {
@@ -28,8 +29,7 @@ class EquationProblem : public AProblem
         virtual ~EquationProblem() {}
         
     private:
-        std::string getCharValue(const std::string &strand, int &p) const;
-        int8_t getIntValue(const std::string &strand, int &p) const;
+        char getCharValue(const std::string &strand, unsigned int &off) const;
         double _number;
 };
 

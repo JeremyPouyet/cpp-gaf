@@ -9,9 +9,8 @@ extern "C" void destroy(Problem *problem) {
 }
 
 void Iis::print(const std::string &strand) const {
-    int p = 0;
-    for (unsigned int i = 0; i < _config.genePerChromosome / 2; i++)
-      std::cout << getIntValue(strand, p) << " ";
+    for (unsigned int i = 0; i < _config.chromosomeSize;)
+      std::cout << getters::getValue<float>(strand, i) << " ";
     std::cout << "fitness: " << computeFitnessOf(strand) << std::endl;
 }
 
@@ -68,38 +67,13 @@ double Iis::computeValue(const std::vector<dataType> &coefs, double x) const {
 }
 
 std::vector<dataType> Iis::getCoefs(const std::string &strand) const {
-    int p = 0;
+    unsigned int i = 0;
     return {
-        getIntValue(strand, p),
-        getIntValue(strand, p),
-        getIntValue(strand, p),
-        getIntValue(strand, p),
-        getIntValue(strand, p),
-        getIntValue(strand, p)
+        getters::getValue<float>(strand, i),
+        getters::getValue<float>(strand, i),
+        getters::getValue<float>(strand, i),
+        getters::getValue<float>(strand, i),
+        getters::getValue<float>(strand, i),
+        getters::getValue<float>(strand, i)
     };
-}
-
-dataType Iis::getIntValue(const std::string &strand, int &p) const
-{
-    int16_t a = 0;
-    int16_t b = 0;
-    bool isneg = false;
-    /*u_t a;
-    a.f = 0;
-    a.i = 0;*/
-    for (unsigned int j = 0; j < sizeof(a) * CHAR_BIT; j++)
-        if (strand[p + j] == '1')
-            a |= 1 << j;
-    p += sizeof(a) * CHAR_BIT;
-    for (unsigned int j = 0; j < sizeof(b) * CHAR_BIT; j++)
-        if (strand[p + j] == '1')
-            b |= 1 << j;
-    b = std::abs(b);
-    if (a < 0) {
-        a = std::abs(a);
-        isneg = true;
-    }
-    p += sizeof(b) * CHAR_BIT;
-    dataType f = a + (b / 100000.0); 
-    return isneg ? -f : f;
 }

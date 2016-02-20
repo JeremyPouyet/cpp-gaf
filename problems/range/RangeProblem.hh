@@ -5,6 +5,7 @@
 #include <climits>
 
 #include "AProblem.hh"
+#include "Getters.hpp"
 
 class RangeProblem : public AProblem {
     public:
@@ -16,8 +17,7 @@ class RangeProblem : public AProblem {
         virtual ~RangeProblem() {}
         
     private:
-        typedef int32_t targetType;
-        targetType getNextInt(const std::string &strand, int &p) const;
+        typedef int16_t targetType;
         
         targetType _min;
         targetType _max;

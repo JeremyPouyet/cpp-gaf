@@ -2,27 +2,29 @@
 #include <string>
 
 #include <iostream>
+#include <string>
 
 #include "AProblem.hh"
 #include "Config.hh"
 #include "Population.hh"
-#include "Chromosome.hh"
 
 int main(int ac, char **av)
 {
-    if (ac != 3) {
-        std::cerr << "Wrong number of arguments: ./number problem configuration_file" << std::endl;
+    if (ac != 2) {
+        std::cerr << "Wrong number of arguments: ./number problemDirectory" << std::endl;
         return 1;
     }
+    std::string configurationPath = std::string(av[1]) + "problem.ini";
+    std::string problemPath = std::string(av[1]) + "problem.so";
     std::srand(time(NULL));
     ProblemLoader problemLoader;
-    if (config.load(av[2]) == false) {
+    if (config.load(configurationPath) == false) {
         std::cerr << "Can't load configuration file " << std::endl;
         return 3;
     }
     config.display();
     try {
-        problemLoader.load(av[1]);
+        problemLoader.load(problemPath);
     } catch(std::string &error) {
        std::cerr << error << std::endl;
        return 2;
