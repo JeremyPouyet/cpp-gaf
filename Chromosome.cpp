@@ -80,7 +80,7 @@ void Chromosome::twoPointCrossover(Strand &s1, Strand &s2)
 
 void Chromosome::crossoverBetween(Strand &s1, Strand &s2, unsigned int l1, unsigned  int l2)
 {
-    Gene g;
+    char g;
     for (unsigned int i = l1; i < l2; i++)
     {
         g = s1[i];

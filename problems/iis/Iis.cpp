@@ -87,11 +87,11 @@ dataType Iis::getIntValue(const std::string &strand, int &p) const
     /*u_t a;
     a.f = 0;
     a.i = 0;*/
-    for (unsigned int j = 0; j < _config.chromosomeSize /_config.genePerChromosome; j++)
+    for (unsigned int j = 0; j < sizeof(a) * CHAR_BIT; j++)
         if (strand[p + j] == '1')
             a |= 1 << j;
-    p += _config.chromosomeSize /_config.genePerChromosome;
-    for (unsigned int j = 0; j < _config.chromosomeSize /_config.genePerChromosome; j++)
+    p += sizeof(a) * CHAR_BIT;
+    for (unsigned int j = 0; j < sizeof(b) * CHAR_BIT; j++)
         if (strand[p + j] == '1')
             b |= 1 << j;
     b = std::abs(b);
@@ -99,7 +99,7 @@ dataType Iis::getIntValue(const std::string &strand, int &p) const
         a = std::abs(a);
         isneg = true;
     }
-    p += _config.chromosomeSize /_config.genePerChromosome;
+    p += sizeof(b) * CHAR_BIT;
     dataType f = a + (b / 100000.0); 
     return isneg ? -f : f;
 }

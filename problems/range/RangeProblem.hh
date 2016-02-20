@@ -2,6 +2,7 @@
 #define	RANGEPROBLEM_HH
 
 #include <iostream>
+#include <climits>
 
 #include "AProblem.hh"
 

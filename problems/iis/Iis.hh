@@ -2,6 +2,7 @@
 #define	IIG_HH
 
 #include <cstdint>
+#include <climits>
 #include <fstream>
 #include <vector>
 #include <utility>

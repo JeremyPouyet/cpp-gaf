@@ -59,9 +59,9 @@ bool RangeProblem::test(const std::string &strand) const
 RangeProblem::targetType RangeProblem::getNextInt(const std::string &strand, int &p) const
 {
     targetType a = 0;
-    for (unsigned int j = 0; j < _config.chromosomeSize/_config.genePerChromosome; j++)
+    for (unsigned int j = 0; j < sizeof(a) * CHAR_BIT; j++)
         if (strand[p + j] == '1')
             a |= 1 << j;   
-    p += _config.chromosomeSize/_config.genePerChromosome;
+    p += sizeof(a) * CHAR_BIT;
     return a;
 }

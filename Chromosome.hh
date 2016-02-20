@@ -16,8 +16,6 @@ typedef std::string Strand;
 class Chromosome
 {
 public:
-  typedef char Gene;
-
   /**
    * Creates a new random chromosome according to the configuration file
    */

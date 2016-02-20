@@ -37,7 +37,7 @@ public:
     */
     // Rate at which a chromosome mutate
     double mutationRate;
-    // Number of chromosome in a gene => equal to a possible solution
+    // Number of chromosome in a gene, not mandatory, only used by the user
     unsigned int genePerChromosome;
     // Number of bit in a chromosome, each bit represents a part of a solution
     unsigned int chromosomeSize;

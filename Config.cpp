@@ -20,8 +20,8 @@ bool Config::load(const std::string &path) {
     simulationNumber = reader.GetInteger("population", "simulation_number", 1500);
     
     mutationRate = reader.GetReal("chromosome", "mutation_rate", 0.1);
-    genePerChromosome = reader.GetInteger("chromosome", "gene_per_chromosome", 13);
-    chromosomeSize = reader.GetInteger("chromosome", "chromosome_size", 8) * genePerChromosome;
+    genePerChromosome = reader.GetInteger("chromosome", "gene_per_chromosome", 1);
+    chromosomeSize = reader.GetInteger("chromosome", "chromosome_size", 8);
     crossoverType = reader.Get("chromosome", "crossover_type", "one-point");
     if (checkCrossover() == false) {
         printCrossoverError();
