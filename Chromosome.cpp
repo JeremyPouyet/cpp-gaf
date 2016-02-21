@@ -2,7 +2,8 @@
 
 const std::map<const std::string, Chromosome::fp> Chromosome::crossovers = {
         {"one-point", &Chromosome::onePointCrossover},
-        {"two-point", &Chromosome::twoPointCrossover}
+        {"two-point", &Chromosome::twoPointCrossover},
+        {"uniform", &Chromosome::uniformCrossover}
     };
 
 Chromosome::Chromosome()
@@ -28,9 +29,10 @@ bool Chromosome::operator() (const Chromosome *c1, const Chromosome *c2)
     return c1->getFitness() < c2->getFitness();
 }
 
-void Chromosome::crossover(const std::string &name, Strand &s1, Strand &s2)
+Chromosome *Chromosome::crossover(const std::string &name, const Chromosome *c1, const Chromosome *c2)
 {
-  crossovers.at(name)(s1, s2);
+    Strand strand = crossovers.at(name)(c1->getStrand(), c2->getStrand());
+    return new Chromosome(strand);
 }
 
 void Chromosome::mutate()
@@ -63,28 +65,33 @@ void Chromosome::set(const Strand strand)
  * crossovers type
  */
 
-void Chromosome::onePointCrossover(Strand &s1, Strand &s2)
+Strand Chromosome::onePointCrossover(Strand s1, Strand s2)
 {
-    crossoverBetween(s1, s2, rand() % config.chromosomeSize, config.chromosomeSize);
+    return crossoverBetween(s1, s2, rand() % config.chromosomeSize, config.chromosomeSize);
 }
 
-void Chromosome::twoPointCrossover(Strand &s1, Strand &s2)
+Strand Chromosome::twoPointCrossover(Strand s1, Strand s2)
 {
     unsigned int r1, r2;
     r1 = rand() % config.chromosomeSize;
     r2 = (rand() % config.chromosomeSize) + r1;
     if (r2 > config.chromosomeSize)
         r2 = config.chromosomeSize;
-    crossoverBetween(s1, s2, r1, r2);
+    return crossoverBetween(s1, s2, r1, r2);
 }
 
-void Chromosome::crossoverBetween(Strand &s1, Strand &s2, unsigned int l1, unsigned  int l2)
+Strand Chromosome::uniformCrossover(Strand s1, Strand s2) {
+    Strand strand = s1;
+    for (unsigned int i = 0; i < config.chromosomeSize; i++)
+        if (rand() % 2 == 1)
+            strand[i] = s2[i];
+    return strand;
+}
+
+Strand Chromosome::crossoverBetween(Strand s1, Strand s2, unsigned int l1, unsigned  int l2)
 {
-    char g;
+    Strand strand = s1;
     for (unsigned int i = l1; i < l2; i++)
-    {
-        g = s1[i];
-        s1[i] = s2[i];
-        s2[i] = g;
-    }
+        strand[i] = s2[i];
+    return strand;
 }

@@ -10,7 +10,7 @@ extern "C" void destroy(Problem *problem) {
 
 void Iis::print(const std::string &strand) const {
     for (unsigned int i = 0; i < _config.chromosomeSize;)
-      std::cout << getters::getValue<float>(strand, i) << " ";
+      std::cout << std::setprecision(8) << getters::getValue<dataType>(strand, i) << " ";
     std::cout << "fitness: " << computeFitnessOf(strand) << std::endl;
 }
 
@@ -27,7 +27,6 @@ bool Iis::loadData() {
 double Iis::computeFitnessOf(const std::string &strand) const {
     double y, fitness = 0;
     std::vector<dataType> coefs = getCoefs(strand);
-    #pragma omp parallel for private(y) reduction(+:fitness)
     for (unsigned int i = 0; i < _values.size(); i++) {
         y = computeValue(coefs, _values[i].first);
         fitness += std::abs(_values[i].second - y);
@@ -69,11 +68,11 @@ double Iis::computeValue(const std::vector<dataType> &coefs, double x) const {
 std::vector<dataType> Iis::getCoefs(const std::string &strand) const {
     unsigned int i = 0;
     return {
-        getters::getValue<float>(strand, i),
-        getters::getValue<float>(strand, i),
-        getters::getValue<float>(strand, i),
-        getters::getValue<float>(strand, i),
-        getters::getValue<float>(strand, i),
-        getters::getValue<float>(strand, i)
+        getters::getValue<dataType>(strand, i),
+        getters::getValue<dataType>(strand, i),
+        getters::getValue<dataType>(strand, i),
+        getters::getValue<dataType>(strand, i),
+        getters::getValue<dataType>(strand, i),
+        getters::getValue<dataType>(strand, i)
     };
 }

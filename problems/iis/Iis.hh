@@ -11,12 +11,7 @@
 #include "AProblem.hh"
 #include "Getters.hpp"
 
-typedef float dataType;
-
-union u_t {
-    float f;
-    uint32_t i;
-};
+typedef int16_t dataType;
 
 class Iis : public AProblem
 {

@@ -35,7 +35,7 @@ public:
    * @param c2, chromosome 2
    * @return a pair of new chromosome
    */
-  static void crossover(const std::string &name, Strand &s1, Strand &s2);
+  static Chromosome *crossover(const std::string &name, const Chromosome * c1, const Chromosome *c2);
 
   /**
    * Set the current fitness of a chromosome previously computed into a problem
@@ -77,21 +77,23 @@ public:
 
 private:
 
-    typedef void (*fp)(Strand &s1, Strand &s2);
+    typedef Strand (*fp)(Strand s1, Strand s2);
 
     /**
      * Crossover function, apply the one point crossover on two strand
      * @param s1, strand 1
      * @param s2, strand 2
+     * @return new strand generated from s1 and s2
      */
-    static void onePointCrossover(Strand &s1, Strand &s2);
+    static Strand onePointCrossover(Strand s1, Strand s2);
     
     /**
      * Crossover function, apply the two point crossover on two strand
      * @param s1, strand 1
      * @param s2, strand 2
+     * @return new strand generated from s1 and s2
      */
-    static void twoPointCrossover(Strand &s1, Strand &s2);
+    static Strand twoPointCrossover(Strand s1, Strand s2);
 
     /**
      * Function used by one point and two point crossover to avoid code duplication
@@ -99,9 +101,19 @@ private:
      * @param s2, strand 2
      * @param l1, limit at which to start crossover
      * @param l2, limit at which to end crossover
+     * @return new strand generated from s1 and s2
      */
-    static void crossoverBetween(Strand &s1, Strand &s2, unsigned int l1, unsigned int l2);
+    static Strand crossoverBetween(Strand s1, Strand s2, unsigned int l1, unsigned int l2);
 
+    /**
+     * Crossover function, apply the uniform crossover on two strand
+     * @param s1, strand 1
+     * @param s2, strand 2
+     * @return new strand generated from s1 and s2
+     */
+    static Strand uniformCrossover(Strand s1, Strand s2);
+    
+    
     // Computation representation of a possible solution
     Strand      _strand;
     // rating, explains how a potential solution is good

@@ -49,51 +49,46 @@ bool Population::test()
         totalFitness += fitness;
     }
     _totalFitness = totalFitness;
-    std::cout << "fitness total: " << _totalFitness << std::endl;
+    std::cout << "Best candidate solution: ";
+    _problem->print(_population.front()->getStrand());
     // sort them by fitness
     sortByFitness();
     // test if the best candidate solution solves the problem
     return _problem->test(_population.front()->getStrand());
 }
 
-void Population::print() const
-{
+void Population::print() const {
     for (auto &candidate : _population)
         _problem->print(candidate->getStrand());
 }
 
-Chromosome *Population::selectChromosome() const
-{
+Chromosome *Population::selectChromosome() const {
     return (this->*selections.at(config.selectionType))();
 }
 
 void Population::sortByFitness() {
     std::sort(_population.begin(), _population.end(), Chromosome());
-    //std::cout << "1st: " << _population.front()->getFitness() << std::endl
-    //        << "last: " << _population.back()->getFitness() << std::endl;
 }
 
 void Population::reproduce()
 {
   Generation nextGeneration;
-  Chromosome *c1, *c2;
+  Chromosome *c1, *c2, *child;
   if (config.useElitism == true) {
       for (unsigned int i = 0; i < config.eliteNumber && i < _population.size(); i++)
           nextGeneration.push_back(new Chromosome(_population.at(i)->getStrand()));
   }
-  Strand s1, s2;
   do
   {
-    s1 = selectChromosome()->getStrand();
-    s2 = selectChromosome()->getStrand();
-    if ((double)rand() / RAND_MAX <= config.crossoverRate)
-        Chromosome::crossover(config.crossoverType, s1, s2);
-    c1 = new Chromosome(s1);
-    c2 = new Chromosome(s2);
-    c1->mutate();
-    c2->mutate();
-    nextGeneration.push_back(c1);
-    nextGeneration.push_back(c2);
+    c1 = selectChromosome();
+    if ((double)rand() / RAND_MAX <= config.crossoverRate) {
+        c2 = selectChromosome();
+        child = Chromosome::crossover(config.crossoverType, c1, c2);
+    }
+    else
+        child = new Chromosome(c1->getStrand());
+    child->mutate();
+    nextGeneration.push_back(child);
   } while (nextGeneration.size() < config.populationSize);
   clean();
   _population = nextGeneration;

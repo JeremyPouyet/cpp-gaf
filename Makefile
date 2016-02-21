@@ -8,7 +8,7 @@ RM		= rm -rf
 ## code like a boss
 ##
 CPPFLAGS	+= -W -Wextra -Wall -fPIC
-CPPFLAGS	+= -fmax-errors=2
+#CPPFLAGS	+= -fmax-errors=2
 CPPFLAGS	+= -fopenmp
 
 ##
