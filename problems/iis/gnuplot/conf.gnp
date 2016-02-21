@@ -1,3 +1,0 @@
-set xrange[-30:900]
-
-plot '../datfile.dat' using 1:2 title "datfile" lw 2 with line;
