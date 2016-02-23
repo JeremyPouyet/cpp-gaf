@@ -11,20 +11,18 @@ Population::Population() :
 void Population::solve(Problem *problem) {
     _problem = problem;
     unsigned int generation;
-    bool solutionFound = false;
-    for (generation = 0; generation < config.simulationNumber; generation++)
+    //test if initial population already have a good solution
+    bool solution = test();
+    for (generation = 0; generation < config.simulationNumber && solution == false; generation++)
     {
-        if (test() == true) {
-            solutionFound = true;
-            break;
-        }
         reproduce();
+        if (test() == true)
+            solution = true;
     }
-    if (solutionFound == true)
+    if (solution == true)
         std::cout << "Solution found in " << generation + 1 << " generations(s) " << std::endl;
     else
         std::cout << "Solution not found, best candidate is: " << std::endl;
-    sortByFitness();
     _problem->print(_population.front()->getStrand());
     _problem->giveBestSolution(_population.front()->getStrand());
     //print();
@@ -72,26 +70,31 @@ void Population::sortByFitness() {
 
 void Population::reproduce()
 {
-  Generation nextGeneration;
-  Chromosome *c1, *c2, *child;
-  if (config.useElitism == true) {
-      for (unsigned int i = 0; i < config.eliteNumber && i < _population.size(); i++)
-          nextGeneration.push_back(new Chromosome(_population.at(i)->getStrand()));
-  }
-  do
-  {
-    c1 = selectChromosome();
-    if ((double)rand() / RAND_MAX <= config.crossoverRate) {
-        c2 = selectChromosome();
-        child = Chromosome::crossover(config.crossoverType, c1, c2);
+    Generation nextGeneration;
+    Generation gens[4];
+    Chromosome *c1, *c2, *child;
+    if (config.useElitism == true) {
+          for (unsigned int i = 0; i < config.eliteNumber && i < _population.size(); i++)
+              nextGeneration.push_back(new Chromosome(_population.at(i)->getStrand()));
     }
-    else
-        child = new Chromosome(c1->getStrand());
-    child->mutate();
-    nextGeneration.push_back(child);
-  } while (nextGeneration.size() < config.populationSize);
-  clean();
-  _population = nextGeneration;
+    #pragma omp parallel for private(c1, c2, child) num_threads(4)
+    for (unsigned int i = nextGeneration.size(); i < config.populationSize; i++)
+    {
+        c1 = selectChromosome();
+        if (((double)rand() / RAND_MAX) <= config.crossoverRate) {
+            c2 = selectChromosome();
+            child = Chromosome::crossover(config.crossoverType, c1, c2);
+        }
+        else {
+            child = new Chromosome(c1->getStrand());
+        }
+        child->mutate();
+        gens[omp_get_thread_num()].push_back(child);
+    }
+    std::merge(gens[0].begin(), gens[0].end(), gens[1].begin(), gens[1].end(), std::back_inserter(nextGeneration));
+    std::merge(gens[2].begin(), gens[2].end(), gens[3].begin(), gens[3].end(), std::back_inserter(nextGeneration));
+    clean();
+    _population = nextGeneration;
 }
 
 void Population::clean()

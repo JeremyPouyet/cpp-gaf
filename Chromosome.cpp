@@ -1,6 +1,6 @@
 #include "./Chromosome.hh"
 
-const std::map<const std::string, Chromosome::fp> Chromosome::crossovers = {
+const std::map<const std::string, const Chromosome::fp> Chromosome::crossovers = {
         {"one-point", &Chromosome::onePointCrossover},
         {"two-point", &Chromosome::twoPointCrossover},
         {"uniform", &Chromosome::uniformCrossover}

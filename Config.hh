@@ -63,24 +63,24 @@ private:
     /**
      * Display an error when the chosen crossover does not exists
      */
-    void printCrossoverError() const;
+    inline void printCrossoverError() const;
     
     /**
      * Display an error when the chosen selection does not exists
      */
-    void printSelectionError() const;
+    inline void printSelectionError() const;
     
     /**
      * Check if chosen crossover is valid
      * @return whether the crossover is valid or not
      */
-    bool checkCrossover() const;
+    inline bool checkCrossover() const;
     
     /**
      * check if chosen selection is valid
      * @return whether the selection is valid or not
      */
-    bool checkSelection() const;
+    inline bool checkSelection() const;
 };
 
 // configuration variable

@@ -119,8 +119,8 @@ private:
     // rating, explains how a potential solution is good
     double	_fitness;
 
-    //  map of possibles crossovers
-    static const std::map<const std::string, fp> crossovers;
+    //  map of possible crossover
+    static const std::map<const std::string, const fp> crossovers;
 };
 
 #endif

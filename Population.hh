@@ -7,6 +7,7 @@
 #include <cfloat>
 #include <map>
 #include <algorithm>
+#include <omp.h>
 
 #include "Config.hh"
 #include "Problem.hh"

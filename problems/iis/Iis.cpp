@@ -9,8 +9,13 @@ extern "C" void destroy(Problem *problem) {
 }
 
 void Iis::print(const std::string &strand) const {
-    for (unsigned int i = 0; i < _config.chromosomeSize;)
-      std::cout << std::setprecision(8) << getters::getValue<dataType>(strand, i) << " ";
+    unsigned int i = 0;
+    std::cout << (int)getters::getValue<dataType>(strand, i) << " ";
+    std::cout << (int)getters::getValue<dataType>(strand, i) << " ";
+    std::cout << (int)getters::getValue<dataType>(strand, i) << " ";
+    std::cout << (int)getters::getValue<dataType>(strand, i) << " ";
+    std::cout << (int)getters::getValue<dataType>(strand, i) << " ";
+    std::cout << (int)getters::getValue<dataType>(strand, i) << " ";
     std::cout << "fitness: " << computeFitnessOf(strand) << std::endl;
 }
 
@@ -51,7 +56,7 @@ void Iis::giveBestSolution(const std::string &strand) const {
     double y;
     for (auto q : _values) {
         y = computeValue(coefs, q.first);
-        file << q.first << "\t" << std::setprecision(12) << y << std::endl;
+        file << q.first << "\t" << y << std::endl;
     }
     file.close();
 }

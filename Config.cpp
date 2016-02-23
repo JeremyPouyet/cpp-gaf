@@ -12,9 +12,15 @@ static const std::vector<std::string> _selections = {
 
 bool Config::load(const std::string &path) {
     INIReader reader(path);
-    if (reader.ParseError() < 0)
-      return false;
-    
+    int error = reader.ParseError();
+    if (error > 0) {
+        std::cerr << "Error on configuration file line " << error << std::endl;
+        return false;
+    }
+    if (error < 0) {
+        std::cerr << "Error while opening configuration file" << std::endl;
+        return false;
+    }
     crossoverRate = reader.GetReal("population", "crossover_rate", 0.7);
     populationSize = reader.GetInteger("population", "size", 100);
     simulationNumber = reader.GetInteger("population", "simulation_number", 1500);
@@ -27,10 +33,8 @@ bool Config::load(const std::string &path) {
         printCrossoverError();
         return false;
     }
-    
     useElitism = reader.GetBoolean("elitism", "use_elitism", false);
     eliteNumber = reader.GetInteger("elitism", "elite_number", 0);
- 
     selectionType = reader.Get("selection", "selection_type", "fitness-proportional");
     if (checkSelection() == false) {
         printSelectionError();

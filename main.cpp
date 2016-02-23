@@ -1,6 +1,4 @@
-#include <cstdlib>
 #include <string>
-
 #include <iostream>
 #include <string>
 
@@ -8,29 +6,7 @@
 #include "Config.hh"
 #include "Population.hh"
 
-int main(int ac, char **av)
-{
-    if (ac != 2) {
-        std::cerr << "Wrong number of arguments: ./number problemDirectory" << std::endl;
-        return 1;
-    }
-    std::string configurationPath = std::string(av[1]) + "problem.ini";
-    std::string problemPath = std::string(av[1]) + "problem.so";
-    std::srand(time(NULL));
-    ProblemLoader problemLoader;
-    if (config.load(configurationPath) == false) {
-        std::cerr << "Can't load configuration file " << std::endl;
-        return 3;
-    }
-    config.display();
-    try {
-        problemLoader.load(problemPath);
-    } catch(std::string &error) {
-       std::cerr << error << std::endl;
-       return 2;
-    }
-    Problem *problem = (AProblem *)problemLoader.getProblem();
-    Population population;
+bool initialise(Problem *problem, Population &population) {
     bool error = false;
     // Don't waste of time, load and generate data while the user enter parameters
     #pragma omp parallel sections
@@ -47,7 +23,29 @@ int main(int ac, char **av)
             population.generate();
         }
     }
-    if (error == true) {
+    if (error == true)
+        return false;
+    return true;
+}
+
+int main(int ac, char **av)
+{
+    if (ac != 2) {
+        std::cerr << "Wrong number of arguments: ./open-gaf problemDirectory" << std::endl;
+        return 1;
+    }
+    std::string configurationPath = std::string(av[1]) + "problem.ini";
+    std::string problemPath = std::string(av[1]) + "problem.so";
+    std::srand(time(NULL));
+    ProblemLoader problemLoader;
+    if (config.load(configurationPath) == false)
+        return 2;
+    config.display();
+    Problem *problem = (AProblem *)problemLoader.load(problemPath);
+    if (problem == NULL)
+        return 3;
+    Population population;
+    if (initialise(problem, population) == false) {
         std::cerr << "Problem while loading data" << std::endl;
         return 4;
     }
