@@ -6,11 +6,10 @@ const std::map<const std::string, const Chromosome::fp> Chromosome::crossovers =
         {"uniform", &Chromosome::uniformCrossover}
     };
 
-Chromosome::Chromosome()
+Chromosome::Chromosome() : _strand(config.chromosomeSize)
 {
-    _strand = "";
     for (unsigned int j = 0; j < config.chromosomeSize; j++)
-        _strand += (rand() % 2) ? '0' : '1';
+        _strand[j] = (rand() % 2);
 }
 
 Chromosome::Chromosome(const Strand &strand) : _strand(strand)
@@ -41,7 +40,7 @@ void Chromosome::mutate()
   {
     randomNb = (double)rand() / RAND_MAX;
     if (randomNb <= config.mutationRate)
-        _strand[i] = (_strand[i] == '0') ? '1' : '0';
+        _strand[i].flip();
   }
 }
 

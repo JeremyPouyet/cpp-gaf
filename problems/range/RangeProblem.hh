@@ -9,10 +9,10 @@
 
 class RangeProblem : public AProblem {
     public:
-        void print(const std::string &strand) const;
+        void print(const Strand &strand) const;
         void askParameters();
-        double computeFitnessOf(const std::string &strand) const;
-        bool test(const std::string &strand) const;
+        double computeFitnessOf(const Strand &strand) const;
+        bool test(const Strand &strand) const;
         
         virtual ~RangeProblem() {}
         

@@ -1,6 +1,7 @@
 #ifndef PROBLEM_H
 #define	PROBLEM_H
 
+#include <boost/dynamic_bitset.hpp>
 #include "Config.hh"
 
 /**
@@ -13,7 +14,7 @@ public:
      * print a chromosome strand
      * @param strand, strand to print
      */
-    virtual void print(const std::string &strand) const = 0;
+    virtual void print(const Strand &strand) const = 0;
     
     /**
      * user interaction function. Used to ask parameter to the user. 
@@ -32,20 +33,20 @@ public:
      * @param strand, strand used to compute a chromosome fitness
      * @return 
      */
-    virtual double computeFitnessOf(const std::string &strand) const = 0;
+    virtual double computeFitnessOf(const Strand &strand) const = 0;
     
     /**
      * test whether a solution resolves the problem
      * @param strand, strand to test
      * @return whether a solution resolves the problem
      */
-    virtual bool test(const std::string &strand) const = 0;
+    virtual bool test(const Strand &strand) const = 0;
     
     /**
      * Transmit the best candidate solution to the problem
      * @param strand, the best candidate solution
      */
-    virtual void giveBestSolution(const std::string &strand) const = 0;
+    virtual void giveBestSolution(const Strand &strand) const = 0;
     
     virtual ~Problem() {}
 };

@@ -1,18 +1,18 @@
 #ifndef GETTERS_HPP
 #define GETTERS_HPP
 
-#include <string>
 #include <climits>
+#include <boost/dynamic_bitset.hpp>
 
 namespace getters {
     // get an int from the strand: int8_t, int16_t, int32_t, int64_t and unsigned type)
     template<class T>
-    T getValue(const std::string &strand, unsigned int &off) {
+    T getValue(const Strand &strand, unsigned int &off) {
         T value = 0;
         unsigned int reverseOff = strand.size() - off - 1;
         unsigned int bitSize = sizeof(T) * CHAR_BIT;
         for (unsigned int i = 0; i < bitSize; i++)
-            if (strand[reverseOff - i] == '1')
+            if (strand[reverseOff - i] == true)
                 value |= 1 << i;
         off += bitSize;
         return value;
@@ -20,15 +20,15 @@ namespace getters {
     
     // get a boolean from the strand
     template<>
-    bool getValue(const std::string &strand, unsigned int &off) {
-        bool value = strand[off] == '1';
+    bool getValue(const Strand &strand, unsigned int &off) {
+        bool value = strand[off];
         ++off;
         return value;
     }
     
     // get a 32 bits float from the strand
     template<>
-    float getValue(const std::string &strand, unsigned int &off) {
+    float getValue(const Strand &strand, unsigned int &off) {
         int16_t a = getValue<int16_t>(strand, off);
         int16_t b = getValue<int16_t>(strand, off);
         bool isNeg = false;

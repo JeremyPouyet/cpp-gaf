@@ -8,7 +8,7 @@ extern "C" void destroy(Problem *problem) {
     delete problem;
 }
 
-void EquationProblem::print(const std::string &strand) const {
+void EquationProblem::print(const Strand &strand) const {
     Type type = DIGIT;
     for (unsigned int i = 0; i < _config.chromosomeSize;) {
         if (type == OPERATOR)
@@ -29,7 +29,7 @@ void EquationProblem::askParameters() {
     std::cin >> _number;
 }
 
-double EquationProblem::computeFitnessOf(const std::string &strand) const {
+double EquationProblem::computeFitnessOf(const Strand &strand) const {
     try {
         return 1.0 / std::abs(_number - computeValue(strand));
     } catch (int e) {
@@ -37,7 +37,7 @@ double EquationProblem::computeFitnessOf(const std::string &strand) const {
     }
 }
 
-double	EquationProblem::computeValue(const std::string &strand) const
+double	EquationProblem::computeValue(const Strand &strand) const
 {
     char op;
     bool hasLeft = false;
@@ -83,14 +83,14 @@ const std::map<bool, std::map<bool, char> > toSymb = {
     }}
 };
 
-char EquationProblem::getCharValue(const std::string &strand, unsigned int &off) const 
+char EquationProblem::getCharValue(const Strand &strand, unsigned int &off) const 
 {
     bool g1 = getters::getValue<bool>(strand, off), 
             g2 = getters::getValue<bool>(strand, off);
     return toSymb.at(g1).at(g2);
 }
 
-bool EquationProblem::test(const std::string &strand) const
+bool EquationProblem::test(const Strand &strand) const
 {
     try {
         return computeValue(strand) == _number;

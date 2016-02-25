@@ -5,8 +5,11 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <boost/dynamic_bitset.hpp>
 
 #include "INIReader.h"
+
+typedef boost::dynamic_bitset<> Strand;
 
 struct Config {
 public:

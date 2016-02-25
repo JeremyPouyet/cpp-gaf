@@ -20,16 +20,16 @@ class EquationProblem : public AProblem
 {
     public:
         
-        void print(const std::string &strand) const;
+        void print(const Strand &strand) const;
         void askParameters();
-        double computeFitnessOf(const std::string &strand) const;
-        double computeValue(const std::string &strand) const;
-        bool test(const std::string &strand) const;
+        double computeFitnessOf(const Strand &strand) const;
+        double computeValue(const Strand &strand) const;
+        bool test(const Strand &strand) const;
         
         virtual ~EquationProblem() {}
         
     private:
-        char getCharValue(const std::string &strand, unsigned int &off) const;
+        char getCharValue(const Strand &strand, unsigned int &off) const;
         double _number;
 };
 

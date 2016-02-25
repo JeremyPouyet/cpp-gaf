@@ -12,8 +12,6 @@
 
 #include "Config.hh"
 
-typedef std::string Strand;
-
 class Chromosome
 {
 public:

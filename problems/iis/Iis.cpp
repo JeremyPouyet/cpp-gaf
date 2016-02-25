@@ -8,7 +8,7 @@ extern "C" void destroy(Problem *problem) {
     delete problem;
 }
 
-void Iis::print(const std::string &strand) const {
+void Iis::print(const Strand &strand) const {
     unsigned int i = 0;
     std::cout << getters::getValue<dataType>(strand, i) << " ";
     std::cout << getters::getValue<dataType>(strand, i) << " ";
@@ -29,7 +29,7 @@ bool Iis::loadData() {
     return true;
 }
 
-double Iis::computeFitnessOf(const std::string &strand) const {
+double Iis::computeFitnessOf(const Strand &strand) const {
     double y, fitness = 0;
     std::vector<dataType> coefs = getCoefs(strand);
     for (unsigned int i = 0; i < _values.size(); i++) {
@@ -39,7 +39,7 @@ double Iis::computeFitnessOf(const std::string &strand) const {
     return fitness == 0 ? 0 : 1.0 / fitness;
 }
 
-bool Iis::test(const std::string &strand) const {
+bool Iis::test(const Strand &strand) const {
     double y;
     std::vector<dataType> coefs = getCoefs(strand);
     for (auto q : _values) {
@@ -50,7 +50,7 @@ bool Iis::test(const std::string &strand) const {
     return true;
 }
 
-void Iis::giveBestSolution(const std::string &strand) const {
+void Iis::giveBestSolution(const Strand &strand) const {
     std::vector<dataType> coefs = getCoefs(strand);
     std::ofstream file("results.dat", std::ofstream::trunc | std::ofstream::out);
     double y;
@@ -70,7 +70,7 @@ double Iis::computeValue(const std::vector<dataType> &coefs, double x) const {
             coefs[5] * std::pow(x, 5);
 }
 
-std::vector<dataType> Iis::getCoefs(const std::string &strand) const {
+std::vector<dataType> Iis::getCoefs(const Strand &strand) const {
     unsigned int i = 0;
     return {
         getters::getValue<dataType>(strand, i),

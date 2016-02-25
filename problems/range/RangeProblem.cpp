@@ -8,7 +8,7 @@ extern "C" void destroy(Problem *problem) {
     delete problem;
 }
 
-void RangeProblem::print(const std::string &strand) const {
+void RangeProblem::print(const Strand &strand) const {
     std::cout << "numbers in this chromosome: " << std::endl;
     for (unsigned int i = 0; i < _config.chromosomeSize;)
         std::cout << getters::getValue<int16_t>(strand, i) << " ";
@@ -26,7 +26,7 @@ void RangeProblem::askParameters() {
     } while (_min > _max);
 }
 
-double RangeProblem::computeFitnessOf(const std::string &strand) const {
+double RangeProblem::computeFitnessOf(const Strand &strand) const {
     double fitness = 0;
     targetType value;
     for (unsigned int i = 0; i < _config.chromosomeSize;) {
@@ -41,7 +41,7 @@ double RangeProblem::computeFitnessOf(const std::string &strand) const {
     return fitness;
 }
 
-bool RangeProblem::test(const std::string &strand) const
+bool RangeProblem::test(const Strand &strand) const
 {
     targetType value;
     for (unsigned int i = 0; i < _config.chromosomeSize;)

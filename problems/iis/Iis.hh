@@ -17,17 +17,17 @@ class Iis : public AProblem
 {
     public:
 
-        void print(const std::string &strand) const;
+        void print(const Strand &strand) const;
         bool loadData();
-        double computeFitnessOf(const std::string &strand) const;
-        bool test(const std::string &strand) const;
-        void giveBestSolution(const std::string &strand) const;
+        double computeFitnessOf(const Strand &strand) const;
+        bool test(const Strand &strand) const;
+        void giveBestSolution(const Strand &strand) const;
 
         virtual ~Iis() {}
 
         private:
             inline double computeValue(const std::vector<dataType> &coefs, double x) const;
-            inline std::vector<dataType> getCoefs(const std::string &strand) const;
+            inline std::vector<dataType> getCoefs(const Strand &strand) const;
             
             std::vector<std::pair<double, double> > _values;
 };

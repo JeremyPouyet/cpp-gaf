@@ -9,7 +9,7 @@ RM		= rm -rf
 ##
 CPPFLAGS	+= -W -Wextra -Wall -fPIC
 #CPPFLAGS	+= -fmax-errors=2
-CPPFLAGS	+= -fopenmp
+CPPFLAGS	+= -fopenmp -lboost_system
 
 ##
 ## header location
