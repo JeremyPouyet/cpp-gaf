@@ -87,8 +87,6 @@ private:
 
     // current population
     Generation  _population;
-    // best candidate solution
-    Chromosome  *_winner;
     // total fitness of the current generation
     double      _totalFitness;
     // current problem

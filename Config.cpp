@@ -33,7 +33,6 @@ bool Config::load(const std::string &path) {
         printCrossoverError();
         return false;
     }
-    useElitism = reader.GetBoolean("elitism", "use_elitism", false);
     eliteNumber = reader.GetInteger("elitism", "elite_number", 0);
     selectionType = reader.Get("selection", "selection_type", "fitness-proportional");
     if (checkSelection() == false) {
@@ -57,7 +56,6 @@ void Config::display() {
     std::cout << "crossover_type:\t\t " << crossoverType << std::endl << std::endl; 
     
     std::cout << "Elitism configuration:\t " << std::endl << "----------------------" << std::endl << std::endl;
-    std::cout << "Is elitism used:\t " << std::boolalpha << useElitism << std::endl;
     std::cout << "Number of elite:\t " << eliteNumber << std::endl << std::endl;
     
     std::cout << "Selection configuration:" << std::endl << "------------------------" << std::endl << std::endl;
@@ -77,7 +75,7 @@ void Config::printCrossoverError() const {
     std::cerr << "Error: crossover " << crossoverType << " does not exists or is not yet implemented" << std::endl;
     std::cerr << "Available crossovers: " << std::endl;
     for (auto c: _crossovers)
-        std::cerr << c;
+        std::cerr << c << " ";
     std::cerr << std::flush;
 }
 
@@ -85,6 +83,6 @@ void Config::printSelectionError() const {
     std::cerr << "Error: selection " << selectionType << " does not exists or is not yet implemented" << std::endl;
     std::cerr << "Available selections: " << std::endl;
     for (auto s: _selections)
-        std::cerr << s;
+        std::cerr << s << " ";
     std::cerr << std::flush;
 }

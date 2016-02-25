@@ -10,12 +10,12 @@ extern "C" void destroy(Problem *problem) {
 
 void Iis::print(const std::string &strand) const {
     unsigned int i = 0;
-    std::cout << (int)getters::getValue<dataType>(strand, i) << " ";
-    std::cout << (int)getters::getValue<dataType>(strand, i) << " ";
-    std::cout << (int)getters::getValue<dataType>(strand, i) << " ";
-    std::cout << (int)getters::getValue<dataType>(strand, i) << " ";
-    std::cout << (int)getters::getValue<dataType>(strand, i) << " ";
-    std::cout << (int)getters::getValue<dataType>(strand, i) << " ";
+    std::cout << getters::getValue<dataType>(strand, i) << " ";
+    std::cout << getters::getValue<dataType>(strand, i) << " ";
+    std::cout << getters::getValue<dataType>(strand, i) << " ";
+    std::cout << getters::getValue<dataType>(strand, i) << " ";
+    std::cout << getters::getValue<dataType>(strand, i) << " ";
+    std::cout << getters::getValue<dataType>(strand, i) << " ";
     std::cout << "fitness: " << computeFitnessOf(strand) << std::endl;
 }
 
@@ -36,7 +36,7 @@ double Iis::computeFitnessOf(const std::string &strand) const {
         y = computeValue(coefs, _values[i].first);
         fitness += std::abs(_values[i].second - y);
     }
-    return fitness;
+    return fitness == 0 ? 0 : 1.0 / fitness;
 }
 
 bool Iis::test(const std::string &strand) const {

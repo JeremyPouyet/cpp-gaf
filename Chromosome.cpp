@@ -10,11 +10,10 @@ Chromosome::Chromosome()
 {
     _strand = "";
     for (unsigned int j = 0; j < config.chromosomeSize; j++)
-        _strand += (rand() % 2) ? "1" : "0";
+        _strand += (rand() % 2) ? '0' : '1';
 }
 
-Chromosome::Chromosome(const Strand &strand) : 
-            _strand(strand)
+Chromosome::Chromosome(const Strand &strand) : _strand(strand)
 {}
 
 void Chromosome::setFitness(double fitness)
@@ -26,7 +25,7 @@ bool Chromosome::operator() (const Chromosome *c1, const Chromosome *c2)
 {
     // > -> desc
     // < -> asc
-    return c1->getFitness() < c2->getFitness();
+    return c1->getFitness() > c2->getFitness();
 }
 
 Chromosome *Chromosome::crossover(const std::string &name, const Chromosome *c1, const Chromosome *c2)
@@ -74,10 +73,10 @@ Strand Chromosome::twoPointCrossover(Strand s1, Strand s2)
 {
     unsigned int r1, r2;
     r1 = rand() % config.chromosomeSize;
-    r2 = (rand() % config.chromosomeSize) + r1;
-    if (r2 > config.chromosomeSize)
-        r2 = config.chromosomeSize;
-    return crossoverBetween(s1, s2, r1, r2);
+    r2 = rand() % config.chromosomeSize;
+    if (r1 > r2)
+        return crossoverBetween(s1, s2, r1, r2);    
+    return crossoverBetween(s1, s2, r2, r1);
 }
 
 Strand Chromosome::uniformCrossover(Strand s1, Strand s2) {

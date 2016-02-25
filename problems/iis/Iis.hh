@@ -26,9 +26,8 @@ class Iis : public AProblem
         virtual ~Iis() {}
 
         private:
-            double computeValue(const std::vector<dataType> &coefs, double x) const;
-            std::vector<dataType> getCoefs(const std::string &strand) const;
-            dataType getIntValue(const std::string &strand, int &p) const;
+            inline double computeValue(const std::vector<dataType> &coefs, double x) const;
+            inline std::vector<dataType> getCoefs(const std::string &strand) const;
             
             std::vector<std::pair<double, double> > _values;
 };

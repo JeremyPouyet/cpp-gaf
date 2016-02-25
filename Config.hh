@@ -55,8 +55,6 @@ public:
     /*
      * Elitism configuration variable
      */
-    // whether or not elitism has to be used
-    bool useElitism;
     // number of elite to pick in a generation
     unsigned int eliteNumber;
 private:

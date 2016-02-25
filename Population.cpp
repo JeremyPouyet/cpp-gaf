@@ -1,7 +1,6 @@
 #include "Population.hh"
 
 Population::Population() : 
-        _winner(NULL),
         _problem(NULL),
         selections({
             {"fitness-proportional", &Population::fitnessProportionateSelection},
@@ -23,9 +22,9 @@ void Population::solve(Problem *problem) {
         std::cout << "Solution found in " << generation + 1 << " generations(s) " << std::endl;
     else
         std::cout << "Solution not found, best candidate is: " << std::endl;
+    print();
     _problem->print(_population.front()->getStrand());
     _problem->giveBestSolution(_population.front()->getStrand());
-    //print();
 }
 
 void Population::generate()
@@ -46,11 +45,16 @@ bool Population::test()
         candidate->setFitness(fitness);
         totalFitness += fitness;
     }
-    _totalFitness = totalFitness;
-    std::cout << "Best candidate solution: ";
-    _problem->print(_population.front()->getStrand());
     // sort them by fitness
     sortByFitness();
+    _totalFitness = totalFitness;
+    /*std::cout << "Best: ";
+    _problem->print(_population.front()->getStrand());
+    std::cout << "Mid: ";
+    _problem->print(_population[config.populationSize/2]->getStrand());
+    std::cout << "Worst: ";
+    _problem->print(_population.back()->getStrand());
+    std::cout << std::endl;*/
     // test if the best candidate solution solves the problem
     return _problem->test(_population.front()->getStrand());
 }
@@ -73,10 +77,9 @@ void Population::reproduce()
     Generation nextGeneration;
     Generation gens[4];
     Chromosome *c1, *c2, *child;
-    if (config.useElitism == true) {
-          for (unsigned int i = 0; i < config.eliteNumber && i < _population.size(); i++)
-              nextGeneration.push_back(new Chromosome(_population.at(i)->getStrand()));
-    }
+    // Elitism if used
+    for (unsigned int i = 0; i < config.eliteNumber && i < _population.size(); i++)
+         nextGeneration.push_back(new Chromosome(_population.at(i)->getStrand()));
     #pragma omp parallel for private(c1, c2, child) num_threads(4)
     for (unsigned int i = nextGeneration.size(); i < config.populationSize; i++)
     {
@@ -116,14 +119,10 @@ Chromosome *Population::fitnessProportionateSelection() const
 {
     double randomNb = std::fmod(std::rand(), _totalFitness);
     double curFitness = 0;
-    for (auto &candidate : _population)
-    {
-        curFitness += candidate->getFitness();
-        if (curFitness >= randomNb)
-            return candidate;
-    }
-    // never happens, just here for the compiler
-    return NULL;
+    unsigned int id = 0;
+    for (;curFitness < randomNb; id++)
+        curFitness += _population[id]->getFitness();
+    return _population[id];
 }
 
 Chromosome *Population::tournamentSelection() const
@@ -139,7 +138,7 @@ Chromosome *Population::tournamentSelection() const
         } while (std::find(subPop.begin(), subPop.end(), id) != subPop.end());
         tmpFitness = _population.at(id)->getFitness();
         // and check if it's better than the other
-        if (tmpFitness < bestFitness) {
+        if (tmpFitness > bestFitness) {
             // if so, set it as the winner
             bestFitness = tmpFitness;
             bestId = id;
