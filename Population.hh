@@ -85,6 +85,8 @@ private:
      */
     inline void        sortByFitness();
 
+    inline void printResume();
+    
     // current population
     Generation  _population;
     // total fitness of the current generation

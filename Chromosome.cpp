@@ -22,8 +22,6 @@ void Chromosome::setFitness(double fitness)
 
 bool Chromosome::operator() (const Chromosome *c1, const Chromosome *c2)
 {
-    // > -> desc
-    // < -> asc
     return c1->getFitness() > c2->getFitness();
 }
 

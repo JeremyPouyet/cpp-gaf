@@ -11,7 +11,7 @@
 #include "AProblem.hh"
 #include "Getters.hpp"
 
-typedef int16_t dataType;
+typedef double dataType;
 
 class Iis : public AProblem
 {
@@ -26,9 +26,9 @@ class Iis : public AProblem
         virtual ~Iis() {}
 
         private:
-            inline double computeValue(const std::vector<dataType> &coefs, double x) const;
+            inline double computeValue(const std::vector<dataType> &coefs, const std::vector<double> &value) const;
             inline std::vector<dataType> getCoefs(const Strand &strand) const;
             
-            std::vector<std::pair<double, double> > _values;
+            std::vector<std::vector<double> > _values;
 };
 #endif	/* IIG_HH */
