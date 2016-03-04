@@ -37,10 +37,6 @@ void ProblemLoader::close() {
     }
 }
 
-ProblemLoader::~ProblemLoader() {
-    close();
-}
-
 Problem *ProblemLoader::getProblem() const {
     return _problem;
 }

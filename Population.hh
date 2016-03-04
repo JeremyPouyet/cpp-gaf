@@ -8,11 +8,13 @@
 #include <map>
 #include <algorithm>
 #include <omp.h>
+#include <set>
 
 #include "Config.hh"
 #include "Problem.hh"
 #include "ProblemLoader.hh"
 #include "Chromosome.hh"
+#include "RandomGenerator.hh"
 
 class Population
 {
@@ -85,7 +87,10 @@ private:
      */
     inline void        sortByFitness();
 
-    inline void printResume();
+    /**
+     * print informations about the population
+     */
+    inline void printResume() const;
     
     // current population
     Generation  _population;
@@ -95,6 +100,8 @@ private:
     Problem     *_problem;
     // list of possible selections
     const std::map<const std::string, fp> selections;
+    // random generator
+    static RandomGenerator _random;
 };
 
 #endif

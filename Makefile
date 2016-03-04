@@ -40,6 +40,7 @@ SRCS	= main.cpp \
 	Chromosome.cpp \
 	Population.cpp \
 	Config.cpp \
+	RandomGenerator.cpp \
 \
 	inih/INIReader.cpp \
 	inih/ini.cpp

@@ -1,6 +1,8 @@
 #ifndef CONFIG_HH
 #define	CONFIG_HH
 
+#include <unistd.h>
+#include <getopt.h>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -13,17 +15,18 @@ typedef boost::dynamic_bitset<> Strand;
 
 struct Config {
 public:
+    
+    bool help;
+    bool verbose;
+    
+    void parseOptions(int ac, char **av);
+    
     /**
      * load a configuration file into the program
      * @param path, configuration file path
      * @return whether the configuration file is loaded or not
      */
     bool load(const std::string &path);
-    
-    /**
-     * Display the current configuration
-     */
-    void display();
     
     /*
     ** Population configuration variable

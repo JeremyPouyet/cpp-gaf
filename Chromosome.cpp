@@ -1,5 +1,7 @@
 #include "./Chromosome.hh"
 
+RandomGenerator Chromosome::_random;
+
 const std::map<const std::string, const Chromosome::fp> Chromosome::crossovers = {
         {"one-point", &Chromosome::onePointCrossover},
         {"two-point", &Chromosome::twoPointCrossover},
@@ -9,7 +11,7 @@ const std::map<const std::string, const Chromosome::fp> Chromosome::crossovers =
 Chromosome::Chromosome() : _strand(config.chromosomeSize)
 {
     for (unsigned int j = 0; j < config.chromosomeSize; j++)
-        _strand[j] = (rand() % 2);
+        _strand[j] = _random.i0_1();
 }
 
 Chromosome::Chromosome(const Strand &strand) : _strand(strand)
@@ -33,13 +35,9 @@ Chromosome *Chromosome::crossover(const std::string &name, const Chromosome *c1,
 
 void Chromosome::mutate()
 {
-  double randomNb;
   for (unsigned int i = 0; i < _strand.size(); i++)
-  {
-    randomNb = (double)rand() / RAND_MAX;
-    if (randomNb <= config.mutationRate)
-        _strand[i].flip();
-  }
+      if (_random.d0_1() <= config.mutationRate)
+          _strand[i].flip();
 }
 
 Strand Chromosome::getStrand() const
@@ -63,14 +61,13 @@ void Chromosome::set(const Strand strand)
 
 Strand Chromosome::onePointCrossover(Strand s1, Strand s2)
 {
-    return crossoverBetween(s1, s2, rand() % config.chromosomeSize, config.chromosomeSize);
+    return crossoverBetween(s1, s2, _random.i0_limit(config.chromosomeSize), config.chromosomeSize);
 }
 
 Strand Chromosome::twoPointCrossover(Strand s1, Strand s2)
 {
-    unsigned int r1, r2;
-    r1 = rand() % config.chromosomeSize;
-    r2 = rand() % config.chromosomeSize;
+    unsigned int r1 = _random.i0_limit(config.chromosomeSize);
+    unsigned int r2 = _random.i0_limit(config.chromosomeSize);
     if (r1 > r2)
         return crossoverBetween(s1, s2, r1, r2);    
     return crossoverBetween(s1, s2, r2, r1);
@@ -79,7 +76,7 @@ Strand Chromosome::twoPointCrossover(Strand s1, Strand s2)
 Strand Chromosome::uniformCrossover(Strand s1, Strand s2) {
     Strand strand = s1;
     for (unsigned int i = 0; i < config.chromosomeSize; i++)
-        if (rand() % 2 == 1)
+        if (Chromosome::_random.i0_1() == 1)
             strand[i] = s2[i];
     return strand;
 }

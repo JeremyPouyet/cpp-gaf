@@ -10,6 +10,24 @@ static const std::vector<std::string> _crossovers = {
 static const std::vector<std::string> _selections = {
     "fitness-proportional", "tournament"};
 
+static struct option const long_opts[] = {
+    {"help", no_argument, NULL, 'h'},
+    {"verbose", no_argument, NULL, 'v'}
+};
+
+void Config::parseOptions(int ac, char **av) {
+    help = false;
+    verbose = false;
+    int c;
+    
+    while ((c = getopt_long(ac, av, "hv", long_opts, NULL)) != -1) {
+        switch (c) {
+            case 'h': this->help = true; break;
+            case 'v': this->verbose = true; break;
+        }
+    }
+}
+ 
 bool Config::load(const std::string &path) {
     INIReader reader(path);
     int error = reader.ParseError();
@@ -21,46 +39,30 @@ bool Config::load(const std::string &path) {
         std::cerr << "Error while opening configuration file" << std::endl;
         return false;
     }
-    crossoverRate = reader.GetReal("population", "crossover_rate", 0.7);
-    populationSize = reader.GetInteger("population", "size", 100);
-    simulationNumber = reader.GetInteger("population", "simulation_number", 1500);
+    this->crossoverRate = reader.GetReal("population", "crossover_rate", 0.7);
+    this->populationSize = reader.GetInteger("population", "size", 100);
+    this->simulationNumber = reader.GetInteger("population", "simulation_number", 1500);
     
-    mutationRate = reader.GetReal("chromosome", "mutation_rate", 0.1);
-    genePerChromosome = reader.GetInteger("chromosome", "gene_per_chromosome", 1);
-    chromosomeSize = reader.GetInteger("chromosome", "chromosome_size", 8);
-    crossoverType = reader.Get("chromosome", "crossover_type", "one-point");
+    this->mutationRate = reader.GetReal("chromosome", "mutation_rate", 0.1);
+    this->genePerChromosome = reader.GetInteger("chromosome", "gene_per_chromosome", 1);
+    this->chromosomeSize = reader.GetInteger("chromosome", "chromosome_size", 8);
+    this->crossoverType = reader.Get("chromosome", "crossover_type", "one-point");
     if (checkCrossover() == false) {
         printCrossoverError();
         return false;
     }
-    eliteNumber = reader.GetInteger("elitism", "elite_number", 0);
-    selectionType = reader.Get("selection", "selection_type", "fitness-proportional");
+    this->eliteNumber = reader.GetInteger("elitism", "elite_number", 0);
+    this->selectionType = reader.Get("selection", "selection_type", "fitness-proportional");
     if (checkSelection() == false) {
         printSelectionError();
         return false;
     }
-    tournamentSize = reader.GetInteger("selection", "tournament_size", 1);
+    if (this->selectionType == "tournament" && populationSize < tournamentSize) {
+        std::cerr << "Tournament size is bigger than the population" << std::endl;
+        return false;
+    }
+    this->tournamentSize = reader.GetInteger("selection", "tournament_size", 1);
     return true;
-}
-
-void Config::display() {
-    std::cout << "Population configuration:\t " << std::endl << "-------------------------" << std::endl << std::endl;
-    std::cout << "crossover rate:\t\t " << crossoverRate << std::endl;
-    std::cout << "population size:\t " << populationSize << std::endl;
-    std::cout << "simulation number:\t " << simulationNumber << std::endl << std::endl;
-    
-    std::cout << "Chromosome configuration:\t " << std::endl << "-------------------------" << std::endl << std::endl;
-    std::cout << "mutation rate:\t\t " << mutationRate << std::endl;
-    std::cout << "gene per chromosome:\t " << genePerChromosome << std::endl;
-    std::cout << "chromosome size:\t " << chromosomeSize << std::endl;
-    std::cout << "crossover_type:\t\t " << crossoverType << std::endl << std::endl; 
-    
-    std::cout << "Elitism configuration:\t " << std::endl << "----------------------" << std::endl << std::endl;
-    std::cout << "Number of elite:\t " << eliteNumber << std::endl << std::endl;
-    
-    std::cout << "Selection configuration:" << std::endl << "------------------------" << std::endl << std::endl;
-    std::cout << "selection_type:\t\t " << selectionType << std::endl;
-    std::cout << "Tournament size:\t" << tournamentSize << std::endl << std::endl;
 }
 
 bool Config::checkCrossover() const {

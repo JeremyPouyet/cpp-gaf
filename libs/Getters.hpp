@@ -3,6 +3,8 @@
 
 #include <climits>
 #include <boost/dynamic_bitset.hpp>
+#include <cstring>
+#include <cmath>
 
 namespace getters {
     // get an int from the strand: int8_t, int16_t, int32_t, int64_t and unsigned type)
@@ -25,11 +27,22 @@ namespace getters {
         ++off;
         return value;
     }
-    
-    // get a 32 bits float from the strand
+
+    // get a 64 bits float from the strand
     template<>
     double getValue(const Strand &strand, unsigned int &off) {
-        return getValue<int64_t>(strand, off) / 10000.0;
+        int64_t i = getValue<int64_t>(strand, off);
+        double d;
+        std::memcpy(&d, &i, 8);
+        return d;
+    }
+
+    template<>
+    float getValue(const Strand &strand, unsigned int &off) {
+        int32_t i = getValue<int32_t>(strand, off);
+        float f;
+        std::memcpy(&f, &i, 4);
+        return f;
     }
 };
 

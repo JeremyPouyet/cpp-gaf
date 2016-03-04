@@ -1,15 +1,12 @@
 #ifndef CHROMOSOME_HH_
 #define CHROMOSOME_HH_
 
-#include <cstdint>
-#include <cmath>
-#include <vector>
 #include <algorithm>
 #include <iostream>
 #include <string>
 #include <map>
-#include <climits>
 
+#include "RandomGenerator.hh"
 #include "Config.hh"
 
 class Chromosome
@@ -116,9 +113,10 @@ private:
     Strand      _strand;
     // rating, explains how a potential solution is good
     double	_fitness;
-
     //  map of possible crossover
     static const std::map<const std::string, const fp> crossovers;
+    // random generator
+    static RandomGenerator _random;
 };
 
 #endif

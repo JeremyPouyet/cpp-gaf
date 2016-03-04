@@ -9,7 +9,6 @@
 class ProblemLoader {
 public:
     ProblemLoader();
-    ~ProblemLoader();
     
     /**
      * load a library into the libraryLoader
