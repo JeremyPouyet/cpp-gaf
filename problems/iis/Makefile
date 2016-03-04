@@ -9,8 +9,7 @@ RM		= rm -rf
 ##
 CPPFLAGS	+= -W -Wextra -Wall -fPIC -fopenmp
 CPPFLAGS	+= -fmax-errors=2
-CPPFLAGS	+= -I./ -I../.. -I../../inih/ -I../../libs/
-
+CPPFLAGS	+= -I./ -I../../libs/ -I../../srcs/problem/
 
 ##
 ## shared library flag

@@ -3,6 +3,7 @@
 ##
 CC		= g++
 RM		= rm -rf
+SRCS_DIR	= ./srcs
 
 ##
 ## code like a boss
@@ -14,9 +15,8 @@ CPPFLAGS	+= -fopenmp -lboost_system
 ##
 ## header location
 ##
-CPPFLAGS += -I./
-CPPFLAGS += -I./inih/
-CPPFLAGS += -I./libs/
+CPPFLAGS += -I./srcs/algorithm -I./srcs/utils
+CPPFLAGS += -I./srcs/problem -I./inih/ -I./libs/
 
 ##
 ## shared library flag
@@ -35,18 +35,18 @@ CPPFLAGS	+= -std=c++11
 ##
 NAME	= open-gaf
 
-SRCS	= main.cpp \
-	ProblemLoader.cpp \
-	Chromosome.cpp \
-	Population.cpp \
-	Config.cpp \
-	RandomGenerator.cpp \
+SRCS	= $(SRCS_DIR)/main.cpp \
+	$(SRCS_DIR)/problem/ProblemLoader.cpp \
+	$(SRCS_DIR)/algorithm/Chromosome.cpp \
+	$(SRCS_DIR)/algorithm/Population.cpp \
+	$(SRCS_DIR)/utils/Config.cpp \
+	$(SRCS_DIR)/utils/RandomGenerator.cpp \
 \
-	inih/INIReader.cpp \
-	inih/ini.cpp
+	$(SRCS_DIR)/inih/INIReader.cpp \
+	$(SRCS_DIR)/inih/ini.cpp
 
 OBJS	= $(SRCS:.cpp=.o)
-	
+
 ##
 ## compilation
 ##

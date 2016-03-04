@@ -2,7 +2,7 @@
 #define	PROBLEM_H
 
 #include <boost/dynamic_bitset.hpp>
-#include "Config.hh"
+#include "../utils/Config.hh"
 
 /**
  * Problem Interface. It is the computational representation of a Problem

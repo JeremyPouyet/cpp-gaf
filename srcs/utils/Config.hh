@@ -9,7 +9,7 @@
 #include <algorithm>
 #include <boost/dynamic_bitset.hpp>
 
-#include "INIReader.h"
+#include "../inih/INIReader.h"
 
 typedef boost::dynamic_bitset<> Strand;
 
