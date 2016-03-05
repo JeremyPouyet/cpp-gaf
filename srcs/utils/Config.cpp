@@ -15,9 +15,14 @@ static struct option const long_opts[] = {
     {"verbose", no_argument, NULL, 'v'}
 };
 
+/*
+ * This class is the only one on which the keyword this is used
+ * we use it here because attributes aren't starting with '_' because they are public
+*/
+
 void Config::parseOptions(int ac, char **av) {
-    help = false;
-    verbose = false;
+    this->help = false;
+    this->verbose = false;
     int c;
     
     while ((c = getopt_long(ac, av, "hv", long_opts, NULL)) != -1) {
@@ -57,24 +62,24 @@ bool Config::load(const std::string &path) {
         printSelectionError();
         return false;
     }
-    if (this->selectionType == "tournament" && populationSize < tournamentSize) {
+    this->tournamentSize = reader.GetInteger("selection", "tournament_size", 1);
+    if (this->selectionType == "tournament" && this->populationSize < this->tournamentSize) {
         std::cerr << "Tournament size is bigger than the population" << std::endl;
         return false;
     }
-    this->tournamentSize = reader.GetInteger("selection", "tournament_size", 1);
     return true;
 }
 
 bool Config::checkCrossover() const {
-    return std::find(_crossovers.begin(), _crossovers.end(), crossoverType) != _crossovers.end();
+    return std::find(_crossovers.begin(), _crossovers.end(), this->crossoverType) != _crossovers.end();
 }
 
 bool Config::checkSelection() const {
-    return std::find(_selections.begin(), _selections.end(), selectionType) != _selections.end();
+    return std::find(_selections.begin(), _selections.end(), this->selectionType) != _selections.end();
 }
 
 void Config::printCrossoverError() const {
-    std::cerr << "Error: crossover " << crossoverType << " does not exists or is not yet implemented" << std::endl;
+    std::cerr << "Error: crossover " << this->crossoverType << " does not exists or is not yet implemented" << std::endl;
     std::cerr << "Available crossovers: " << std::endl;
     for (auto c: _crossovers)
         std::cerr << c << " ";
@@ -82,7 +87,7 @@ void Config::printCrossoverError() const {
 }
 
 void Config::printSelectionError() const {
-    std::cerr << "Error: selection " << selectionType << " does not exists or is not yet implemented" << std::endl;
+    std::cerr << "Error: selection " << this->selectionType << " does not exists or is not yet implemented" << std::endl;
     std::cerr << "Available selections: " << std::endl;
     for (auto s: _selections)
         std::cerr << s << " ";

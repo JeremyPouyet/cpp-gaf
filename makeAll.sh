@@ -30,4 +30,10 @@ echo -e "${green}Executing make $cmd on open-gaf${default}"
 make $cmd
 check_failure
 echo -e "${green}Success!${default}"
+
+#execute make on the project generator
+echo -e "${green}Executing make $cmd on project generator${default}"
+make -C ./template/ $cmd
+echo -e "${green}Success!${default}"
+
 exit 0
