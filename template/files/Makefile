@@ -29,7 +29,7 @@ CPPFLAGS	+= -std=c++11
 NAME	= ./problem.so
 
 # add your sources here
-SRCS	= ./__CLASS__.cpp
+SRCS	= ./__CLASS__Problem.cpp
 
 OBJS	= $(SRCS:.cpp=.o)
 

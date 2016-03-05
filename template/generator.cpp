@@ -5,14 +5,15 @@
 #include <cerrno> // errno
 #include <iostream>
 #include <vector>
+#include <cctype> // isupper, toupper
 
 static const std::string defaultClassName = "__CLASS__";
 
-static const std::vector<std::pair<std::string, std::string> > files = {
-    {"Makefile", ""},
-    {"Class", ".cpp"},
-    {"Class", ".hh"},
-    {"problem", ".ini"}
+static std::vector<std::string> files = {
+    {"Makefile"},
+    {"__CLASS__Problem.cpp"},
+    {"__CLASS__Problem.hh"},
+    {"problem.ini"}
 };
 
 static void replace(std::string &file, const std::string &className) {
@@ -35,11 +36,14 @@ int main(int ac, char **av) {
                 << ". Maybe this problem already exists ?" << std::endl;
         return -1;
     }
+    std::cout << "Creation of the directory " << problemPath << std::endl;
+    if (isupper(className[0]) == false)
+        className[0] = toupper(className[0]); 
     std::ifstream srcFile;
     std::string content, currentFile;
     std::ofstream destFile;
     for (auto file : files) {
-        currentFile = "./files/" + file.first + file.second;
+        currentFile = "./files/" + file;
         srcFile.open(currentFile, std::ifstream::in);
         if (srcFile.is_open() == false) {
             std::cout << "Error, can't open " << currentFile << std::endl;
@@ -49,7 +53,9 @@ int main(int ac, char **av) {
                 (std::istreambuf_iterator<char>()));
         srcFile.close();
         replace(content, className);
-        currentFile = problemPath + "/" + className + file.second;
+        replace(file, className);
+        currentFile = problemPath + "/" + file;
+        std::cout << "Generation of file " << currentFile << std::endl;
         destFile.open(currentFile);
         if (destFile.is_open() == false) {
             std::cout << "Error, can't open " << currentFile << std::endl;
