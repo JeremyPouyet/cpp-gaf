@@ -16,7 +16,6 @@ Problem *ProblemLoader::load(const std::string &libPath) {
         std::cerr << "Cannot load create symbol: " + std::string(dlsym_error) << std::endl;
         return NULL;
     }
-    _destructor = (destroy_t *)dlsym(_sharedLibrary, "destroy");
     dlsym_error = dlerror();
     if (dlsym_error) {
         std::cerr << "Cannot load destroy symbol: " + std::string(dlsym_error) << std::endl;

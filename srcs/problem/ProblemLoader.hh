@@ -34,8 +34,6 @@ private:
     Problem     *_problem;
     // Pointer to the Problem constructor
     create_t    *_constructor;
-    // Pointer to the Problem destructor
-    destroy_t   *_destructor;
 };
 
 #endif	/* PROBLEMLOADER_HH */
