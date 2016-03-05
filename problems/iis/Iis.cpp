@@ -4,10 +4,6 @@ extern "C" Problem *create() {
     return new Iis();
 }
 
-extern "C" void destroy(Problem *problem) {
-    delete problem;
-}
-
 void Iis::print(const Strand &strand) const {
     unsigned int i = 0;
     std::cout << std::setprecision(16) << getters::getValue<dataType>(strand, i) << " ";

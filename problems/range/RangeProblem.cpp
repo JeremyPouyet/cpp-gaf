@@ -4,10 +4,6 @@ extern "C" Problem *create() {
     return new RangeProblem();
 }
 
-extern "C" void destroy(Problem *problem) {
-    delete problem;
-}
-
 void RangeProblem::print(const Strand &strand) const {
     std::cout << "numbers in this chromosome: " << std::endl;
     for (unsigned int i = 0; i < _config.chromosomeSize;)

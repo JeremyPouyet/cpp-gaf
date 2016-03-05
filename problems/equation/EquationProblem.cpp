@@ -4,10 +4,6 @@ extern "C" Problem *create() {
     return new EquationProblem();
 }
 
-extern "C" void destroy(Problem *problem) {
-    delete problem;
-}
-
 void EquationProblem::print(const Strand &strand) const {
     Type type = DIGIT;
     for (unsigned int i = 0; i < _config.chromosomeSize;) {

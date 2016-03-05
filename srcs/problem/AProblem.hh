@@ -11,8 +11,9 @@ public:
     virtual bool loadData() { return true; }
     virtual double computeFitnessOf(const Strand &strand) const = 0;
     virtual bool test(const Strand &strand) const = 0;
-    void setConfig(Config &config) { _config = config; }
     virtual void giveBestSolution(const Strand &strand) const { (void)strand; }
+    
+    void setConfig(Config &config) { _config = config; }
     
     virtual ~AProblem() {}
 protected:

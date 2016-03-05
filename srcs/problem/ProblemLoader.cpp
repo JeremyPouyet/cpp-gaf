@@ -28,7 +28,7 @@ Problem *ProblemLoader::load(const std::string &libPath) {
 
 void ProblemLoader::close() {
     if (_problem) {
-        _destructor(_problem);
+        delete _problem;
         _problem = NULL;
     }
     if (_sharedLibrary) {
