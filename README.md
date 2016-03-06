@@ -16,7 +16,7 @@ For a problem to be executable from the framework, it needs to be under the form
 - a problem.ini file -> to configure the simulation  
  
 To make the framework easier to use, a project generator has been created. It creates a default package that contains 4 files:  
--  Makefile -> to compile the problem  
+-  Makefile to compile the problem  
 -  problem.ini  
 -  a .hh file containing a class that inherits from the AProblem abstract class  
 -  a .cpp file that implements the .hh file
