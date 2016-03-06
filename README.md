@@ -14,3 +14,4 @@ Genetic algorithm Framework written in c++, helps you to solve problems.
 - [ ] add the "cut and splice" crossover in population
 - [ ] new demo problem: traveling salesman -> need of a new mutation type
 - [ ] add non uniform crossover (new option in .ini file when uniform crossover is selected)
+- [ ] More documentation!! Readme + Wiki :)
