@@ -24,42 +24,36 @@ public:
      * @param problem, Problem to solve
      */
     Population();
-    ~Population();
     
     /**
      * Try to Solve the current Problem
      * @param problem, the problem to solve
      */
     void solve(Problem *problem);
-    
-    /**
-     * generate the current population
-     */
-    void        generate();
 
 private:
-    typedef std::vector<Chromosome *> Generation;
-    typedef Chromosome *(Population::*fp)() const;
+    typedef std::vector<Chromosome > Generation;
+    typedef unsigned int (Population::*fp)() const;
     
     /**
      * Selection function, Select a chromosome in the current population by using
      * fitness proportional selection
      * @return the selected chromosome
      */
-    Chromosome  *fitnessProportionateSelection()            const;
+    unsigned int    fitnessProportionateSelection()            const;
     
     /**
      * Selection function, Select a chromosome in the current population by using
      * tournament selection
      * @return the selected chromosome
      */
-    Chromosome  *tournamentSelection()                      const;
+    unsigned int    tournamentSelection()                      const;
     
     /**
      * Selection function, redirect to the good selection according to the configuration's selection type
      * @return the selected chromosome
      */
-    inline Chromosome  *selectChromosome()                  const;
+    inline unsigned int  selectChromosome()                  const;
     
     /**
      * test if the population has a winner
@@ -71,12 +65,7 @@ private:
      * print the current population
      */
     void        print()                                     const;
-    
-    /**
-     * clean the current population
-     */
-    void        clean();
-    
+
     /**
      * reproduce the current population, creation of the next generation
      */
@@ -90,7 +79,7 @@ private:
     /**
      * print informations about the population
      */
-    inline void printResume() const;
+    inline void printResume(unsigned int generation) const;
     
     // current population
     Generation  _population;

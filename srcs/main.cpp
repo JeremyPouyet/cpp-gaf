@@ -7,7 +7,7 @@
 #include "Population.hh"
 #include "Display.hpp"
 
-bool userInitialization(Problem *problem, Population &population) {
+bool userInitialization(Problem *problem) {
     bool error = false;
     // Don't waste of time, load and generate data while the user enter parameters
     #pragma omp parallel sections
@@ -21,9 +21,6 @@ bool userInitialization(Problem *problem, Population &population) {
             (dynamic_cast<AProblem *>(problem))->setConfig(config);
             if (problem->loadData() == false)
                 error = true;
-            else {
-                population.generate();
-            }
         }
     }
     return !error;
@@ -58,7 +55,7 @@ int main(int ac, char **av)
         return -1;
     }
     Population population;
-    if (userInitialization(problem, population) == false) {
+    if (userInitialization(problem) == false) {
         std::cerr << "Problem while loading data" << std::endl;
         return -1;
     }

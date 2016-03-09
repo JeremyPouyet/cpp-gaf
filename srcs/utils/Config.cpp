@@ -57,6 +57,10 @@ bool Config::load(const std::string &path) {
         return false;
     }
     this->eliteNumber = reader.GetInteger("elitism", "elite_number", 0);
+    if (this->eliteNumber > this->populationSize) {
+        std::cerr << "Elite number is bigger than population size." << std::endl;
+        return false;
+    }
     this->selectionType = reader.Get("selection", "selection_type", "fitness-proportional");
     if (checkSelection() == false) {
         printSelectionError();
@@ -64,7 +68,7 @@ bool Config::load(const std::string &path) {
     }
     this->tournamentSize = reader.GetInteger("selection", "tournament_size", 1);
     if (this->selectionType == "tournament" && this->populationSize < this->tournamentSize) {
-        std::cerr << "Tournament size is bigger than the population" << std::endl;
+        std::cerr << "Tournament size is bigger than population size" << std::endl;
         return false;
     }
     return true;

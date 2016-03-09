@@ -11,7 +11,7 @@
 #include "AProblem.hh"
 #include "Getters.hpp"
 
-typedef double dataType;
+typedef float dataType;
 
 class Iis : public AProblem {
 public:
