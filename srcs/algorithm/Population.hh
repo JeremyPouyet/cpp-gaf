@@ -1,5 +1,4 @@
-#ifndef _POPULATION_HH_
-#define _POPULATION_HH_
+#pragma once
 
 #include <vector>
 #include <cstdlib>
@@ -21,15 +20,14 @@ class Population
 public:
     /**
      * Population constructor
-     * @param problem, Problem to solve
+     * @param problem, the problem to solve
      */
-    Population();
+    Population(Problem *problem);
     
     /**
      * Try to Solve the current Problem
-     * @param problem, the problem to solve
      */
-    void solve(Problem *problem);
+    void solve();
 
 private:
     typedef std::vector<Chromosome > Generation;
@@ -79,10 +77,14 @@ private:
     /**
      * print informations about the population
      */
-    inline void printResume(unsigned int generation) const;
+    inline void printResume() const;
     
     // current population
     Generation  _population;
+    // next population
+    Generation  _nextGeneration;
+    // index of the current generation
+    unsigned int _currentGeneration;
     // total fitness of the current generation
     double      _totalFitness;
     // current problem
@@ -92,5 +94,3 @@ private:
     // random generator
     static RandomGenerator _random;
 };
-
-#endif

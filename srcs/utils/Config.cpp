@@ -40,6 +40,7 @@ bool Config::load(const std::string &path) {
         std::cerr << "Error on configuration file line " << error << std::endl;
         return false;
     }
+    std::cout << path << std::endl;
     if (error < 0) {
         std::cerr << "Error while opening configuration file" << std::endl;
         return false;

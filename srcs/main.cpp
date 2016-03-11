@@ -27,16 +27,16 @@ bool userInitialization(Problem *problem) {
 }
 
 static int configInitialization(const Display &display, int ac, char **av) {
-    if (ac != 2) {
+    if (ac < 2) {
         display.usage();
         return -1;
     }
+    std::string configurationPath = std::string(av[1]) + "problem.ini";
     config.parseOptions(ac, av);
     if (config.help == true) {
         display.help();
         return 0;
     }        
-    std::string configurationPath = std::string(av[1]) + "problem.ini";
     if (config.load(configurationPath) == false)
         return -1;
     return 1;
@@ -45,21 +45,21 @@ static int configInitialization(const Display &display, int ac, char **av) {
 int main(int ac, char **av)
 {
     Display &display = Display::getInstance();
+    std::string problemPath = std::string(av[1]) + "problem.so";
     int ret = configInitialization(display, ac, av);
     if (ret != 1) return ret;
     display.conf();
     ProblemLoader problemLoader;
-    std::string problemPath = std::string(av[1]) + "problem.so";
     Problem *problem = dynamic_cast<AProblem *>(problemLoader.load(problemPath));
     if (problem == NULL) {
         return -1;
     }
-    Population population;
     if (userInitialization(problem) == false) {
         std::cerr << "Problem while loading data" << std::endl;
         return -1;
     }
-    population.solve(problem);
+    Population population(problem);
+    population.solve();
     problemLoader.close();
     return 0;
 }

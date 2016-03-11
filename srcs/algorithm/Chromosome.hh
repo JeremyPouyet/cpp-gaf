@@ -1,5 +1,4 @@
-#ifndef CHROMOSOME_HH_
-#define CHROMOSOME_HH_
+#pragma once
 
 #include <algorithm>
 #include <iostream>
@@ -32,7 +31,7 @@ public:
    * @param c2, chromosome 2
    * @return a pair of new chromosome
    */
-  static Strand crossover(const std::string &name, const Chromosome &c1, const Chromosome &c2);
+  static Strand crossover(const std::string &name, const Strand &c1, const Strand &c2);
 
   /**
    * Set the current fitness of a chromosome previously computed into a problem
@@ -42,14 +41,15 @@ public:
   
   /**
    * generates a random mutation
+   * @return if the chromosome has mutated
    */
-  void		mutate();
+  int		mutate();
   
   /**
    * Set a chromosome strand
    * @param strand, new chromosome strand
    */
-  void		set(const Strand &strand);
+  void		setStrand(const Strand &strand);
   
   /**
    * get the chromosome strand
@@ -71,6 +71,7 @@ public:
    * @return whether the first chromosome has a better fitness than the second
    */
   bool operator() (const Chromosome &c1, const Chromosome &c2);
+  Chromosome &operator=(const Chromosome &other);
 
 private:
 
@@ -120,5 +121,3 @@ private:
     // random generator
     static RandomGenerator _random;
 };
-
-#endif

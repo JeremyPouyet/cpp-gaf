@@ -1,5 +1,4 @@
-#ifndef GETTERS_HPP
-#define GETTERS_HPP
+#pragma once
 
 #include <climits>
 #include <boost/dynamic_bitset.hpp>
@@ -13,7 +12,7 @@ namespace getters {
         T value = 0;
         unsigned int reverseOff = strand.size() - off - 1;
         unsigned int bitSize = sizeof(T) * CHAR_BIT;
-        for (unsigned int i = 0; i < bitSize; i++)
+        for (unsigned int i = 0; i < bitSize; ++i)
             if (strand[reverseOff - i] == true)
                 value |= 1 << i;
         off += bitSize;
@@ -45,6 +44,3 @@ namespace getters {
         return f;
     }
 };
-
-#endif /* GETTERS_HPP */
-

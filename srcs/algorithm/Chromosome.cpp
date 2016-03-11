@@ -8,20 +8,15 @@ const std::map<const std::string, const Chromosome::fp> Chromosome::crossovers =
         {"uniform", &Chromosome::uniformCrossover}
     };
 
-Chromosome::Chromosome() : 
-_strand(config.chromosomeSize) { }
+Chromosome::Chromosome() {}
 
 Chromosome::Chromosome(const Strand &strand) : 
 _strand(strand) { }
 
 void Chromosome::generate() {
-    for (unsigned int j = 0; j < config.chromosomeSize; j++)
+    _strand.resize(config.chromosomeSize, false);
+    for (unsigned int j = 0; j < config.chromosomeSize; ++j)
         _strand[j] = _random.i0_1();
-}
-
-void Chromosome::setFitness(double fitness)
-{
-    _fitness = fitness;
 }
 
 bool Chromosome::operator() (const Chromosome &c1, const Chromosome &c2)
@@ -29,16 +24,26 @@ bool Chromosome::operator() (const Chromosome &c1, const Chromosome &c2)
     return c1.getFitness() > c2.getFitness();
 }
 
-Strand Chromosome::crossover(const std::string &name, const Chromosome &c1, const Chromosome &c2)
-{
-    return crossovers.at(name)(c1.getStrand(), c2.getStrand());
+Chromosome &Chromosome::operator=(const Chromosome &other) {
+    _fitness = other.getFitness();
+    _strand = other.getStrand();
+    return *this;
 }
 
-void Chromosome::mutate()
+Strand Chromosome::crossover(const std::string &name, const Strand &s1, const Strand &s2)
 {
-  for (unsigned int i = 0; i < _strand.size(); i++)
-      if (_random.d0_1() <= config.mutationRate)
-          _strand[i].flip();
+    return crossovers.at(name)(s1, s2);
+}
+
+int Chromosome::mutate()
+{
+    int mutated = 0;
+    for (unsigned int i = 0; i < _strand.size(); ++i)
+        if (_random.d0_1() <= config.mutationRate)  {
+            _strand[i].flip();
+            ++mutated;
+        }
+    return mutated;
 }
 
 Strand Chromosome::getStrand() const
@@ -51,9 +56,16 @@ double Chromosome::getFitness() const
   return _fitness;
 }
 
-void Chromosome::set(const Strand &strand)
+void Chromosome::setStrand(const Strand &strand)
 {
   _strand = strand;
+}
+
+void Chromosome::setFitness(double fitness)
+{
+    if (isnan(fitness))
+        fitness = -1;
+    _fitness = fitness;
 }
 
 /**
@@ -76,7 +88,7 @@ Strand Chromosome::twoPointCrossover(const Strand &s1, const Strand &s2)
 
 Strand Chromosome::uniformCrossover(const Strand &s1, const Strand &s2) {
     Strand strand = s1;
-    for (unsigned int i = 0; i < config.chromosomeSize; i++)
+    for (unsigned int i = 0; i < config.chromosomeSize; ++i)
         if (Chromosome::_random.i0_1() == 1)
             strand[i] = s2[i];
     return strand;

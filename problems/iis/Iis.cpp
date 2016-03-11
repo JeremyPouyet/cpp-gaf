@@ -29,11 +29,12 @@ bool Iis::loadData() {
 }
 
 double Iis::computeFitnessOf(const Strand &strand) const {
-    double y, fitness = 0;
+    double y, fitness = 0, distance;
     std::vector<dataType> coefs = getCoefs(strand);
     for (const std::vector<double> &value : _values) {
         y = computeValue(coefs, value);
-        fitness += std::abs(value[1] - y);
+        distance = value[1] - y;
+        fitness += distance < 0 ? -distance : distance;
     }
     return fitness == 0 ? 0 : 1.0 / fitness;
 }
