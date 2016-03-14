@@ -1,5 +1,4 @@
-#ifndef __CLASS__ProblemHH
-#define __CLASS__ProblemHH
+#pragma once
 
 #include "AProblem.hh"
 #include "Getters.hpp"
@@ -16,6 +15,3 @@ class __CLASS__Problem : public AProblem {
     void giveBestSolution(const Strand &strand) const;
     virtual ~__CLASS__Problem();
 };
-
-#endif /* __CLASS___ProblemHH */
-
