@@ -39,7 +39,6 @@ But you can also create your own package.
 
 - [ ] 32 bits supports
 - [ ] command line option to enable/disable OpenMP
-- [ ] better support of OpenMP in the Population::reproduce() function
 - [ ] change project name to open-gaf
 - [ ] comments in template/generator.cpp
 - [ ] comments in generated file ?
