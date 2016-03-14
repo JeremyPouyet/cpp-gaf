@@ -17,6 +17,8 @@ void Iis::print(const Strand &strand) const {
 
 bool Iis::loadData() {
     std::ifstream file("./problems/iis/datfile.dat");
+    if (file.is_open() == false)
+        return false;
     double x, y;
     while (file >> x >> y) {
         _values.push_back({
@@ -40,24 +42,18 @@ double Iis::computeFitnessOf(const Strand &strand) const {
 }
 
 bool Iis::test(const Strand &strand) const {
-    double y;
     std::vector<dataType> coefs = getCoefs(strand);
-    for (const std::vector<double> &value : _values) {
-        y = computeValue(coefs, value);
-        if (y != value[1])
+    for (const std::vector<double> &value : _values)
+        if (computeValue(coefs, value) != value[1])
             return false;
-    }
     return true;
 }
 
 void Iis::giveBestSolution(const Strand &strand) const {
     std::vector<dataType> coefs = getCoefs(strand);
     std::ofstream file("results.dat", std::ofstream::trunc | std::ofstream::out);
-    double y;
-    for (const std::vector<double> &value : _values) {
-        y = computeValue(coefs, value);
-        file << value[0] << "\t" << y << std::endl;
-    }
+    for (const std::vector<double> &value : _values)
+        file << value[0] << "\t" << computeValue(coefs, value) << std::endl;
     file.close();
 }
 

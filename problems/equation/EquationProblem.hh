@@ -1,5 +1,4 @@
-#ifndef EQUATIONPROBLEM_HH
-#define	EQUATIONPROBLEM_HH
+#pragma once
 
 #include <iostream>
 #include <cmath>
@@ -32,6 +31,3 @@ class EquationProblem : public AProblem
         char getCharValue(const Strand &strand, unsigned int &off) const;
         double _number;
 };
-
-#endif	/* EQUATIONPROBLEM_HH */
-

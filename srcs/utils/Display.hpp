@@ -1,5 +1,4 @@
-#ifndef DISPLAY_HH
-#define DISPLAY_HH
+#pragma once
 
 #include <string>
 #include <iostream>
@@ -114,6 +113,3 @@ private:
     const Display &operator=(const Display &other) = delete;
     ~Display() {}
 };
-
-#endif /* DISPLAY_HH */
-

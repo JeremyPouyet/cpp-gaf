@@ -1,5 +1,4 @@
-#ifndef IIG_HH
-#define IIG_HH
+#pragma once
 
 #include <cstdint>
 #include <fstream>
@@ -30,4 +29,3 @@ private:
 
     std::vector<std::vector<double> > _values;
 };
-#endif /* IIG_HH */

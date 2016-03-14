@@ -1,5 +1,4 @@
-#ifndef APROBLEM_HH
-#define	APROBLEM_HH
+#pragma once
 
 #include "Problem.hh"
 
@@ -19,6 +18,3 @@ public:
 protected:
     Config _config;
 };
-
-#endif	/* APROBLEM_HH */
-

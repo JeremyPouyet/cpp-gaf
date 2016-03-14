@@ -1,5 +1,4 @@
-#ifndef PROBLEMLOADER_HH
-#define	PROBLEMLOADER_HH
+#pragma once
 
 #include <dlfcn.h>
 #include <string>
@@ -35,6 +34,3 @@ private:
     // Pointer to the Problem constructor
     create_t    *_constructor;
 };
-
-#endif	/* PROBLEMLOADER_HH */
-

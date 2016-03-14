@@ -1,5 +1,4 @@
-#ifndef RANGEPROBLEM_HH
-#define	RANGEPROBLEM_HH
+#pragma once
 
 #include <iostream>
 #include <climits>
@@ -22,6 +21,3 @@ class RangeProblem : public AProblem {
         targetType _min;
         targetType _max;
 };
-
-#endif	/* RANGEPROBLEM_HH */
-

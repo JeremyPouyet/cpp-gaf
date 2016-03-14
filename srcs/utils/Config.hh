@@ -1,5 +1,4 @@
-#ifndef CONFIG_HH
-#define	CONFIG_HH
+#pragma once
 
 #include <unistd.h>
 #include <getopt.h>
@@ -89,5 +88,3 @@ private:
 
 // configuration variable
 extern Config config;
-
-#endif	/* CONFIG_HH */

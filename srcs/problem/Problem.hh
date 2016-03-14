@@ -1,5 +1,4 @@
-#ifndef PROBLEM_H
-#define	PROBLEM_H
+#pragma once
 
 #include <boost/dynamic_bitset.hpp>
 #include "../utils/Config.hh"
@@ -53,6 +52,3 @@ public:
 
 typedef Problem * create_t();
 typedef void destroy_t(Problem *);
-
-#endif	/* PROBLEM_H */
-

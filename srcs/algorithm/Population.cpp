@@ -27,7 +27,7 @@ void Population::solve() {
         reproduce();
         solution = test();
         // print information about the current population each 5% of generation
-        if (config.verbose && _currentGeneration % 100 == 0)
+        if (config.verbose && _currentGeneration % p5 == 0)
             printResume();
     }
     if (solution == true)

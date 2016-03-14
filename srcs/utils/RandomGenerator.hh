@@ -1,5 +1,4 @@
-#ifndef RANDOMGENERATOR_HH
-#define RANDOMGENERATOR_HH
+#pragma once
 
 #include <random>
 #include <cfloat>
@@ -49,6 +48,3 @@ private:
     // random double between 0 and 1
     std::uniform_real_distribution<double> _d0_1udis;
 };
-
-#endif /* RANDOMGENERATOR_HH */
-
