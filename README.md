@@ -35,6 +35,17 @@ Generation of file ../problems/test/problem.ini
 
 But you can also create your own package.
 
+## Use
+
+```shell
+$> ./open-gaf path/to/problem
+```
+
+For example, with the "test" project created in the Project generator section:
+
+```shell
+$> cd cpp-gaf && ./open-gaf ./problems/test/
+```
 #### Todo  
 
 - [ ] 32 bits supports
