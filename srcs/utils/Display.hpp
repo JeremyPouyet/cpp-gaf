@@ -25,8 +25,8 @@ public:
      */
     void help() const {
         usage();
-        std::cout << std::endl;
-        std::cout << "Option list:" << std::endl;
+        newLine();
+        basicLine("Option list:");
         optionLine('h', "help\t", "display this help and exit");
         optionLine('v', "verbose", "explain what is being done");
     }
@@ -35,13 +35,13 @@ public:
      * print usage message
      */
     void usage() const {
-        std::cout << "Usage: open-gaf path_to_problem_directory" << std::endl;
+        basicLine("Usage: open-gaf path_to_problem_directory");
     }
 
     /**
      * print the current configuration
      */
-    void conf() const {
+    void showConf() const {
         titleLine("Population configuration:");
         configLine("crossover rate:\t", config.crossoverRate);
         configLine("population size:", config.populationSize);
@@ -61,7 +61,22 @@ public:
         configLine("Tournament size:", config.tournamentSize);
         newLine();
     }
-private:
+    
+    /**
+     * Print an error on a standard way
+     * @param error, error to print
+     */
+    void error(const std::string& err) const {
+        std::cerr << "Error: " << err << std::endl;
+    }
+    
+    /**
+     * Print a message on a standard way
+     * @param msg, msg to print
+     */
+    void basicLine(const std::string &msg) const {
+        std::cout << msg << std::endl;
+    }
     
     /**
      * print a new line
@@ -69,6 +84,7 @@ private:
     void newLine() const {
         std::cout << std::endl;
     }
+private:
     
     /**
      * print an option line

@@ -5,6 +5,7 @@
 #include <string>
 #include <map>
 
+#include "Problem.hh"
 #include "RandomGenerator.hh"
 #include "Config.hh"
 #include "Chrono.hpp"
@@ -70,6 +71,7 @@ public:
    */
   bool operator() (const Chromosome &c1, const Chromosome &c2);
   Chromosome &operator=(const Chromosome &other);
+  static Problem *_problem;
 
 private:
 

@@ -24,10 +24,9 @@ public:
     
     /**
      * load a configuration file into the program
-     * @param path, configuration file path
      * @return whether the configuration file is loaded or not
      */
-    bool load(const std::string &path);
+    bool load();
     
     /*
     ** Population configuration variable
@@ -64,6 +63,8 @@ public:
      */
     // number of elite to pick in a generation
     unsigned int eliteNumber;
+    
+    std::string getProblemPath() const;
 private:
     /**
      * Display an error when the chosen crossover does not exists
@@ -92,6 +93,9 @@ private:
      * @return whether the configuration is valid
      */
     bool isValid() const;
+    
+    std::string _configurationPath;
+    std::string _problemPath;
 };
 
 // configuration variable

@@ -21,6 +21,9 @@ static struct option const long_opts[] = {
 */
 
 void Config::parseOptions(int ac, char **av) {
+    std::string path(av[1]);
+    _configurationPath = path + "problem.ini";
+    _problemPath = path + "problem.so";
     int c;
     
     while ((c = getopt_long(ac, av, "hv", long_opts, NULL)) != -1) {
@@ -31,8 +34,8 @@ void Config::parseOptions(int ac, char **av) {
     }
 }
  
-bool Config::load(const std::string &path) {
-    INIReader reader(path);
+bool Config::load() {
+    INIReader reader(_configurationPath);
     int error = reader.ParseError();
     if (error > 0) {
         std::cerr << "Error on configuration file line " << error << std::endl;
@@ -97,4 +100,8 @@ void Config::printSelectionError() const {
     for (auto s: _selections)
         std::cerr << s << " ";
     std::cerr << std::flush;
+}
+
+std::string Config::getProblemPath() const {
+    return _problemPath; 
 }

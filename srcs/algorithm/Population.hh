@@ -16,80 +16,71 @@
 #include "RandomGenerator.hh"
 #include "Chrono.hpp"
 
-class Population
-{
+class Population {
 public:
     /**
      * Population constructor
      * @param problem, the problem to solve
      */
     Population(Problem *problem);
-    
-    /**
-     * Try to Solve the current Problem
-     */
-    void solve();
 
+    /**
+     * test if the population has a winner
+     * @return if a candidate solution solves the problem
+     */
+    bool checkForWinner();
+
+    /**
+     * reproduce the current population, creation of the next generation
+     */
+    void reproduce();
+
+    Strand best() const;
+    Strand at(unsigned int id) const;
+    Strand worst() const;
+    
 private:
     typedef std::vector<Chromosome > Generation;
-    typedef unsigned int (Population::*fp)() const;
-    
+    using fp = unsigned int (Population::*)() const;
+
     /**
      * Selection function, Select a chromosome in the current population by using
      * fitness proportional selection
      * @return the selected chromosome
      */
-    unsigned int    fitnessProportionateSelection()            const;
-    
+    unsigned int fitnessProportionateSelection() const;
+
     /**
      * Selection function, Select a chromosome in the current population by using
      * tournament selection
      * @return the selected chromosome
      */
-    unsigned int    tournamentSelection()                    const;
-    
+    unsigned int tournamentSelection() const;
+
     /**
      * Selection function, redirect to the good selection according to the configuration's selection type
      * @return the selected chromosome
      */
-    inline unsigned int  selectChromosome()                  const;
-    
-    /**
-     * test if the population has a winner
-     * @return if a candidate solution solves the problem
-     */
-    bool        checkForWinner();
-    
+    inline unsigned int selectChromosome() const;
+
     /**
      * print the current population
      */
-    void        print()                                     const;
+    void print() const;
 
-    /**
-     * reproduce the current population, creation of the next generation
-     */
-    void        reproduce();
-    
     /**
      * sort the current population by chromosome fitness
      */
     inline void sortByFitness();
 
-    /**
-     * print informations about the population
-     */
-    inline void printResume() const;
-    
     // current population
-    Generation  _population;
+    Generation _population;
     // next population
-    Generation  _nextGeneration;
-    // index of the current generation
-    unsigned int _currentGeneration;
+    Generation _nextGeneration;
     // total fitness of the current generation
-    double      _totalFitness;
+    double _totalFitness;
     // current problem
-    Problem     *_problem;
+    Problem *_problem;
     // list of possible selections
     const std::map<const std::string, fp> selections;
     // random generator

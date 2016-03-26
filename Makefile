@@ -38,6 +38,7 @@ SRCS	= $(SRCS_DIR)/main.cpp \
 	$(SRCS_DIR)/problem/ProblemLoader.cpp \
 	$(SRCS_DIR)/algorithm/Chromosome.cpp \
 	$(SRCS_DIR)/algorithm/Population.cpp \
+	$(SRCS_DIR)/algorithm/Simulation.cpp \
 	$(SRCS_DIR)/utils/Config.cpp \
 	$(SRCS_DIR)/utils/RandomGenerator.cpp \
 \

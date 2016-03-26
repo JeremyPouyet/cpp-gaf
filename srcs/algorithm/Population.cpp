@@ -1,12 +1,10 @@
 #include "Population.hh"
 
-Chrono &c = Chrono::getInstance();
 RandomGenerator Population::_random;
 
 Population::Population(Problem *problem) :
 _population(config.populationSize),
 _nextGeneration(config.populationSize),
-_currentGeneration(1),
 _problem(problem),
 selections({
     {"fitness-proportional", &Population::fitnessProportionateSelection},
@@ -18,39 +16,6 @@ selections({
         fitness = _problem->computeFitnessOf(candidate.getStrand());
         candidate.setFitness(fitness);
     }
-}
-
-void Population::solve() {
-    //test if initial population already have a good solution
-    bool solution = checkForWinner();
-    unsigned int p5 = config.simulationNumber / 100 * 5;
-    for (; _currentGeneration < config.simulationNumber + 1 && solution == false; ++_currentGeneration) {
-        c.start();
-        reproduce();
-        c.end();
-        solution = checkForWinner();
-        // print information about the current population each 5% of generation
-        if (config.verbose && _currentGeneration % p5 == 0)
-            printResume();
-    }
-    if (solution == true)
-        std::cout << "Solution found in " << _currentGeneration << " generations(s) " << std::endl;
-    else
-        std::cout << "Solution not found, best candidate is: " << std::endl;
-    _problem->print(_population.front().getStrand());
-    _problem->giveBestSolution(_population.front().getStrand());
-    Chrono::getInstance().display();
-}
-
-void Population::printResume() const {
-    std::cout << "generation " << _currentGeneration << std::endl;
-    std::cout << "Best: ";
-    _problem->print(_population.front().getStrand());
-    std::cout << "Mid: ";
-    _problem->print(_population[config.populationSize / 2].getStrand());
-    std::cout << "Worst: ";
-    _problem->print(_population.back().getStrand());
-    std::cout << std::endl;
 }
 
 bool Population::checkForWinner() {
@@ -129,4 +94,16 @@ unsigned int Population::tournamentSelection() const {
         }
     } 
     return bestId;
+}
+
+Strand Population::at(unsigned int id) const {
+    return _population[id].getStrand();
+}
+
+Strand Population::best() const {
+    return at(0);
+}
+
+Strand Population::worst() const {
+    return at(_population.size() - 1);
 }
