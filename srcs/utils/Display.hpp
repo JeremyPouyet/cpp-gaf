@@ -15,7 +15,7 @@ public:
      * initialise and/or return the Display instance
      * @return the display instance
      */
-    static Display &getInstance(){
+    static Display &getInstance() {
         static Display d;
         return d;
     }
@@ -108,7 +108,7 @@ private:
         return std::string(msg.length(), '-');
     }
     
-    Display() {}
+    Display() = default;
     Display(const Display &other) = delete;
     const Display &operator=(const Display &other) = delete;
     ~Display() {}

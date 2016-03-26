@@ -42,8 +42,7 @@ static int configInitialization(const Display &display, int ac, char **av) {
     return 1;
 }
 
-int main(int ac, char **av)
-{
+int main(int ac, char **av) {
     Display &display = Display::getInstance();
     std::string problemPath = std::string(av[1]) + "problem.so";
     int ret = configInitialization(display, ac, av);
@@ -51,9 +50,8 @@ int main(int ac, char **av)
     display.conf();
     ProblemLoader problemLoader;
     Problem *problem = dynamic_cast<AProblem *>(problemLoader.load(problemPath));
-    if (problem == NULL) {
+    if (problem == NULL)
         return -1;
-    }
     if (userInitialization(problem) == false) {
         std::cerr << "Problem while loading data" << std::endl;
         return -1;

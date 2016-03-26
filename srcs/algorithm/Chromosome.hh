@@ -7,14 +7,13 @@
 
 #include "RandomGenerator.hh"
 #include "Config.hh"
+#include "Chrono.hpp"
 
 class Chromosome
 {
 public:
-  /**
-   * Creates a new random chromosome according to the configuration file
-   */
-  Chromosome();
+  
+  Chromosome() = default;
   
   /**
    * Creates a new chromosome according to a Strand
@@ -31,7 +30,7 @@ public:
    * @param c2, chromosome 2
    * @return a pair of new chromosome
    */
-  static Strand crossover(const std::string &name, const Strand &c1, const Strand &c2);
+  static Strand crossover(const Strand &c1, const Strand &c2);
 
   /**
    * Set the current fitness of a chromosome previously computed into a problem
@@ -41,9 +40,8 @@ public:
   
   /**
    * generates a random mutation
-   * @return if the chromosome has mutated
    */
-  int		mutate();
+  void		mutate();
   
   /**
    * Set a chromosome strand
@@ -75,7 +73,7 @@ public:
 
 private:
 
-    typedef Strand (*fp)(const Strand &s1, const Strand &s2);
+    using fp = Strand (*)(const Strand &s1, const Strand &s2);
 
     /**
      * Crossover function, apply the one point crossover on two strand

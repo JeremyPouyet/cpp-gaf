@@ -7,8 +7,6 @@
 
 class ProblemLoader {
 public:
-    ProblemLoader();
-    
     /**
      * load a library into the libraryLoader
      * @param libPath, shared library path
@@ -28,9 +26,9 @@ public:
     Problem *getProblem() const;
 private:
     // pointer to a shared library entrance
-    void        *_sharedLibrary;
+    void        *_sharedLibrary = NULL;
     // pointer to the current problem
-    Problem     *_problem;
+    Problem     *_problem = NULL;
     // Pointer to the Problem constructor
-    create_t    *_constructor;
+    create_t    *_constructor = NULL;
 };

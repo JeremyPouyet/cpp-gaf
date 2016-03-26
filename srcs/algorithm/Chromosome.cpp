@@ -8,8 +8,6 @@ const std::map<const std::string, const Chromosome::fp> Chromosome::crossovers =
         {"uniform", &Chromosome::uniformCrossover}
     };
 
-Chromosome::Chromosome() {}
-
 Chromosome::Chromosome(const Strand &strand) : 
 _strand(strand) { }
 
@@ -30,20 +28,16 @@ Chromosome &Chromosome::operator=(const Chromosome &other) {
     return *this;
 }
 
-Strand Chromosome::crossover(const std::string &name, const Strand &s1, const Strand &s2)
+Strand Chromosome::crossover(const Strand &s1, const Strand &s2)
 {
-    return crossovers.at(name)(s1, s2);
+    return crossovers.at(config.crossoverType)(s1, s2);
 }
 
-int Chromosome::mutate()
+void Chromosome::mutate()
 {
-    int mutated = 0;
     for (unsigned int i = 0; i < _strand.size(); ++i)
-        if (_random.d0_1() <= config.mutationRate)  {
+        if (_random.d0_1() <= config.mutationRate)
             _strand[i].flip();
-            ++mutated;
-        }
-    return mutated;
 }
 
 Strand Chromosome::getStrand() const

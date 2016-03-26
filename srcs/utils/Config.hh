@@ -15,8 +15,10 @@ typedef boost::dynamic_bitset<> Strand;
 struct Config {
 public:
     
-    bool help;
-    bool verbose;
+    // whether the help have to be displayed
+    bool help = false;
+    // whether diverse informations have to be displayed
+    bool verbose = false;
     
     void parseOptions(int ac, char **av);
     
@@ -77,13 +79,19 @@ private:
      * Check if chosen crossover is valid
      * @return whether the crossover is valid or not
      */
-    inline bool checkCrossover() const;
+    bool checkCrossover() const;
     
     /**
      * check if chosen selection is valid
      * @return whether the selection is valid or not
      */
-    inline bool checkSelection() const;
+    bool checkSelection() const;
+    
+    /**
+     * check if the loaded configuration is valid
+     * @return whether the configuration is valid
+     */
+    bool isValid() const;
 };
 
 // configuration variable

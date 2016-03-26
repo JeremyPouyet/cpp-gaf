@@ -21,8 +21,6 @@ static struct option const long_opts[] = {
 */
 
 void Config::parseOptions(int ac, char **av) {
-    this->help = false;
-    this->verbose = false;
     int c;
     
     while ((c = getopt_long(ac, av, "hv", long_opts, NULL)) != -1) {
@@ -40,34 +38,36 @@ bool Config::load(const std::string &path) {
         std::cerr << "Error on configuration file line " << error << std::endl;
         return false;
     }
-    std::cout << path << std::endl;
     if (error < 0) {
-        std::cerr << "Error while opening configuration file" << std::endl;
+        std::cerr << "Error while opening problem.ini file" << std::endl;
         return false;
     }
-    this->crossoverRate = reader.GetReal("population", "crossover_rate", 0.7);
-    this->populationSize = reader.GetInteger("population", "size", 100);
-    this->simulationNumber = reader.GetInteger("population", "simulation_number", 1500);
-    
-    this->mutationRate = reader.GetReal("chromosome", "mutation_rate", 0.1);
+    this->crossoverRate     = reader.GetReal("population", "crossover_rate", 0.7);
+    this->populationSize    = reader.GetInteger("population", "size", 100);
+    this->simulationNumber  = reader.GetInteger("population", "simulation_number", 1500);
+    this->mutationRate      = reader.GetReal("chromosome", "mutation_rate", 0.1);
     this->genePerChromosome = reader.GetInteger("chromosome", "gene_per_chromosome", 1);
-    this->chromosomeSize = reader.GetInteger("chromosome", "chromosome_size", 8);
-    this->crossoverType = reader.Get("chromosome", "crossover_type", "one-point");
+    this->chromosomeSize    = reader.GetInteger("chromosome", "chromosome_size", 8);
+    this->crossoverType     = reader.Get("chromosome", "crossover_type", "one-point");
+    this->eliteNumber       = reader.GetInteger("elitism", "elite_number", 0);
+    this->selectionType     = reader.Get("selection", "selection_type", "fitness-proportional");
+    this->tournamentSize    = reader.GetInteger("selection", "tournament_size", 1);    
+    return isValid();
+}
+
+bool Config::isValid() const {
     if (checkCrossover() == false) {
         printCrossoverError();
         return false;
     }
-    this->eliteNumber = reader.GetInteger("elitism", "elite_number", 0);
     if (this->eliteNumber > this->populationSize) {
         std::cerr << "Elite number is bigger than population size." << std::endl;
         return false;
     }
-    this->selectionType = reader.Get("selection", "selection_type", "fitness-proportional");
     if (checkSelection() == false) {
         printSelectionError();
         return false;
     }
-    this->tournamentSize = reader.GetInteger("selection", "tournament_size", 1);
     if (this->selectionType == "tournament" && this->populationSize < this->tournamentSize) {
         std::cerr << "Tournament size is bigger than population size" << std::endl;
         return false;

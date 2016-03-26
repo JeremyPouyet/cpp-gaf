@@ -1,5 +1,6 @@
 #include "Population.hh"
 
+Chrono &c = Chrono::getInstance();
 RandomGenerator Population::_random;
 
 Population::Population(Problem *problem) :
@@ -21,11 +22,13 @@ selections({
 
 void Population::solve() {
     //test if initial population already have a good solution
-    bool solution = test();
+    bool solution = checkForWinner();
     unsigned int p5 = config.simulationNumber / 100 * 5;
     for (; _currentGeneration < config.simulationNumber + 1 && solution == false; ++_currentGeneration) {
+        c.start();
         reproduce();
-        solution = test();
+        c.end();
+        solution = checkForWinner();
         // print information about the current population each 5% of generation
         if (config.verbose && _currentGeneration % p5 == 0)
             printResume();
@@ -36,6 +39,7 @@ void Population::solve() {
         std::cout << "Solution not found, best candidate is: " << std::endl;
     _problem->print(_population.front().getStrand());
     _problem->giveBestSolution(_population.front().getStrand());
+    Chrono::getInstance().display();
 }
 
 void Population::printResume() const {
@@ -49,11 +53,13 @@ void Population::printResume() const {
     std::cout << std::endl;
 }
 
-bool Population::test() {
+bool Population::checkForWinner() {
     // compute fitness of all chromosome
-    if (config.selectionType == "fitness-proportional")
+    if (config.selectionType == "fitness-proportional") {
+        _totalFitness = 0;
         for (const auto &candidate : _population)
             _totalFitness += candidate.getFitness();
+    }
     // sort them by fitness
     sortByFitness();
     // test if the best candidate solution solves the problem
@@ -74,33 +80,24 @@ void Population::sortByFitness() {
 }
 
 void Population::reproduce() {
-    double fitness;
     unsigned int c1, c2;
-    int modified;
     Strand child;
     // Elitism if used
-    for (unsigned int i = 0; i < config.eliteNumber; ++i) 
+    for (unsigned int i = 0; i < config.eliteNumber; ++i)
         _nextGeneration[i] = _population[i];
-    #pragma omp parallel for private(c1, c2, child, fitness, modified)
+    #pragma omp parallel for private(c1, c2, child)
     for (unsigned int i = config.eliteNumber; i < config.populationSize; ++i) {
-        modified = 0;
         c1 = selectChromosome();
         if (_random.d0_1() <= config.crossoverRate) {
             c2 = selectChromosome();
-            child = Chromosome::crossover(config.crossoverType, _population[c1].getStrand(), _population[c2].getStrand());
-            ++modified;
-        }
-        else
+            child = Chromosome::crossover(_population[c1].getStrand(), _population[c2].getStrand());
+        } else
             child = _population[c1].getStrand();
         _nextGeneration[i].setStrand(child);
-        modified += _nextGeneration[i].mutate();
-        if (modified > 0)
-            fitness = _problem->computeFitnessOf(_nextGeneration[i].getStrand());
-        else
-            fitness = _population[c1].getFitness();
-        _nextGeneration[i].setFitness(fitness);
+        _nextGeneration[i].mutate();
+        _nextGeneration[i].setFitness(_problem->computeFitnessOf(_nextGeneration[i].getStrand()));
     }
-   _population = _nextGeneration;
+    _population = _nextGeneration;
 }
 
 /**
@@ -118,16 +115,18 @@ unsigned int Population::fitnessProportionateSelection() const {
 
 unsigned int Population::tournamentSelection() const {
     // use set to ensure chromosome uniqueness
-    std::set<int> subPop;
+    std::map<int, bool> subPop;
     int id, bestId = _population.size() - 1;
     // for each tournament
-    do {
+    while (subPop.size() != config.tournamentSize) {
         // randomly select a chromosome
         id = _random.i0_limit(config.populationSize - 1);
-        subPop.insert(id);
-        // and check if it's better than the other
-        if (_population[id].getFitness() > _population[bestId].getFitness())
-            bestId = id;
-    } while (subPop.size() != config.tournamentSize);
+        if (subPop.count(id) == 0) {
+            subPop.insert({id, true});
+            // and check if it's better than the other
+            if (_population[id].getFitness() > _population[bestId].getFitness())
+                bestId = id;
+        }
+    } 
     return bestId;
 }

@@ -14,6 +14,7 @@
 #include "ProblemLoader.hh"
 #include "Chromosome.hh"
 #include "RandomGenerator.hh"
+#include "Chrono.hpp"
 
 class Population
 {
@@ -45,7 +46,7 @@ private:
      * tournament selection
      * @return the selected chromosome
      */
-    unsigned int    tournamentSelection()                      const;
+    unsigned int    tournamentSelection()                    const;
     
     /**
      * Selection function, redirect to the good selection according to the configuration's selection type
@@ -57,7 +58,7 @@ private:
      * test if the population has a winner
      * @return if a candidate solution solves the problem
      */
-    bool  test();
+    bool        checkForWinner();
     
     /**
      * print the current population
@@ -72,7 +73,7 @@ private:
     /**
      * sort the current population by chromosome fitness
      */
-    inline void        sortByFitness();
+    inline void sortByFitness();
 
     /**
      * print informations about the population

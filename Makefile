@@ -9,7 +9,6 @@ SRCS_DIR	= ./srcs
 ## code like a boss
 ##
 CPPFLAGS	+= -W -Wextra -Wall -fPIC
-#CPPFLAGS	+= -fmax-errors=2
 CPPFLAGS	+= -fopenmp -lboost_system
 
 ##

@@ -58,12 +58,9 @@ void Iis::giveBestSolution(const Strand &strand) const {
 }
 
 double Iis::computeValue(const std::vector<dataType> &coefs, const std::vector<double> &value) const {
-    return coefs[0] + 
-            coefs[1] * value[0] +
-            coefs[2] * value[2] +
-            coefs[3] * value[3] +
-            coefs[4] * value[4] +
-            coefs[5] * value[5]; 
+    return  coefs[0]            + coefs[1] * value[0] +
+            coefs[2] * value[2] + coefs[3] * value[3] +
+            coefs[4] * value[4] + coefs[5] * value[5]; 
 }
 
 std::vector<dataType> Iis::getCoefs(const Strand &strand) const {

@@ -1,8 +1,5 @@
 #include "ProblemLoader.hh"
 
-ProblemLoader::ProblemLoader() 
-: _sharedLibrary(NULL), _problem(NULL) {}
-
 Problem *ProblemLoader::load(const std::string &libPath) {
     _sharedLibrary = dlopen(libPath.c_str(), RTLD_LAZY);
     if (!_sharedLibrary) {

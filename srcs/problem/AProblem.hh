@@ -13,8 +13,6 @@ public:
     virtual void giveBestSolution(const Strand &strand) const { (void)strand; }
     
     void setConfig(Config &config) { _config = config; }
-    
-    virtual ~AProblem() {}
 protected:
     Config _config;
 };
