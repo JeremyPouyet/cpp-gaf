@@ -106,6 +106,8 @@ private:
      */
     static Strand crossoverBetween(const Strand &s1, const Strand &s2, unsigned int l1, unsigned int l2);
 
+    static Strand arithmeticCrossover(const Strand &s1, const Strand &s2, const Problem *problem);
+    
     /**
      * Crossover function, apply the uniform crossover on two strand
      * @param s1, strand 1

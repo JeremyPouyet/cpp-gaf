@@ -3,7 +3,8 @@
 const std::map<const std::string, const Chromosome::fp> Chromosome::crossovers = {
     {"one-point", &Chromosome::onePointCrossover},
     {"two-point", &Chromosome::twoPointCrossover},
-    {"uniform", &Chromosome::uniformCrossover}
+    {"uniform", &Chromosome::uniformCrossover},
+    {"arithmetic", &Chromosome::arithmeticCrossover}
 };
 
 Chromosome::Chromosome(const Strand &strand) :
@@ -22,8 +23,8 @@ bool Chromosome::operator()(const Chromosome &child1, const Chromosome &child2) 
 }
 
 Chromosome &Chromosome::operator=(const Chromosome &other) {
-    _fitness    = other.getFitness();
-    _strand     = other.getStrand();
+    _fitness = other.getFitness();
+    _strand = other.getStrand();
     return *this;
 }
 
@@ -62,9 +63,9 @@ void Chromosome::setFitness(double fitness) {
 
 Strand Chromosome::onePointCrossover(const Strand &s1, const Strand &s2, const Problem *problem) {
     RandomGenerator& randomGenerator = RandomGenerator::getInstance();
-    int limit       = randomGenerator.i0_limit(config.chromosomeSize);
-    Strand child1   = crossoverBetween(s1, s2, limit, config.chromosomeSize);
-    Strand child2   = crossoverBetween(s1, s2, limit, config.chromosomeSize);
+    int limit = randomGenerator.i0_limit(config.chromosomeSize);
+    Strand child1 = crossoverBetween(s1, s2, limit, config.chromosomeSize);
+    Strand child2 = crossoverBetween(s1, s2, limit, config.chromosomeSize);
     return problem->computeFitnessOf(child1) > problem->computeFitnessOf(child2) ? child1 : child2;
 }
 
@@ -84,13 +85,18 @@ Strand Chromosome::twoPointCrossover(const Strand &s1, const Strand &s2, const P
 }
 
 Strand Chromosome::uniformCrossover(const Strand &s1, const Strand &s2, const Problem *problem) {
-    (void)problem;
+    (void) problem;
     Strand strand = s1;
     RandomGenerator& randomGenerator = RandomGenerator::getInstance();
     for (unsigned int i = 0; i < config.chromosomeSize; ++i)
         if (randomGenerator.i0_1() == 1)
             strand[i] = s2[i];
     return strand;
+}
+
+Strand Chromosome::arithmeticCrossover(const Strand &s1, const Strand &s2, const Problem *problem) {
+    (void) problem;
+    return s1 ^ s2;
 }
 
 Strand Chromosome::crossoverBetween(const Strand &s1, const Strand &s2, unsigned int l1, unsigned int l2) {
