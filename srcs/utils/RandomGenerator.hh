@@ -6,7 +6,12 @@
 
 class RandomGenerator {
 public:
-    RandomGenerator();
+    
+    static RandomGenerator &getInstance() {
+        static RandomGenerator randomGenerator;
+        return randomGenerator;
+    }
+    
     /**
      * randomly get 0 or 1
      * @return 0 or 1
@@ -47,4 +52,9 @@ private:
     std::uniform_int_distribution<> _i0_1udis;
     // random double between 0 and 1
     std::uniform_real_distribution<double> _d0_1udis;
+    
+    RandomGenerator();
+    RandomGenerator(const RandomGenerator &other) = delete;
+    const RandomGenerator &operator=(const RandomGenerator &other) = delete;
+    ~RandomGenerator() {}
 };

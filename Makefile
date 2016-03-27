@@ -35,7 +35,6 @@ CPPFLAGS	+= -std=c++11
 NAME	= open-gaf
 
 SRCS	= $(SRCS_DIR)/main.cpp \
-	$(SRCS_DIR)/problem/ProblemLoader.cpp \
 	$(SRCS_DIR)/algorithm/Chromosome.cpp \
 	$(SRCS_DIR)/algorithm/Population.cpp \
 	$(SRCS_DIR)/algorithm/Simulation.cpp \

@@ -1,7 +1,5 @@
 #include "Population.hh"
 
-RandomGenerator Population::_random;
-
 Population::Population(Problem *problem) :
 _population(config.populationSize),
 _nextGeneration(config.populationSize),
@@ -53,9 +51,9 @@ void Population::reproduce() {
     #pragma omp parallel for private(c1, c2, child)
     for (unsigned int i = config.eliteNumber; i < config.populationSize; ++i) {
         c1 = selectChromosome();
-        if (_random.d0_1() <= config.crossoverRate) {
+        if (RandomGenerator::getInstance().d0_1() <= config.crossoverRate) {
             c2 = selectChromosome();
-            child = Chromosome::crossover(_population[c1].getStrand(), _population[c2].getStrand());
+            child = Chromosome::crossover(_population[c1].getStrand(), _population[c2].getStrand(), _problem);
         } else
             child = _population[c1].getStrand();
         _nextGeneration[i].setStrand(child);
@@ -70,9 +68,9 @@ void Population::reproduce() {
  */
 
 unsigned int Population::fitnessProportionateSelection() const {
-    double randomNb = _random.d0_limit(_totalFitness);
-    double curFitness = 0;
-    unsigned int id = 0;
+    double randomNb     = RandomGenerator::getInstance().d0_limit(_totalFitness);
+    double curFitness   = 0;
+    unsigned int id     = 0;
     while (curFitness < randomNb)
         curFitness += _population[id++].getFitness();
     return id;
@@ -85,7 +83,7 @@ unsigned int Population::tournamentSelection() const {
     // for each tournament
     while (subPop.size() != config.tournamentSize) {
         // randomly select a chromosome
-        id = _random.i0_limit(config.populationSize - 1);
+        id = RandomGenerator::getInstance().i0_limit(config.populationSize - 1);
         if (subPop.count(id) == 0) {
             subPop.insert({id, true});
             // and check if it's better than the other

@@ -2,12 +2,13 @@
 
 #include <string>
 #include <iostream>
-#include <string>
 
 #include "AProblem.hh"
 #include "Config.hh"
 #include "Population.hh"
 #include "Display.hpp"
+#include "Chrono.hpp"
+#include "DynamicLoader.hpp"
 
 class Simulation {
 public:
@@ -28,6 +29,7 @@ public:
      * properly destroy the simulation
      */
     ~Simulation();
+
 private:
     /**
      * Try to Solve the current Problem
@@ -62,7 +64,7 @@ private:
     // Timer to time the simulation time
     Chrono _timer;
     // object that loads a shared library into the framework
-    ProblemLoader _problemLoader;
+    DynamicLoader<Problem> _problemLoader;
     // index of the current generation
     unsigned int _currentGeneration = 1;
 };
