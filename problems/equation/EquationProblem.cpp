@@ -29,7 +29,7 @@ double EquationProblem::computeFitnessOf(const Strand &strand) const {
     try {
         return 1.0 / std::abs(_number - computeValue(strand));
     } catch (int e) {
-        return 1.0 / (_config.populationSize * _config.simulationNumber); // minimize division by zero 
+        return 1.0 / (_config.populationSize * _config.simulationNumber); // minimise division by zero 
     }
 }
 

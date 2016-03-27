@@ -22,13 +22,13 @@ static struct option const long_opts[] = {
 
 void Config::parseOptions(int ac, char **av) {
     std::string path(av[1]);
-    _configurationPath = path + "problem.ini";
-    _problemPath = path + "problem.so";
+    _configurationPath  = path + "problem.ini";
+    _problemPath        = path + "problem.so";
     int c;
     
     while ((c = getopt_long(ac, av, "hv", long_opts, NULL)) != -1) {
         switch (c) {
-            case 'h': this->help = true; break;
+            case 'h': this->help    = true; break;
             case 'v': this->verbose = true; break;
         }
     }

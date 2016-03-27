@@ -1,7 +1,6 @@
 #pragma once
 
 #include <climits>
-#include <boost/dynamic_bitset.hpp>
 #include <cstring>
 
 namespace getters {

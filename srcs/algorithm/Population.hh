@@ -1,20 +1,14 @@
 #pragma once
 
 #include <vector>
-#include <cstdlib>
 #include <string>
-#include <cfloat>
 #include <map>
 #include <algorithm>
-#include <omp.h>
-#include <set>
 
 #include "Config.hh"
 #include "Problem.hh"
-#include "ProblemLoader.hh"
 #include "Chromosome.hh"
 #include "RandomGenerator.hh"
-#include "Chrono.hpp"
 
 class Population {
 public:
@@ -35,8 +29,23 @@ public:
      */
     void reproduce();
 
+    /**
+     * Get the best candidate solution
+     * @return the best candidate solution
+     */
     Strand best() const;
+    
+    /**
+     * Get the nth candidate solution
+     * @param id, id of the candidate solution
+     * @return the nth candidate solution
+     */
     Strand at(unsigned int id) const;
+    
+    /**
+     * Get the worst candidate solution
+     * @return the worst candidate solution
+     */
     Strand worst() const;
     
 private:
@@ -83,6 +92,4 @@ private:
     Problem *_problem;
     // list of possible selections
     const std::map<const std::string, fp> selections;
-    // random generator
-    static RandomGenerator _random;
 };

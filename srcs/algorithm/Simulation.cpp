@@ -44,7 +44,6 @@ int Simulation::initialise(int ac, char **av) {
     _problem = dynamic_cast<AProblem *>(_problemLoader.load(config.getProblemPath()));
     if (_problem == NULL)
         return -1;
-    Chromosome::_problem = _problem;
     if (userInitialisation() == false) {
         _display.error("Problem while loading data");
         return -1;

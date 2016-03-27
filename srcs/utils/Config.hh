@@ -6,11 +6,8 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <boost/dynamic_bitset.hpp>
 
 #include "../inih/INIReader.h"
-
-typedef boost::dynamic_bitset<> Strand;
 
 struct Config {
 public:
@@ -20,6 +17,11 @@ public:
     // whether diverse informations have to be displayed
     bool verbose = false;
     
+    /**
+     * Parse command line options stored in av
+     * @param ac, number of command line parameters
+     * @param av, command line parameters
+     */
     void parseOptions(int ac, char **av);
     
     /**
@@ -94,7 +96,9 @@ private:
      */
     bool isValid() const;
     
+    // path of the configuration file
     std::string _configurationPath;
+    // path of the shared library representing the current problem
     std::string _problemPath;
 };
 

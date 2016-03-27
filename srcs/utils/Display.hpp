@@ -3,8 +3,6 @@
 #include <string>
 #include <iostream>
 
-#include "Config.hh"
-
 /*
  * Singleton Display
  */
@@ -16,8 +14,8 @@ public:
      * @return the display instance
      */
     static Display &getInstance() {
-        static Display d;
-        return d;
+        static Display display;
+        return display;
     }
     
     /**
