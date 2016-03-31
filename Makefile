@@ -39,7 +39,6 @@ SRCS	= $(SRCS_DIR)/main.cpp \
 	$(SRCS_DIR)/algorithm/Population.cpp \
 	$(SRCS_DIR)/algorithm/Simulation.cpp \
 	$(SRCS_DIR)/utils/Config.cpp \
-	$(SRCS_DIR)/utils/RandomGenerator.cpp \
 \
 	$(SRCS_DIR)/inih/INIReader.cpp \
 	$(SRCS_DIR)/inih/ini.cpp

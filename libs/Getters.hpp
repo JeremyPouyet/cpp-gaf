@@ -4,7 +4,7 @@
 #include <cstring>
 
 namespace getters {
-    // get an int from the strand: int8_t, int16_t, int32_t, int64_t and unsigned type)
+    // get an int from the strand: int8_t, int16_t, int32_t, int64_t and unsigned type
     template<class T>
     T getValue(const Strand &strand, unsigned int &off) {
         T value = 0;

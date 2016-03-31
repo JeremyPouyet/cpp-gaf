@@ -4,7 +4,7 @@ Config config;
 
 // list of all possible crossover type
 static const std::vector<std::string> _crossovers = {
-    "one-point", "two-point", "uniform"};
+    "one-point", "two-point", "uniform", "arithmetic"};
 
 // list of all possible selection type
 static const std::vector<std::string> _selections = {
