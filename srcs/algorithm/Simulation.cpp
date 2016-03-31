@@ -1,5 +1,10 @@
 #include "Simulation.hh"
 
+Simulation::Simulation() {
+    config.setCrossovers(Chromosome::getCrossovers());
+    config.setSelections(Population::getSelections());
+}
+
 void Simulation::run() {
     _timer.start();
     Population population(_problem);

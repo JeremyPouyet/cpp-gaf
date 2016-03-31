@@ -7,6 +7,13 @@ const std::map<const std::string, const Chromosome::fp> Chromosome::crossovers =
     {"arithmetic", &Chromosome::arithmeticCrossover}
 };
 
+std::vector<std::string> Chromosome::getCrossovers() {
+    std::vector<std::string> keys;
+    for (const auto &crossover : Chromosome::crossovers)
+        keys.push_back(crossover.first);
+    return keys;
+}
+
 Chromosome::Chromosome(const Strand &strand) :
 _strand(strand) {
 }

@@ -12,6 +12,8 @@
 
 class Simulation {
 public:
+    Simulation();
+    
     /**
      * Initialise the simulation
      * @param ac, command line parameters number

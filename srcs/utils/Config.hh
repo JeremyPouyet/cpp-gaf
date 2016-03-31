@@ -67,6 +67,9 @@ public:
     unsigned int eliteNumber;
     
     std::string getProblemPath() const;
+    
+    void setCrossovers(const std::vector<std::string> &crossovers);
+    void setSelections(const std::vector<std::string> &selections);
 private:
     /**
      * Display an error when the chosen crossover does not exists
@@ -100,6 +103,10 @@ private:
     std::string _configurationPath;
     // path of the shared library representing the current problem
     std::string _problemPath;
+    // list of all possible crossovers
+    std::vector<std::string> _crossovers;
+    // list of all possible selections
+    std::vector<std::string> _selections;
 };
 
 // configuration variable

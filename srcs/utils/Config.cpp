@@ -2,14 +2,6 @@
 
 Config config;
 
-// list of all possible crossover type
-static const std::vector<std::string> _crossovers = {
-    "one-point", "two-point", "uniform", "arithmetic"};
-
-// list of all possible selection type
-static const std::vector<std::string> _selections = {
-    "fitness-proportional", "tournament"};
-
 static struct option const long_opts[] = {
     {"help", no_argument, NULL, 'h'},
     {"verbose", no_argument, NULL, 'v'}
@@ -104,4 +96,12 @@ void Config::printSelectionError() const {
 
 std::string Config::getProblemPath() const {
     return _problemPath; 
+}
+
+void Config::setCrossovers(const std::vector<std::string> &crossovers) {
+    _crossovers = crossovers;
+}
+
+void Config::setSelections(const std::vector<std::string> &selections) {
+    _selections = selections;
 }

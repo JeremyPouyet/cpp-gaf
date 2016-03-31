@@ -67,6 +67,12 @@ public:
      */
     Chromosome &operator=(const Chromosome &other);
 
+    /**
+     * Get all possible crossovers for error checking
+     * @return the list of all possible crossovers
+     */
+    static 
+    std::vector<std::string> getCrossovers();
 private:
 
     using fp = Strand(*)(const Strand &s1, const Strand &s2, const Problem *problem);
@@ -77,7 +83,8 @@ private:
      * @param s2, strand 2
      * @return new strand generated from s1 and s2
      */
-    static Strand onePointCrossover(const Strand &s1, const Strand &s2, const Problem *problem);
+    static
+    Strand onePointCrossover(const Strand &s1, const Strand &s2, const Problem *problem);
 
     /**
      * Crossover function, apply the two point crossover on two strand
@@ -85,7 +92,8 @@ private:
      * @param s2, strand 2
      * @return new strand generated from s1 and s2
      */
-    static Strand twoPointCrossover(const Strand &s1, const Strand &s2, const Problem *problem);
+    static 
+    Strand twoPointCrossover(const Strand &s1, const Strand &s2, const Problem *problem);
 
     /**
      * Function used by one point and two point crossover to avoid code duplication
@@ -95,9 +103,11 @@ private:
      * @param l2, limit at which to end crossover
      * @return new strand generated from s1 and s2
      */
-    static Strand crossoverBetween(const Strand &s1, const Strand &s2, unsigned int l1, unsigned int l2);
+    static 
+    Strand crossoverBetween(const Strand &s1, const Strand &s2, unsigned int l1, unsigned int l2);
 
-    static Strand arithmeticCrossover(const Strand &s1, const Strand &s2, const Problem *problem);
+    static 
+    Strand arithmeticCrossover(const Strand &s1, const Strand &s2, const Problem *problem);
 
     /**
      * Crossover function, apply the uniform crossover on two strand
@@ -105,7 +115,8 @@ private:
      * @param s2, strand 2
      * @return new strand generated from s1 and s2
      */
-    static Strand uniformCrossover(const Strand &s1, const Strand &s2, const Problem *problem);
+    static 
+    Strand uniformCrossover(const Strand &s1, const Strand &s2, const Problem *problem);
 
 
     // Computation representation of a possible solution
@@ -113,5 +124,6 @@ private:
     // rating, explains how a potential solution is good
     double _fitness;
     //  map of possible crossover
-    static const std::map<const std::string, const fp> crossovers;
+    static 
+    const std::map<const std::string, const fp> crossovers;
 };

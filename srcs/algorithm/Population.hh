@@ -48,26 +48,40 @@ public:
      */
     Strand worst() const;
     
+    /**
+     * Get all possible selections for error checking
+     * @return the list of all possible selections
+     */
+    static std::vector<std::string> getSelections();
+    
+    const Chromosome &operator[](unsigned int id) const;
+    
+    double getTotalFitness() const;
 private:
     typedef std::vector<Chromosome> Generation;
-    using fp = unsigned int (Population::*)() const;
+    using fp = unsigned int (*)(const Population &population);
 
     /**
      * Selection function, Select a chromosome in the current population by using
      * fitness proportional selection
+     * @param population, the function selects a chromosome from it
      * @return the selected chromosome
      */
-    unsigned int fitnessProportionateSelection() const;
+    static 
+    unsigned int fitnessProportionateSelection(const Population &population);
 
     /**
      * Selection function, Select a chromosome in the current population by using
      * tournament selection
+     * @param population, the function selects a chromosome from it
      * @return the selected chromosome
      */
-    unsigned int tournamentSelection() const;
+    static
+    unsigned int tournamentSelection(const Population &population);
 
     /**
      * Selection function, redirect to the good selection according to the configuration's selection type
+     * @param population, the function selects a chromosome from it
      * @return the selected chromosome
      */
     inline unsigned int selectChromosome() const;
@@ -91,5 +105,6 @@ private:
     // current problem
     Problem *_problem;
     // list of possible selections
-    const std::map<const std::string, fp> selections;
+    static
+    const std::map<const std::string, const fp> selections;
 };

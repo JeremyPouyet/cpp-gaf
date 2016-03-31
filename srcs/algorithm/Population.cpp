@@ -1,19 +1,27 @@
 #include "Population.hh"
 
+const std::map<const std::string, const Population::fp> Population::selections = {
+    {"fitness-proportional", &Population::fitnessProportionateSelection},
+    {"tournament", &Population::tournamentSelection}
+};
+
 Population::Population(Problem *problem) :
 _population(config.populationSize),
 _nextGeneration(config.populationSize),
-_problem(problem),
-selections({
-    {"fitness-proportional", &Population::fitnessProportionateSelection},
-    {"tournament", &Population::tournamentSelection}
-}) {
+_problem(problem) {
     double fitness;
     for (auto &candidate : _population) {
         candidate.generate();
         fitness = _problem->computeFitnessOf(candidate.getStrand());
         candidate.setFitness(fitness);
     }
+}
+
+std::vector<std::string> Population::getSelections() {
+    std::vector<std::string> keys;
+    for (const auto &selection : selections)
+        keys.push_back(selection.first);
+    return keys;
 }
 
 bool Population::checkForWinner() {
@@ -35,11 +43,11 @@ void Population::print() const {
 }
 
 unsigned int Population::selectChromosome() const {
-    return (this->*selections.at(config.selectionType))();
+    return selections.at(config.selectionType)(*this);
 }
 
 void Population::sortByFitness() {
-    std::sort(_population.begin(), _population.end(), [](const Chromosome& c1, const Chromosome &c2) {
+    std::sort(_population.begin(), _population.end(), [](const Chromosome& c1, const Chromosome & c2) {
         return c1.getFitness() > c2.getFitness();
     });
 }
@@ -50,7 +58,7 @@ void Population::reproduce() {
     // Elitism if used
     for (unsigned int i = 0; i < config.eliteNumber; ++i)
         _nextGeneration[i] = _population[i];
-    #pragma omp parallel for private(c1, c2, child)
+#pragma omp parallel for private(c1, c2, child)
     for (unsigned int i = config.eliteNumber; i < config.populationSize; ++i) {
         c1 = selectChromosome();
         if (RandomGenerator::getInstance().d_between(0, 1) <= config.crossoverRate) {
@@ -69,19 +77,19 @@ void Population::reproduce() {
  ** Selections
  */
 
-unsigned int Population::fitnessProportionateSelection() const {
-    double randomNb = RandomGenerator::getInstance().d_between(0, _totalFitness);
+unsigned int Population::fitnessProportionateSelection(const Population &population) {
+    double randomNb = RandomGenerator::getInstance().d_between(0, population.getTotalFitness());
     double curFitness = 0;
     unsigned int id = 0;
     while (curFitness < randomNb)
-        curFitness += _population[id++].getFitness();
+        curFitness += population[id++].getFitness();
     return id;
 }
 
-unsigned int Population::tournamentSelection() const {
+unsigned int Population::tournamentSelection(const Population &population) {
     // use set to ensure chromosome uniqueness
     std::map<int, bool> subPop;
-    int id, bestId = _population.size() - 1;
+    int id, bestId = config.populationSize - 1;
     // for each tournament
     while (subPop.size() != config.tournamentSize) {
         // randomly select a chromosome
@@ -89,11 +97,19 @@ unsigned int Population::tournamentSelection() const {
         if (subPop.count(id) == 0) {
             subPop.insert({id, true});
             // and check if it's better than the other
-            if (_population[id].getFitness() > _population[bestId].getFitness())
+            if (population[id].getFitness() > population[bestId].getFitness())
                 bestId = id;
         }
     }
     return bestId;
+}
+
+/**
+ * getters
+ */
+
+double Population::getTotalFitness() const {
+    return _totalFitness;
 }
 
 Strand Population::at(unsigned int id) const {
@@ -106,4 +122,8 @@ Strand Population::best() const {
 
 Strand Population::worst() const {
     return at(_population.size() - 1);
+}
+
+const Chromosome & Population::operator[](unsigned int id) const {
+    return _population[id];
 }
