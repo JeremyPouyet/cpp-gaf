@@ -8,7 +8,7 @@
 #include "Config.hh"
 #include "Problem.hh"
 #include "Chromosome.hh"
-#include "RandomGenerator.hh"
+#include "RandomGenerator.hpp"
 
 class Population {
 public:
@@ -49,7 +49,7 @@ public:
     Strand worst() const;
     
 private:
-    typedef std::vector<Chromosome > Generation;
+    typedef std::vector<Chromosome> Generation;
     using fp = unsigned int (Population::*)() const;
 
     /**

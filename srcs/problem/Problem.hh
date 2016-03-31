@@ -4,7 +4,6 @@
 #include "../utils/Config.hh"
 
 typedef boost::dynamic_bitset<> Strand;
-
 /**
  * Problem Interface. It is the computational representation of a Problem
  * Just implement it to be able to load a new problem into the framework.
