@@ -1,5 +1,5 @@
 ##
-## Practical alias
+## Practical aliases
 ##
 CC		= g++
 RM		= rm -rf
@@ -9,20 +9,23 @@ SRCS_DIR	= ./srcs
 ## code like a boss
 ##
 CPPFLAGS	+= -W -Wextra -Wall -fPIC
+
+##
+## libraries
+##
 CPPFLAGS	+= -fopenmp -lboost_system
+LIBDL		= -ldl -lgomp
 
 ##
 ## header location
 ##
-CPPFLAGS += -I./srcs/algorithm -I./srcs/utils
-CPPFLAGS += -I./srcs/problem -I./inih/ -I./libs/
+CPPFLAGS 	+= -I./srcs/algorithm -I./srcs/utils
+CPPFLAGS 	+= -I./srcs/problem -I./inih/ -I./libs/
 
 ##
 ## shared library flag
 ##
 LDFLAGS		+= -shared
-
-LIBDL		= -ldl -lgomp
 
 ##
 ## c++ version
@@ -30,9 +33,11 @@ LIBDL		= -ldl -lgomp
 CPPFLAGS	+= -std=c++11
 
 ##
-## files generation compilation options
+## compilation options
 ##
-NAME	= open-gaf
+FRAMEWORK	= open-gaf
+PROBLEMS	= $(shell find problems/ -maxdepth 1 -mindepth 1 -type d)
+GENERATOR	= template
 
 SRCS	= $(SRCS_DIR)/main.cpp \
 	$(SRCS_DIR)/algorithm/Chromosome.cpp \
@@ -48,20 +53,40 @@ OBJS	= $(SRCS:.cpp=.o)
 ##
 ## compilation
 ##
-all:		$(NAME)
+all:		$(FRAMEWORK) $(PROBLEMS) $(GENERATOR)
 
-$(NAME):	$(OBJS)
-		$(CC) $(OBJS) -o $(NAME) $(LIBDL)
+framework:	$(FRAMEWORK)
+$(FRAMEWORK):	$(OBJS)
+		$(CC) $(OBJS) -o $(FRAMEWORK) $(LIBDL)
 
+problems: 	$(PROBLEMS)
+$(PROBLEMS):
+		$(MAKE) -C $@
+
+generator:	$(GENERATOR)
+$(GENERATOR):
+		$(MAKE) -C $@
 ##
-## Clean data
+## Clean
 ##
+RM_OBJS	= $(OBJS) \
+	$(foreach dir, $(PROBLEMS), $(wildcard $(dir)/*.o)) \
+	$(foreach dir, $(GENERATOR), $(wildcard $(dir)/*.o))
+
+RM_BIN	= $(FRAMEWORK) \
+	$(foreach dir, $(PROBLEMS), $(wildcard $(dir)/*.so)) \
+	$(GENERATOR)/generator
+
 clean:
-		$(RM) $(OBJS)
+	$(RM) $(RM_OBJS)
 
-fclean:		clean
-		$(RM) $(NAME)
+fclean:	clean
+	$(RM) $(RM_BIN)
 
-re:		fclean all
+re:	fclean all
 
-.PHONY:		all clean fclean re rclean
+##
+## avoid problems
+##
+.PHONY:	all clean fclean re rclean problems generator \
+	$(PROBLEMS) $(FRAMEWORK) $(GENERATOR)

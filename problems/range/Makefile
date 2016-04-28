@@ -25,7 +25,7 @@ LIBDL		= -ldl
 CPPFLAGS	+= -std=c++11
 
 ##
-## files generation compilation options
+## compilation options
 ##
 NAME	= ./problem.so
 

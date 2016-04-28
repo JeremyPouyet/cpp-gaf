@@ -5,26 +5,26 @@ Genetic algorithm Framework written in c++, helps you to solve problems.
 ## Compilation
 
 ```shell
-$> ./makeAll.sh  
+$> make
 ```
-This script will compile the framework, the tests problems and the project generator.  
+The Makefile will compile the framework, the tests problems and the project generator.
 
 ## Project generator
 
-For a problem to be executable from the framework, it needs to be under the form of a package containing:  
-- one shared library (problem.so) -> to be load by the framework  
-- a problem.ini file -> to configure the simulation  
- 
-To make the framework easier to use, a project generator has been created. It creates a default package that contains 4 files:  
--  Makefile to compile the problem  
--  problem.ini  
--  a .hh file containing a class that inherits from the AProblem abstract class  
+For a problem to be executable from the framework, it needs to be under the form of a package containing:
+- one shared library (problem.so) -> to be load by the framework
+- a problem.ini file -> to configure the simulation
+
+To make the framework easier to use, a project generator has been created. It creates a default package that contains 4 files:
+-  Makefile to compile the problem
+-  problem.ini
+-  a .hh file containing a class that inherits from the AProblem abstract class
 -  a .cpp file that implements the .hh file
 
-To use it, proceed as follow:  
+To use it, proceed as follow:
 
 ```shell
-$> cd template/  
+$> cd template/
 $> ./generator test
 Creation of the directory ../problems/test
 Generation of file ../problems/test/Makefile
@@ -46,7 +46,7 @@ For example, with the "test" project created in the Project generator section:
 ```shell
 $> cd cpp-gaf && ./open-gaf ./problems/test/
 ```
-#### Todo  
+#### Todo
 
 - [ ] 32 bits supports
 - [ ] command line option to enable/disable OpenMP

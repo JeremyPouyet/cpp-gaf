@@ -16,7 +16,7 @@ CPPFLAGS	+= -I./
 CPPFLAGS	+= -std=c++11
 
 ##
-## files generation compilation options
+## compilation options
 ##
 NAME	= ./generator
 
